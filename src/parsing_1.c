@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_operations.c                                 :+:      :+:    :+:   */
+/*   parsing_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/06/30 16:59:46 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/30 20:38:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,41 @@ t_list		*parse_operations()
 			free(line);
 			return (operations);
 		}
-		// if (ft_strequ((const char *)line, "secret password"))
-		// 	return ;
-		// printf("line = %s\n", line);
 		free(line);
 	}
 	return (operations);
+}
+
+int			parse_number(char *s, int *n)
+{
+	int		i;
+
+	i = -1;
+	while (s[++i])
+	{
+		if ((s[i] < '0' || s[i] > '9') && s[i] != '-')
+			return (0);
+	}
+	*n = ft_atoi((const char *)s);
+	return (1);
+}
+
+t_list		*parse_stack(int ac, char **av)
+{
+	t_list	*stack;
+	int		i;
+	int		tmp;
+
+	stack = NULL;
+	i = 0;
+	while (++i < ac)
+	{
+		if (parse_number(av[i], &tmp) == 0)
+		{
+			free_list(&stack);
+			return (NULL);
+		}
+		ft_lstaddend(&stack, ft_lstnew((const void *)&tmp, sizeof(int)));
+	}
+	return (stack);
 }

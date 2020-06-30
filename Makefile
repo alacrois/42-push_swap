@@ -5,7 +5,9 @@ NAME2 = checker
 SRCS =	src/push_swap.c
 
 SRCS2 =	src/checker.c \
-		src/parse_operations.c
+		src/parsing_1.c \
+		src/utils.c \
+		src/operations.c
 
 OBJS = $(SRCS:.c=.o)
 
