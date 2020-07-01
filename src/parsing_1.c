@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 15:13:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 19:39:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int			parse_number(char *s, int *n)
 		if ((s[i] < '0' || s[i] > '9') && s[i] != '-')
 			return (0);
 	}
+	if (is_int(s) == false)
+		return (0);
 	*n = ft_atoi((const char *)s);
 	return (1);
 }

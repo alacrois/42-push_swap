@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alacrois <alacrois@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/22 16:48:25 by alacrois          #+#    #+#             */
-/*   Updated: 2018/03/18 06:22:44 by alacrois         ###   ########.fr       */
+/*   Updated: 2020/07/01 21:26:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,6 @@ typedef struct			s_img
 	int					endian;
 }						t_img;
 
-// typedef struct			s_env
-// {
-// 	void				*mlx;
-// 	void				*win;
-// 	t_img				*i;
-// 	void				*data;
-// }						t_env;
-
 int						ft_intmax(int a, int b);
 int						ft_intmin(int a, int b);
 int						ft_abs(int n);
@@ -172,6 +164,7 @@ char					*ft_getspaces(int n);
 int						ft_getdigit(int nb, int index);
 
 void					ft_putchar(char c);
+void					ft_putnchar(char c, int n);
 void					ft_putstr(char const *s);
 void					ft_putstr_free(char *s);
 void					ft_putstrs(char *s1, char *s2, char *s3, char *s4);

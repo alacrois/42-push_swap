@@ -6,14 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/06/30 16:31:17 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 20:57:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHECKER_H
-# define CHECKER_H
-# include "stdlib.h"
-# include "stdio.h"
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 # include "libft.h"
 
 #endif

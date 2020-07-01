@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 15:34:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 21:34:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,8 @@ int		main(int ac, char **av)
 		ft_putendl("\e[1;31mKO\e[0m");
 	else
 		ft_putendl("\e[1;32mOK\e[0m");
+	free_list(&a_stack);
+	free_list(&b_stack);
+	free_list(&operations);
 	return (0);
 }
