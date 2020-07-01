@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/06/30 20:29:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 15:09:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +30,41 @@ void	free_list(t_list **list)
 		*list = NULL;
 }
 
-void	display_infos(t_list	*operations, t_list *a_stack)
+void	display_b_stack(t_list *b_stack)
 {
-	t_operation	*o;
+	int	*n;
+
+	if (b_stack != NULL)
+	{
+		n = (int *)b_stack->content;
+		ft_putnbr(*n);
+		ft_putchar('\n');
+	}
+	else
+		ft_putchar('\n');
+}
+
+void	display_stacks(t_list *a_stack, t_list *b_stack)
+{
 	int			*n;
 
-	if (operations == NULL)
-		ft_putendl("No valid operation given !");
-	else
+	ft_putendl("\nStacks   A		B\n");
+	while (a_stack != NULL || b_stack != NULL)
 	{
-		ft_putendl("Operations :");
-		while (operations != NULL)
-		{
-			o = (t_operation *)operations->content;
-			printf("%i\n", (int)*o);
-			operations = operations->next;
-		}
-	}
-
-	if (a_stack == NULL)
-		ft_putendl("\nStack is empty !");
-	else
-	{
-		ft_putendl("\nStack :");
-		while (a_stack != NULL)
+		if (a_stack != NULL)
 		{
 			n = (int *)a_stack->content;
-			printf("%i\n", *n);
-			a_stack = a_stack->next;
+			ft_putstr("	 ");
+			ft_putnbr(*n);
+			ft_putstr("		");
 		}
+		else
+			ft_putstr("			");
+		display_b_stack(b_stack);
+		if (a_stack != NULL)
+			a_stack = a_stack->next;
+		if (b_stack != NULL)
+			b_stack = b_stack->next;
 	}
 	ft_putchar('\n');
 }

@@ -1,13 +1,15 @@
-NAME = push_swap
+NAME = checker
 
-NAME2 = checker
+NAME2 = push_swap
 
-SRCS =	src/push_swap.c
+SRCS2 =	src/push_swap.c
 
-SRCS2 =	src/checker.c \
+SRCS =	src/checker.c \
 		src/parsing_1.c \
+		src/parsing_2.c \
 		src/utils.c \
-		src/operations.c
+		src/operations_1.c \
+		src/operations_2.c
 
 OBJS = $(SRCS:.c=.o)
 

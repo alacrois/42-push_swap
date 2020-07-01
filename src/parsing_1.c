@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/06/30 20:38:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 15:13:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void		add_operation(t_list **operations, t_operation o)
 	}
 	else
 	{
-		ft_lstaddend(operations, ft_lstnew((const void *)&o, sizeof(t_operation)));
+		ft_lstaddend(operations, \
+			ft_lstnew((const void *)&o, sizeof(t_operation)));
 	}
-	
 }
 
 int			parse_operation(char *line, t_list **operations)
@@ -33,12 +33,28 @@ int			parse_operation(char *line, t_list **operations)
 		add_operation(operations, SB);
 	else if (ft_strequ(line, "ss"))
 		add_operation(operations, SS);
+	else if (ft_strequ(line, "pa"))
+		add_operation(operations, PA);
+	else if (ft_strequ(line, "pb"))
+		add_operation(operations, PB);
+	else if (ft_strequ(line, "ra"))
+		add_operation(operations, RA);
+	else if (ft_strequ(line, "rb"))
+		add_operation(operations, RB);
+	else if (ft_strequ(line, "rr"))
+		add_operation(operations, RR);
+	else if (ft_strequ(line, "rra"))
+		add_operation(operations, RRA);
+	else if (ft_strequ(line, "rrb"))
+		add_operation(operations, RRB);
+	else if (ft_strequ(line, "rrr"))
+		add_operation(operations, RRR);
 	else
-		return 0;
-	return 1;
+		return (0);
+	return (1);
 }
 
-t_list		*parse_operations()
+t_list		*parse_operations(void)
 {
 	char	*line;
 	t_list	*operations;
