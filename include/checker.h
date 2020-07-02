@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 22:02:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:27:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void			rotate(t_list **a_stack, t_list **b_stack, t_operation o);
 void			reverse_rotate(t_list **a_stack, t_list **b_stack, \
 				t_operation o);
 t_bool			is_int(char *s);
-t_list			*generate_operations(t_list **a_stack);
+// t_list			*generate_operations(t_list **a_stack);
+t_list			*generate_operations(t_stack *a_stack);
 void			display_operations(t_list *operations);
 
 void			stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o);

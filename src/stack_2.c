@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 21:37:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:11:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void			stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o)
 	stack = o == SB ? b_stack : stack;
 	if (o == SS)
 	{
-		swap(a_stack, b_stack, SA);
-		swap(a_stack, b_stack, SB);
+		stack_swap(a_stack, b_stack, SA);
+		stack_swap(a_stack, b_stack, SB);
 	}
 	if (stack != NULL)
 	{
@@ -46,7 +46,7 @@ void			stack_push(t_stack *a_stack, t_stack *b_stack, t_operation o)
 	stack2 = o == PB ? a_stack : stack2;
 	if (stack2 != NULL && stack2->size >= 1)
 	{
-		add_top(stack1, stack2[stack2->size - 1]);
+		add_top(stack1, stack2->data[stack2->size - 1]);
 		remove_top(stack2);
 	}
 }
@@ -61,8 +61,8 @@ void			stack_rotate(t_stack *a_stack, t_stack *b_stack, t_operation o)
 	stack = o == RB ? b_stack : stack;
 	if (o == RR)
 	{
-		rotate(a_stack, b_stack, RA);
-		rotate(a_stack, b_stack, RB);
+		stack_rotate(a_stack, b_stack, RA);
+		stack_rotate(a_stack, b_stack, RB);
 	}
 	if (stack != NULL && stack->size >= 2)
 	{
@@ -88,8 +88,8 @@ void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
 	stack = o == RRB ? b_stack : stack;
 	if (o == RRR)
 	{
-		reverse_rotate(a_stack, b_stack, RRA);
-		reverse_rotate(a_stack, b_stack, RRB);
+		stack_reverse_rotate(a_stack, b_stack, RRA);
+		stack_reverse_rotate(a_stack, b_stack, RRB);
 	}
 	if (stack != NULL && stack->size >= 2)
 	{

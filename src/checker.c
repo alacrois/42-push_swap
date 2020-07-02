@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 22:02:42 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:17:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int		main(int ac, char **av)
 		return (return_error());
 	operations = parse_operations();
 	b_stack = new_stack(a_stack.size);
+	b_stack.size = 0;
 	execute_stack_operations(&a_stack, &b_stack, operations);
 	if (DISPLAY_INFOS == true)
 		display_infos(a_stack, b_stack, operations);

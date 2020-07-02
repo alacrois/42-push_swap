@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 21:42:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:13:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,10 @@ t_stack		parse_stack(int ac, char **av)
 	{
 		if (parse_number(av[i], &tmp) == 0)
 		{
-			free_list(&stack);
-			return (NULL);
+			stack.size = 0;
+			return (stack);
 		}
-		stack.data[i - 1] = tmp;
+		stack.data[stack.size - i] = tmp;
 	}
 	return (stack);
 }

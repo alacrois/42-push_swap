@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 22:07:03 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:21:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_bool		stack_is_ordered(t_stack stack)
 	{
 		a = stack.data[index];
 		b = stack.data[index + 1];
-		if (a > b)
+		if (a < b)
 			return (false);
 	}
 	return (true);
