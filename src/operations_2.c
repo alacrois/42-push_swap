@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 22:49:32 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 23:01:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,17 @@ int			get_element_index(t_stack *stack, int to_find)
 
 	index = 1;
 	i = stack->size;
-	while (--i > 0)
+	while (--i >= 0)
 	{
 		to_compare = stack->data[i];
 		if (to_find == to_compare)
 			return (index);
 		index++;
 	}
-	// elem = stack != NULL ? *stack : NULL;
-	// while (elem != NULL)
-	// {
-	// 	to_compare = *((int *)elem->content);
-	// 	if (to_find == to_compare)
-	// 		return (index);
-	// 	index++;
-	// 	elem = elem->next;
-	// }
+	ft_putstr("Error in 'get_element_index', could not find ");
+	ft_putnbr(to_find);
+	ft_putstr(" in stack !\n");
+	ft_exit("");
 	return (-1);
 }
 
@@ -285,6 +280,7 @@ t_list		*generate_operations(t_stack *a_stack)
 	b_stack = new_stack(a_stack->max_size);
 	b_stack.size = 0;
 	get_ordered_numbers_in_array(a_stack, numbers);
+
 	i = -1;
 	len = a_stack->size;
 	while (++i < len)
@@ -294,6 +290,7 @@ t_list		*generate_operations(t_stack *a_stack)
 									&operations);
 		execute_and_save_operation(a_stack, &b_stack, &operations, PB);
 	}
+
 	all_b_to_a(a_stack, &b_stack, &operations);
 	return (operations);
 }
