@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 21:35:32 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 19:52:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,12 @@ int		nb_len(int n)
 	return (len);
 }
 
-void	display_stacks(t_list *a_stack, t_list *b_stack)
+void	display_infos(t_list *a_stack, t_list *b_stack, t_list *operations)
 {
 	int			*n;
 
+	// ft_putstr("Total number of operations : ");
+	// ft_putnbr(ft_lstlen(operations));
 	ft_putendl("A		B\n");
 	while (a_stack != NULL || b_stack != NULL)
 	{
@@ -107,5 +109,8 @@ void	display_stacks(t_list *a_stack, t_list *b_stack)
 		a_stack = a_stack != NULL ? a_stack->next : NULL;
 		b_stack = b_stack != NULL ? b_stack->next : NULL;
 	}
+	ft_putchar('\n');
+	ft_putstr("Total number of operations : ");
+	ft_putnbr(ft_lstlen(operations));
 	ft_putchar('\n');
 }
