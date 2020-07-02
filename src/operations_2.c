@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 23:14:19 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 18:01:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,53 @@ void		execute_and_save_operation(t_list **a_stack, t_list **b_stack, \
 
 }
 
+int			get_element_index(t_list **stack, int to_find)
+{
+	int		index;
+	int		to_compare;
+	t_list	*elem;
+
+	index = 1;
+	elem = stack != NULL ? *stack : NULL;
+	while (elem != NULL)
+	{
+		to_compare = *((int *)elem->content);
+		if (to_find == to_compare)
+			return (index);
+		index++;
+		elem = elem->next;
+	}
+	return (-1);
+}
+
 void		put_indexed_element_on_top(t_list **a_stack, int index, \
 										t_list **operations)
 {
-	while (index > 1)
+	int		len;
+
+	if (a_stack == NULL || *a_stack == NULL)
+		return ;
+	len = ft_lstlen(*a_stack);
+	// TO DO : Optimize the number of shifts (RRA or RA)
+	if (index <= len / 2)
 	{
-		execute_and_save_operation(a_stack, NULL, operations, RA);
-		index--;
+		while (index != 1)
+		{
+			execute_and_save_operation(a_stack, NULL, operations, RA);
+			index--;
+		}
+	}
+	else
+	{
+		while (index <= len)
+		{
+			execute_and_save_operation(a_stack, NULL, operations, RRA);
+			index++;
+		}
 	}
 }
+
+// void		insert_at_index(t_list **a_stack)
 
 
 void		swap_elements(t_list **a_stack, int index, t_list **operations)
@@ -56,12 +94,69 @@ void		all_b_to_a(t_list **a_stack, t_list **b_stack, \
 	}
 }
 
+int			get_minimum(t_list *stack, int *nextmin)
+{
+	int		tmp;
+	int		n;
+
+	// n = *((int *)stack->content);
+	tmp = 2147483647;
+	while (stack != NULL)
+	{
+		n = *((int *)stack->content);
+		if (n <= tmp && (nextmin == NULL || n >= *nextmin))
+			tmp = n;
+		stack = stack->next;
+	}
+	if (nextmin != NULL && tmp < *nextmin)
+	{
+		ft_putendl("get_minimum error !");
+		printf("tmp = %i  &&  *nextmin = %i\n", tmp, *nextmin);
+	}
+	else
+	{
+		// printf("get_minimum returns %i\n", tmp);
+	}
+	
+	return (tmp);
+}
+
+void		get_ordered_numbers_in_array(t_list	**a_stack, int numbers[])
+{
+	int		i;
+	int		len;
+	int		nextmin;
+
+	if (a_stack == NULL || *a_stack == NULL)
+		return ;
+	len = ft_lstlen(*a_stack);
+	numbers[0] = get_minimum(*a_stack, NULL);
+	nextmin = numbers[0] + 1;
+	i = 0;
+	while (++i < len)
+	{
+		numbers[i] = get_minimum(*a_stack, &nextmin);
+		nextmin = numbers[i] + 1;
+	}
+}
+
 t_list		*generate_operations(t_list **a_stack)
 {
 	t_list	*operations;
 	t_list	*b_stack;
 	int		n1;
 	int		n2;
+	int		numbers[ft_lstlen(*a_stack)];
+	int		i;
+	int		len;
+
+	get_ordered_numbers_in_array(a_stack, numbers);
+	i = -1;
+	len = ft_lstlen(*a_stack);
+	while (++i < len)
+	{
+		printf("numbers[%i] = %i\n", i, numbers[i]);
+	}
 
 	operations = a_stack == NULL ? NULL : NULL;
 	// add_operation(&operations, SA);

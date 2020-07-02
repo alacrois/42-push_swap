@@ -1,15 +1,15 @@
-NAME = checker
+NAME2 = checker
 
-NAME2 = push_swap
+NAME = push_swap
 
-SRCS2 =	src/push_swap.c \
+SRCS =	src/push_swap.c \
 		src/parsing_1.c \
 		src/parsing_2.c \
 		src/utils.c \
 		src/operations_1.c \
 		src/operations_2.c
 
-SRCS =	src/checker.c \
+SRCS2 =	src/checker.c \
 		src/parsing_1.c \
 		src/parsing_2.c \
 		src/utils.c \
