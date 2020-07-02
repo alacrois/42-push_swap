@@ -7,14 +7,18 @@ SRCS =	src/push_swap.c \
 		src/parsing_2.c \
 		src/utils.c \
 		src/operations_1.c \
-		src/operations_2.c
+		src/operations_2.c \
+		src/stack_1.c \
+		src/stack_2.c
 
 SRCS2 =	src/checker.c \
 		src/parsing_1.c \
 		src/parsing_2.c \
 		src/utils.c \
 		src/operations_1.c \
-		src/operations_2.c
+		src/operations_2.c \
+		src/stack_1.c \
+		src/stack_2.c
 
 OBJS = $(SRCS:.c=.o)
 

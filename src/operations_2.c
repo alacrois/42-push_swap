@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 19:41:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 20:32:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ t_list		*generate_operations(t_list **a_stack)
 	len = ft_lstlen(*a_stack);
 	while (++i < len)
 	{
-		printf("numbers[%i] = %i\n", i, numbers[i]);
+		// printf("numbers[%i] = %i\n", i, numbers[i]);
 		put_indexed_element_on_top(a_stack, get_element_index(a_stack, numbers[i]), \
 									&operations);
 		execute_and_save_operation(a_stack, &b_stack, &operations, PB);

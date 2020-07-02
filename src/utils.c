@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 19:52:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:01:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,6 @@ void	free_list(t_list **list)
 		*list = NULL;
 }
 
-void	display_b_stack(t_list *b_stack)
-{
-	int	*n;
-
-	if (b_stack != NULL)
-	{
-		n = (int *)b_stack->content;
-		ft_putnbr(*n);
-		ft_putchar('\n');
-	}
-	else
-		ft_putchar('\n');
-}
 
 int		nb_len(int n)
 {
@@ -88,26 +75,73 @@ int		nb_len(int n)
 	return (len);
 }
 
-void	display_infos(t_list *a_stack, t_list *b_stack, t_list *operations)
-{
-	int			*n;
+// Old implementation :
+// void	display_b_stack(t_list *b_stack)
+// {
+// 	int	*n;
 
-	// ft_putstr("Total number of operations : ");
-	// ft_putnbr(ft_lstlen(operations));
+// 	if (b_stack != NULL)
+// 	{
+// 		n = (int *)b_stack->content;
+// 		ft_putnbr(*n);
+// 		ft_putchar('\n');
+// 	}
+// 	else
+// 		ft_putchar('\n');
+// }
+
+// void	display_infos(t_list *a_stack, t_list *b_stack, t_list *operations)
+// {
+// 	int			*n;
+
+// 	// ft_putstr("Total number of operations : ");
+// 	// ft_putnbr(ft_lstlen(operations));
+// 	ft_putendl("A		B\n");
+// 	while (a_stack != NULL || b_stack != NULL)
+// 	{
+// 		if (a_stack != NULL)
+// 		{
+// 			n = (int *)a_stack->content;
+// 			ft_putnbr(*n);
+// 			ft_putnchar(' ', 16 - nb_len(*n));
+// 		}
+// 		else
+// 			ft_putnchar(' ', 16);
+// 		display_b_stack(b_stack);
+// 		a_stack = a_stack != NULL ? a_stack->next : NULL;
+// 		b_stack = b_stack != NULL ? b_stack->next : NULL;
+// 	}
+// 	ft_putchar('\n');
+// 	ft_putstr("Total number of operations : ");
+// 	ft_putnbr(ft_lstlen(operations));
+// 	ft_putchar('\n');
+// }
+
+void	display_infos(t_stack a_stack, t_stack b_stack, t_list *operations)
+{
+	int			n;
+	int			i;
+
 	ft_putendl("A		B\n");
-	while (a_stack != NULL || b_stack != NULL)
+	i = 0;
+	while (++i <= a_stack.max_size)
 	{
-		if (a_stack != NULL)
+		if (i <= a_stack.size)
 		{
-			n = (int *)a_stack->content;
-			ft_putnbr(*n);
-			ft_putnchar(' ', 16 - nb_len(*n));
+			n = number_at_index(a_stack, i);
+			ft_putnbr(n);
+			ft_putnchar(' ', 16 - nb_len(n));
 		}
 		else
 			ft_putnchar(' ', 16);
-		display_b_stack(b_stack);
-		a_stack = a_stack != NULL ? a_stack->next : NULL;
-		b_stack = b_stack != NULL ? b_stack->next : NULL;
+		if (i <= b_stack.size)
+		{
+			n = number_at_index(b_stack, i);
+		ft_putnbr(n);
+		ft_putchar('\n');
+		}
+		else
+			ft_putchar('\n');
 	}
 	ft_putchar('\n');
 	ft_putstr("Total number of operations : ");

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 15:40:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 22:07:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,65 @@ t_bool		is_ordered(t_list *stack)
 	return (true);
 }
 
-t_bool		stack_has_duplicates(t_list *a_stack)
+t_bool		stack_is_ordered(t_stack stack)
 {
-	int		n;
-	int		i;
-	int		len;
-	t_list	*elem1;
-	t_list	*elem2;
+	int		a;
+	int		b;
+	int		index;
 
-	len = ft_lstlen(a_stack);
-	elem1 = a_stack;
-	while (elem1 != NULL)
+	if (stack.size == 0)
+		return (true);
+	index = -1;
+	while (++index < stack.size - 1)
 	{
-		i = 0;
-		n = *((int *)elem1->content);
-		while (++i <= len)
+		a = stack.data[index];
+		b = stack.data[index + 1];
+		if (a > b)
+			return (false);
+	}
+	return (true);
+}
+
+// Old implementation :
+// t_bool		stack_has_duplicates(t_list *a_stack)
+// {
+// 	int		n;
+// 	int		i;
+// 	int		len;
+// 	t_list	*elem1;
+// 	t_list	*elem2;
+
+// 	len = ft_lstlen(a_stack);
+// 	elem1 = a_stack;
+// 	while (elem1 != NULL)
+// 	{
+// 		i = 0;
+// 		n = *((int *)elem1->content);
+// 		while (++i <= len)
+// 		{
+// 			elem2 = ft_lstelem(a_stack, i);
+// 			if (elem1 != elem2 && n == *((int *)elem2->content))
+// 				return (true);
+// 		}
+// 		elem1 = elem1->next;
+// 	}
+// 	return (false);
+// }
+
+t_bool		stack_has_duplicates(t_stack a_stack)
+{
+	int		i1;
+	int		i2;
+
+	i1 = -1;
+	while (++i1 < a_stack.size)
+	{
+		i2 = -1;
+		while (++i2 < a_stack.size)
 		{
-			elem2 = ft_lstelem(a_stack, i);
-			if (elem1 != elem2 && n == *((int *)elem2->content))
+			if (a_stack.data[i1] == a_stack.data[i2] && i1 != i2)
 				return (true);
 		}
-		elem1 = elem1->next;
 	}
 	return (false);
 }

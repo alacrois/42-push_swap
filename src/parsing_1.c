@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 19:39:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/02 21:42:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,34 @@ int			parse_number(char *s, int *n)
 	return (1);
 }
 
-t_list		*parse_stack(int ac, char **av)
+// Old implementation :
+// t_list		*parse_stack(int ac, char **av)
+// {
+// 	t_list	*stack;
+// 	int		i;
+// 	int		tmp;
+
+// 	stack = NULL;
+// 	i = 0;
+// 	while (++i < ac)
+// 	{
+// 		if (parse_number(av[i], &tmp) == 0)
+// 		{
+// 			free_list(&stack);
+// 			return (NULL);
+// 		}
+// 		ft_lstaddend(&stack, ft_lstnew((const void *)&tmp, sizeof(int)));
+// 	}
+// 	return (stack);
+// }
+
+t_stack		parse_stack(int ac, char **av)
 {
-	t_list	*stack;
+	t_stack	stack;
 	int		i;
 	int		tmp;
 
-	stack = NULL;
+	stack = new_stack(ac - 1);
 	i = 0;
 	while (++i < ac)
 	{
@@ -103,7 +124,7 @@ t_list		*parse_stack(int ac, char **av)
 			free_list(&stack);
 			return (NULL);
 		}
-		ft_lstaddend(&stack, ft_lstnew((const void *)&tmp, sizeof(int)));
+		stack.data[i - 1] = tmp;
 	}
 	return (stack);
 }
