@@ -2,25 +2,22 @@ NAME2 = checker
 
 NAME = push_swap
 
-SRCS =	src/push_swap.c \
-		src/parsing_1.c \
+SRCS = 	src/parsing_1.c \
 		src/parsing_2.c \
-		src/utils.c \
+		src/utils_1.c \
+		src/utils_2.c \
 		src/operations_1.c \
 		src/operations_2.c \
+		src/operations_3.c \
+		src/operations_4.c \
 		src/stack_1.c \
 		src/stack_2.c
 
-SRCS2 =	src/checker.c \
-		src/parsing_1.c \
-		src/parsing_2.c \
-		src/utils.c \
-		src/operations_1.c \
-		src/operations_2.c \
-		src/stack_1.c \
-		src/stack_2.c
+SRCS1 =	src/push_swap.c $(SRCS)
 
-OBJS = $(SRCS:.c=.o)
+SRCS2 =	src/checker.c $(SRCS)
+
+OBJS1 = $(SRCS1:.c=.o)
 
 OBJS2 = $(SRCS2:.c=.o)
 
@@ -43,9 +40,9 @@ all : $(NAME)
 %.o : %.c
 	gcc $(FLAGS) -c -o $@ $< $(INCLUDES)
 
-$(NAME) : $(OBJS)
+$(NAME) : $(OBJS1)
 	@make -C $(LIBFT_DIR)
-	gcc $(FLAGS) -o $(NAME) $(OBJS) $(LIBDIRS) $(LIBS)
+	gcc $(FLAGS) -o $(NAME) $(OBJS1) $(LIBDIRS) $(LIBS)
 	@echo "Compilation finished."
 
 $(NAME2) : $(OBJS2)
@@ -54,7 +51,7 @@ $(NAME2) : $(OBJS2)
 	@echo "Compilation finished."
 
 clean :
-	rm -f $(OBJS) $(OBJS2)
+	rm -f $(OBJS1) $(OBJS2)
 	make clean -C $(LIBFT_DIR)
 
 fclean : clean
