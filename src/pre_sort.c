@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 21:26:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 23:55:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,11 @@ void			pre_sort_stack_core(t_so *so, float median_ratio)
 	{
 		element_on_top = so->a_stack->data[so->a_stack->size - 1];
 		if (element_on_top < median)
+		{
+			// Check last rotations (RA ==> RRA ?)
 			execute_and_save_operation(so->a_stack, so->b_stack, \
 										so->operations, PB);
+		}
 		else
 			execute_and_save_operation(so->a_stack, so->b_stack, \
 										so->operations, RA);
@@ -109,8 +112,9 @@ void			pre_sort_stack(t_so *so)
 
 	s = so->a_stack->max_size;
 	pre_sort_div = s < 1000 ? 8 : 16;
-	pre_sort_div = s < 100 ? 4 : s;
-	pre_sort_div = s < 50 ? 2 : s;
+	pre_sort_div = s < 100 ? 4 : pre_sort_div;
+	pre_sort_div = s < 50 ? 2 : pre_sort_div;
+	// printf("pre_sort_div = %i\n", pre_sort_div);
 	med_step = 1 / (float)pre_sort_div;
 	med = med_step;
 	while (med < 1)
