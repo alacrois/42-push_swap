@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 22:11:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 20:18:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
 	}
 }
 
-void	execute_stack_operations(t_stack *a_stack, t_stack *b_stack, \
+void			execute_stack_operations(t_stack *a_stack, t_stack *b_stack, \
 									t_list *operations)
 {
 	t_operation	o;

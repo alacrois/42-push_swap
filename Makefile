@@ -9,9 +9,9 @@ SRCS = 	src/parsing_1.c \
 		src/operations_1.c \
 		src/operations_2.c \
 		src/operations_3.c \
-		src/operations_4.c \
 		src/stack_1.c \
-		src/stack_2.c
+		src/stack_2.c \
+		src/pre_sort.c
 
 SRCS1 =	src/push_swap.c $(SRCS)
 

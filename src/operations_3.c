@@ -6,93 +6,100 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/03 21:55:01 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 22:20:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-void		execute_and_save_operation(t_stack *a_stack, t_stack *b_stack, \
-										t_list **operations, t_operation o)
+static void		delete_next_n_elem(t_list *start, int n)
 {
-	t_list	*new_operation;
+	t_list		*elem;
+	t_list		*nextnext;
+	int			i;
 
-	new_operation = NULL;
-	add_operation(&new_operation, o);
-	execute_stack_operations(a_stack, b_stack, new_operation);
-	free_list(&new_operation);
-	add_operation(operations, o);
-}
-
-int			get_element_index(t_stack *stack, int to_find)
-{
-	int		index;
-	int		to_compare;
-	int		i;
-
-	index = 1;
-	i = stack->size;
-	while (--i >= 0)
-	{
-		to_compare = stack->data[i];
-		if (to_find == to_compare)
-			return (index);
-		index++;
-	}
-	// ft_putstr("Error in 'get_element_index', could not find ");
-	// ft_putnbr(to_find);
-	// ft_putstr(" in stack !\n");
-	// ft_exit("");
-	return (-1);
-}
-
-void		all_b_to_a(t_stack *a_stack, t_stack *b_stack, \
-										t_list **operations)
-{
-	while (b_stack->size > 0)
-		execute_and_save_operation(a_stack, b_stack, operations, PA);
-}
-
-int			get_minimum(t_stack *stack, int *nextmin)
-{
-	int		tmp;
-	int		n;
-	int		i;
-
-	tmp = 2147483647;
-	i = -1;
-	while (++i < stack->size)
-	{
-		n = stack->data[i];
-		if (n <= tmp && (nextmin == NULL || n >= *nextmin))
-			tmp = n;
-	}
-	if (nextmin != NULL && tmp < *nextmin)
-	{
-		ft_putstr("get_minimum error ! tmp = ");
-		ft_putnbr(tmp);
-		ft_putstr(" & *nextmin = ");
-		ft_putnbr(*nextmin);
-		ft_exit(0);
-	}
-	return (tmp);
-}
-
-void		get_ordered_numbers_in_array(t_stack *a_stack, int numbers[])
-{
-	int		i;
-	int		len;
-	int		nextmin;
-
-	if (a_stack->size == 0)
-		return ;
-	len = a_stack->size;
-	numbers[0] = get_minimum(a_stack, NULL);
-	nextmin = numbers[0] + 1;
+	elem = start->next;
 	i = 0;
-	while (++i < len)
+	while (elem != NULL && i < n)
 	{
-		numbers[i] = get_minimum(a_stack, &nextmin);
-		nextmin = numbers[i] + 1;
+		nextnext = elem->next;
+		if (elem->content != NULL)
+		{
+			printf("Trimmed operation : %i\n", *((t_operation *)elem->content));
+			free(elem->content);
+		}
+		free(elem);
+		elem = nextnext;
+	}
+	start->next = elem;
+}
+
+static int		trim_next(t_list *start, int count, t_operation o, t_list *before_cut)
+{
+	int			deleted;
+	t_list		*elem;
+	t_list		*next_elem;
+
+
+	elem = start;
+	deleted = 0;
+	while (elem != NULL && *((t_operation *)elem->content) == o && count > 0)
+	{
+		next_elem = elem->next;
+		if (elem->content != NULL)
+			free(elem->content);
+		free(elem);
+		count--;
+		deleted++;
+		elem = next_elem;
+	}
+	if (before_cut != NULL)
+		before_cut->next = elem;
+	return (deleted);
+}
+
+static void		trim_core(t_list *elem)
+{
+	t_list		*ne;
+	t_list		*before_cut;
+	t_operation o;
+	int			count;
+	int			deleted;
+
+	o = *((t_operation *)elem->content);
+	count = 1;
+	ne = elem->next;
+	while (ne != NULL && *((t_operation *)ne->content) == o)
+	{
+		count++;
+		before_cut = ne;
+		ne = ne->next;
+	}
+	if (o == RA)
+		deleted = trim_next(ne, count, RRA, before_cut);
+	else if (o == RRA)
+		deleted = trim_next(ne, count, RA, before_cut);
+	if (deleted > 0)
+		delete_next_n_elem(elem, deleted);
+}
+
+void		trim_operations(t_list **operations)
+{
+	t_list	*elem;
+	// t_list	*previous_elem;
+
+	if (operations == NULL || *operations == NULL)
+		return ;
+	elem = *operations;
+	// previous_elem = NULL;
+	while (elem != NULL)
+	{
+		// if (previous_elem == NULL)
+		// 	*operations = trim_core(elem);
+		// else
+		// 	previous_elem->next = trim_core(elem);
+		trim_core(elem);
+		// previous_elem = elem;
+		elem = elem->next;
 	}
 }

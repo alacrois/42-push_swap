@@ -1,126 +1,94 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operations_1.c                                     :+:      :+:    :+:   */
+/*   operations_3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/01 21:44:18 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 20:20:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-void	swap(t_list **a_stack, t_list **b_stack, t_operation o)
+void		execute_and_save_operation(t_stack *a_stack, t_stack *b_stack, \
+										t_list **operations, t_operation o)
 {
-	int		*a;
-	int		*b;
-	t_list	*stack;
+	t_list	*new_operation;
+
+	new_operation = NULL;
+	add_operation(&new_operation, o);
+	execute_stack_operations(a_stack, b_stack, new_operation);
+	free_list(&new_operation);
+	add_operation(operations, o);
+}
+
+int			get_element_index(t_stack *stack, int to_find)
+{
+	int		index;
+	int		to_compare;
+	int		i;
+
+	index = 1;
+	i = stack->size;
+	while (--i >= 0)
+	{
+		to_compare = stack->data[i];
+		if (to_find == to_compare)
+			return (index);
+		index++;
+	}
+	return (-1);
+}
+
+void		all_b_to_a(t_stack *a_stack, t_stack *b_stack, \
+										t_list **operations)
+{
+	while (b_stack->size > 0)
+		execute_and_save_operation(a_stack, b_stack, operations, PA);
+}
+
+int			get_minimum(t_stack *stack, int *nextmin)
+{
 	int		tmp;
+	int		n;
+	int		i;
 
-	stack = o == SA ? *a_stack : NULL;
-	stack = o == SB ? *b_stack : stack;
-	if (o == SS)
+	tmp = 2147483647;
+	i = -1;
+	while (++i < stack->size)
 	{
-		swap(a_stack, b_stack, SA);
-		swap(a_stack, b_stack, SB);
+		n = stack->data[i];
+		if (n <= tmp && (nextmin == NULL || n >= *nextmin))
+			tmp = n;
 	}
-	if (stack != NULL)
+	if (nextmin != NULL && tmp < *nextmin)
 	{
-		if (ft_lstlen(stack) >= 2)
-		{
-			a = (int *)ft_lstelem(stack, 1)->content;
-			b = (int *)ft_lstelem(stack, 2)->content;
-			tmp = *a;
-			*a = *b;
-			*b = tmp;
-		}
+		ft_putstr("get_minimum error ! tmp = ");
+		ft_putnbr(tmp);
+		ft_putstr(" & *nextmin = ");
+		ft_putnbr(*nextmin);
+		ft_exit(0);
 	}
+	return (tmp);
 }
 
-void	push(t_list **a_stack, t_list **b_stack, t_operation o)
+void		get_ordered_numbers_in_array(t_stack *a_stack, int numbers[])
 {
-	t_list	*elem;
-	t_list	**stack1;
-	t_list	**stack2;
+	int		i;
+	int		len;
+	int		nextmin;
 
-	stack1 = o == PA ? a_stack : NULL;
-	stack1 = o == PB ? b_stack : stack1;
-	stack2 = o == PA ? b_stack : NULL;
-	stack2 = o == PB ? a_stack : stack2;
-	if (stack2 != NULL)
+	if (a_stack->size == 0)
+		return ;
+	len = a_stack->size;
+	numbers[0] = get_minimum(a_stack, NULL);
+	nextmin = numbers[0] + 1;
+	i = 0;
+	while (++i < len)
 	{
-		if (ft_lstlen(*stack2) >= 1)
-		{
-			elem = *stack2;
-			*stack2 = elem->next;
-			elem->next = *stack1;
-			*stack1 = elem;
-		}
-	}
-}
-
-void	rotate(t_list **a_stack, t_list **b_stack, t_operation o)
-{
-	t_list	*elem;
-	t_list	**stack;
-
-	stack = o == RA ? a_stack : NULL;
-	stack = o == RB ? b_stack : stack;
-	if (o == RR)
-	{
-		rotate(a_stack, b_stack, RA);
-		rotate(a_stack, b_stack, RB);
-	}
-	if (stack != NULL)
-	{
-		if (ft_lstlen(*stack) >= 2)
-		{
-			elem = *stack;
-			*stack = elem->next;
-			elem->next = NULL;
-			ft_lstaddend(stack, elem);
-		}
-	}
-}
-
-void	reverse_rotate(t_list **a_stack, t_list **b_stack, t_operation o)
-{
-	t_list	*elem;
-	t_list	**stack;
-
-	stack = o == RRA ? a_stack : NULL;
-	stack = o == RRB ? b_stack : stack;
-	if (o == RRR)
-	{
-		reverse_rotate(a_stack, b_stack, RRA);
-		reverse_rotate(a_stack, b_stack, RRB);
-	}
-	if (stack != NULL)
-	{
-		if (ft_lstlen(*stack) >= 2)
-		{
-			elem = ft_lstelem(*stack, ft_lstlen(*stack) - 1);
-			elem->next->next = *stack;
-			*stack = elem->next;
-			elem->next = NULL;
-		}
-	}
-}
-
-void	execute_operations(t_list **a_stack, t_list **b_stack, \
-							t_list *operations)
-{
-	t_operation	o;
-
-	while (operations != NULL)
-	{
-		o = *(t_operation *)operations->content;
-		swap(a_stack, b_stack, o);
-		push(a_stack, b_stack, o);
-		rotate(a_stack, b_stack, o);
-		reverse_rotate(a_stack, b_stack, o);
-		operations = operations->next;
+		numbers[i] = get_minimum(a_stack, &nextmin);
+		nextmin = numbers[i] + 1;
 	}
 }

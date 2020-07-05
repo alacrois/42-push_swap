@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 20:00:45 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 21:38:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,11 @@ void		execute_pending_b_operations(t_so so)
 		o = *((t_operation *)elem->content);
 		execute_and_save_operation(so.a_stack, so.b_stack, so.operations, o);
 		if (DEBUG == true)
-			printf("Executed operation %i from 'pending_b_operations' list !\n", (int)o);
+		{
+			ft_putstr("Executed operation ");
+			ft_putnbr((int)o);
+			ft_putendl(" from 'pending_b_operations' list !");
+		}
 		elem = elem->next;
 	}
 	free_list(so.pending_b_operations);
@@ -142,20 +146,13 @@ t_list		*generate_operations(t_stack *a_stack)
 	get_ordered_numbers_in_array(a_stack, numbers);
 	so.ordered_numbers = numbers;
 	len = a_stack->size;
-	if (ENABLE_PRE_SORT == true && len >= PRE_SORT_SIZE_MINIMUM)
+	if (len >= SMALL_STACK_THRESHOLD)
+		pre_sort_stack(&so);
+	else
 	{
-		// int		pre_sort_div = 16;
-		// float	med;
-		// float	med_step;
-
-		// med_step = 1 / (float)pre_sort_div;
-		// med = med_step;
-		// while (med < 1)
-		// {
-		// 	pre_sort_stack_2(&so, pre_sort_div, med);
-		// 	med += med_step;
-		// }
-		// all_b_to_a(so.a_stack, so.b_stack, so.operations);
+		sort(&so);
+		trim_operations(&operations);
+		return (operations);
 	}
 	i = -1;
 	while (++i < len)
@@ -186,7 +183,8 @@ t_list		*generate_operations(t_stack *a_stack)
 	}
 	all_b_to_a(a_stack, &b_stack, &operations);
 	if (DEBUG_INFOS == true)
-		printf("Total number of operations : %i\n", (int)ft_lstlen(operations));
+		printf("Total number of operations (before trimming): %i\n", (int)ft_lstlen(operations));
+	trim_operations(&operations);
 	return (operations);
 }
 

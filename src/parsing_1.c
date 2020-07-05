@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 22:13:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 20:17:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,27 +87,6 @@ int			parse_number(char *s, int *n)
 	*n = ft_atoi((const char *)s);
 	return (1);
 }
-
-// Old implementation :
-// t_list		*parse_stack(int ac, char **av)
-// {
-// 	t_list	*stack;
-// 	int		i;
-// 	int		tmp;
-
-// 	stack = NULL;
-// 	i = 0;
-// 	while (++i < ac)
-// 	{
-// 		if (parse_number(av[i], &tmp) == 0)
-// 		{
-// 			free_list(&stack);
-// 			return (NULL);
-// 		}
-// 		ft_lstaddend(&stack, ft_lstnew((const void *)&tmp, sizeof(int)));
-// 	}
-// 	return (stack);
-// }
 
 t_stack		parse_stack(int ac, char **av)
 {

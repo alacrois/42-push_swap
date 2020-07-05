@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/02 21:58:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 20:17:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_stack		new_stack(int size)
 		ft_exit("Malloc error in 'new_stack'");
 	s.size = size;
 	s.max_size = size;
-	return s;
+	return (s);
 }
 
 void		add_bottom(t_stack *s, int n)
