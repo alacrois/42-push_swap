@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/04 01:08:19 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 19:08:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void			get_ordered_numbers_in_array(t_stack *a_stack, int numbers[]);
 // 				t_bool push_back, int test_number);
 void			pre_sort_stack(t_so *so, t_bool a_stack, int fraction, \
 				float median_ratio);
-
+void			pre_sort_stack_test(t_so * so);
+void			pre_sort_stack_2(t_so *so, int div, float median_ratio);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/04 02:30:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 19:47:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,4 +173,109 @@ void			pre_sort_stack(t_so *so, t_bool sort_in_a_stack, int fraction, \
 		printf("========== SORT DEBUG 2 ==========\n");
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
+}
+
+t_bool			check_order(t_so *so)
+{
+	int			len;
+	int			i;
+	int			a;
+	int			b;
+
+	len = so->a_stack->max_size;
+	i = 0;
+	while (++i < len)
+	{
+		a = number_at_index(*so->a_stack, i);
+		b = number_at_index(*so->a_stack, i + 1);
+		// printf("b = %i, min = %i, a = %i\n", b, so->ordered_numbers[0], a);
+		if ((b != so->ordered_numbers[0] || a != so->ordered_numbers[len - 1]) && a > b)
+			return (false);
+	}
+	return (true);
+}
+
+void			rotate_minimum_on_top(t_so *so)
+{
+	int			len;
+	int			min;
+	int			index;
+	t_operation	rotate_op;
+	
+	len = so->a_stack->max_size;
+	min = so->ordered_numbers[0];
+	index = get_element_index(so->a_stack, min);
+	rotate_op = index - 1 <= len / 2 ? RA : RRA;
+	while (number_at_index(*so->a_stack, 1) != min)
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, rotate_op);
+}
+
+void			pre_sort_stack_test(t_so *so)
+{
+	int			len;
+
+	if (DEBUG_SORT == true)
+	{
+		printf("========== SORT TEST BEFORE ==========\n");
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	len = so->a_stack->max_size;
+	while (check_order(so) == false)
+	{
+		if (number_at_index(*so->a_stack, 1) > number_at_index(*so->a_stack, 2) \
+			&& number_at_index(*so->a_stack, 1) != so->ordered_numbers[len - 1])
+			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SA);
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+	}
+	if (DEBUG_SORT == true)
+	{
+		printf("========== SORT TEST AFTER ==========\n");
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	rotate_minimum_on_top(so);
+}
+
+void			pre_sort_stack_2(t_so *so, int div, float median_ratio)
+{
+	int		i;
+	int		median;
+	int		test_number;
+	int 	push_moves;
+	int 	rotate_moves;
+
+	median = get_median(so->ordered_numbers, so->a_stack->max_size, median_ratio);
+	// test_number = 2 * (int)((float)so->a_stack->max_size * fraction);
+	test_number = 2 * (int)((float)so->a_stack->max_size / div);
+	if (DEBUG_SORT == true)
+	{
+		printf("Median = %i && div = %i && median_ratio = %f   ", \
+			median, div, median_ratio);
+	}
+	i = -1;
+	push_moves = 0;
+	rotate_moves = 0;
+	test_number = so->a_stack->size;
+	while (++i <= test_number)
+	{
+		if (pre_sort_core(so, true, median) == 1)
+			push_moves++;
+		else
+			rotate_moves++;
+	}
+	if (DEBUG_SORT == true)
+	{
+		printf("========== SORT DEBUG 1 ==========\n");
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	// push_back_stack(so, true, push_moves);
+	// rotate_back(so, true, rotate_moves);
+	// if (div < 8)
+	// {
+
+	// }
+	// if (DEBUG_SORT == true)
+	// {
+	// 	printf("========== SORT DEBUG 2 ==========\n");
+	// 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	// }
 }

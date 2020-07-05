@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/04 01:07:32 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/05 20:00:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,12 +144,18 @@ t_list		*generate_operations(t_stack *a_stack)
 	len = a_stack->size;
 	if (ENABLE_PRE_SORT == true && len >= PRE_SORT_SIZE_MINIMUM)
 	{
-		// pre_sort_stack(&so, true, 0.5, true, a_stack->max_size);
-		pre_sort_stack(&so, true, 2, 0.5);
-		// pre_sort_stack(&so, true, 2);
-		// printf("Before main algo :\n\n");
-		// display_infos(*a_stack, b_stack, operations);
+		// int		pre_sort_div = 16;
+		// float	med;
+		// float	med_step;
 
+		// med_step = 1 / (float)pre_sort_div;
+		// med = med_step;
+		// while (med < 1)
+		// {
+		// 	pre_sort_stack_2(&so, pre_sort_div, med);
+		// 	med += med_step;
+		// }
+		// all_b_to_a(so.a_stack, so.b_stack, so.operations);
 	}
 	i = -1;
 	while (++i < len)
