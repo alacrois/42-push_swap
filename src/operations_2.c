@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 19:04:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/07 00:04:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,63 @@ t_so		init_stacks_and_operations(t_stack *a_stack, t_stack *b_stack, \
 	return (so);
 }
 
+void		execute_one_operation(t_so *so, t_operation o)
+{
+	stack_swap(so->a_stack, so->b_stack, o);
+	stack_push(so->a_stack, so->b_stack, o);
+	stack_rotate(so->a_stack, so->b_stack, o);
+	stack_reverse_rotate(so->a_stack, so->b_stack, o);
+}
+
+void		undo_all_operations(t_so *so)
+{
+	t_list		*elem;
+	t_operation	o;
+	int			len;
+	int			i;
+
+	elem = *(so->operations);
+	// printf("Operations before changing : \n");
+	// display_operations(*so->operations);
+	while (elem != NULL)
+	{
+		o = *((t_operation *)elem->content);
+		if (o == PA)
+			*((t_operation *)elem->content) = PB;
+		else if (o == PB)
+			*((t_operation *)elem->content) = PA;
+		else if (o == RR)
+			*((t_operation *)elem->content) = RRR;
+		else if (o == RRR)
+			*((t_operation *)elem->content) = RR;
+		else if (o == RA)
+			*((t_operation *)elem->content) = RRA;
+		else if (o == RRA)
+			*((t_operation *)elem->content) = RA;
+		else if (o == RB)
+			*((t_operation *)elem->content) = RRB;
+		else if (o == RRB)
+			*((t_operation *)elem->content) = RB;
+		elem = elem->next;		
+	}
+	// printf("Operations AFTER changing : \n");
+	// display_operations(*so->operations);
+	// ft_putendl("=============================");
+	len = ft_lstlen(*so->operations);
+	i = len;
+	while (i > 0)
+	{
+		elem = ft_lstelem(*(so->operations), i);
+		o = *((t_operation *)elem->content);
+		execute_one_operation(so, o);
+		i--;
+	}
+	// ft_putendl("D1");
+	free_list(so->operations);
+	// ft_putendl("D2");
+	*(so->operations) = NULL;
+}
+
 t_list		*generate_operations(t_stack *a_stack)
 {
 	t_list	*operations;
@@ -136,6 +193,8 @@ t_list		*generate_operations(t_stack *a_stack)
 	int		len;
 	// int		target;
 	int		element_to_find_index;
+	int		ooo;
+	size_t		op_len;
 
 	operations = NULL;
 	pending_b_operations = NULL;
@@ -147,15 +206,47 @@ t_list		*generate_operations(t_stack *a_stack)
 	so.ordered_numbers = numbers;
 	len = a_stack->size;
 
-	printf("Out of order : %i\n\n", out_of_order(&so));
 
 	if (len >= SMALL_STACK_THRESHOLD)
 		pre_sort_stack(&so);
-	else if (out_of_order(&so) < a_stack->max_size - 1)
+	else
 	{
-		// if (len > 3)
-		// 	pre_sort_stack(&so);
-		sort_small(&so);
+		ooo = out_of_order(&so);
+		// printf("Out of order : %i (size = %i)\n\n", ooo, a_stack->max_size);
+		// if (ooo >= (a_stack->max_size / 2) + 1)
+		if (ooo >= 1)
+		{
+			sort_small(&so);
+			op_len = ft_lstlen(*so.operations);
+
+			// printf("Stack before undoing all :\n");
+			// display_infos(*a_stack, b_stack, operations);
+			undo_all_operations(&so);
+			// printf("Stack after undoing all :\n");
+			// display_infos(*a_stack, b_stack, operations);
+			// printf("=====================\n");
+
+			inverse_order(&so);
+			sort_small(&so);
+			if (op_len < ft_lstlen(*so.operations))
+			{
+				undo_all_operations(&so);
+				sort_small(&so);
+				// printf("'inverse order' not used !\n");
+			}
+			else
+			{
+				// printf("'inverse order' used !\n");
+			}
+			
+			// printf("Stack inversed :\n");
+			// display_infos(*a_stack, b_stack, operations);
+			// ooo = out_of_order(&so);
+			// printf("Out of order : %i (size = %i)\n\n", ooo, a_stack->max_size);
+
+		}
+		else
+			sort_small(&so);
 		// trim_operations(&operations);
 		if (DEBUG_INFOS == true)
 			printf("Total number of operations (before trimming): %i\n", (int)ft_lstlen(operations));

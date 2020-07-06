@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 17:55:39 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 22:25:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,22 @@ void			optimise_last_rotations(t_list **operations, int stack_size)
 	}
 	// ft_putendl("D14");
 
+}
+
+void	inverse_order(t_so *so)
+{
+	int	len;
+	int i;
+
+	len = so->a_stack->max_size;
+	i = len;
+	while (--i >= 2)
+	{
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+		if (so->b_stack->size > 1)
+			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RB);
+	}
+	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SA);
+	while (so->b_stack->size > 0)
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
 }
