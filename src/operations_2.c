@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 17:32:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 19:04:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,14 @@ t_list		*generate_operations(t_stack *a_stack)
 	so.ordered_numbers = numbers;
 	len = a_stack->size;
 
-	// printf("Out of order : %i\n\n", out_of_order(&so));
+	printf("Out of order : %i\n\n", out_of_order(&so));
 
 	if (len >= SMALL_STACK_THRESHOLD)
 		pre_sort_stack(&so);
-	else
+	else if (out_of_order(&so) < a_stack->max_size - 1)
 	{
+		// if (len > 3)
+		// 	pre_sort_stack(&so);
 		sort_small(&so);
 		// trim_operations(&operations);
 		if (DEBUG_INFOS == true)

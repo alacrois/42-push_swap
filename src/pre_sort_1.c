@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 17:58:28 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 18:46:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ t_bool			check_order(t_so *so)
 
 	len = so->a_stack->max_size;
 	i = 0;
-	while (++i < len)
+	while (++i <= len)
 	{
 		a = number_at_index(*so->a_stack, i);
-		b = number_at_index(*so->a_stack, i + 1);
+		b = number_at_index(*so->a_stack, i < len ? i + 1 : 1);
 		if ((b != so->ordered_numbers[0] || a != so->ordered_numbers[len - 1]) \
 			&& a > b)
 			return (false);
@@ -64,11 +64,11 @@ void			sort_small(t_so *so)
 	len = so->a_stack->max_size;
 	while (check_order(so) == false)
 	{
-		// if (number_at_index(*a, 1) > number_at_index(*a, 2) 
-		// 	&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1] 
-		// 	|| number_at_index(*a, 2) != so->ordered_numbers[0]))
 		if (number_at_index(*a, 1) > number_at_index(*a, 2) \
-			&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1]))
+			&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1] \
+			|| number_at_index(*a, 2) != so->ordered_numbers[0]))
+		// if (number_at_index(*a, 1) > number_at_index(*a, 2)
+		// 	&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1]))
 		{
 			optimise_last_rotations(so->operations, len);
 			execute_and_save_operation(a, NULL, so->operations, SA);
@@ -80,6 +80,10 @@ void			sort_small(t_so *so)
 	{
 		ft_putendl("========== SORT TEST AFTER ==========");
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+		// if (check_order(so) == false)
+		// 	printf("Here, check_order(so) == false\n");
+		// else
+		// 	printf("Here, check_order(so) == true\n");
 	}
 	rotate_minimum_on_top(so);
 	optimise_last_rotations(so->operations, len);
