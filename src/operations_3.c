@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 23:20:32 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:24:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,49 @@ void		trim_operations(t_list **operations)
 	}
 	// printf("Operations AFTER trim :\n");
 
+}
+
+int		nb_at_index_mod(t_stack *stack, int index, int size)
+{
+	int	n;
+
+	if (index < 1)
+		n = number_at_index(*stack, index + size);
+	else if (index > size)
+		n = number_at_index(*stack, index - size);
+	else
+		n = number_at_index(*stack, index);
+	return (n);
+}
+
+int		out_of_order(t_so *so)
+{
+	int	min;
+	int	max;
+	int	count;
+	int	i;
+	int	a;
+	int	b;
+	int c;
+	int len;
+
+	min = so->ordered_numbers[0];
+	len = so->a_stack->max_size;
+	max = so->ordered_numbers[so->a_stack->max_size - 1];
+	count = 0;
+
+	i = 0;
+	while (++i < so->a_stack->max_size)
+	{
+		a = nb_at_index_mod(so->a_stack, i - 1, len);
+		b = nb_at_index_mod(so->a_stack, i, len);
+		c = nb_at_index_mod(so->a_stack, i + 1, len);
+		// printf("Considering '%i', comparing to %i(a) & %i(c)\n", b, a, c);
+		if ((c != min && b > c) || (a != max && a > b))
+		{
+			// printf("'%i' is out of order\n", b);
+			count++;
+		}
+	}
+	return (count);
 }

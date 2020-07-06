@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pre_sort.c                                         :+:      :+:    :+:   */
+/*   pre_sort_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 23:55:29 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 17:58:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void			rotate_minimum_on_top(t_so *so)
 									so->operations, rotate_op);
 }
 
-void			sort(t_so *so)
+void			sort_small(t_so *so)
 {
 	int			len;
 	t_stack		*a;
@@ -64,10 +64,17 @@ void			sort(t_so *so)
 	len = so->a_stack->max_size;
 	while (check_order(so) == false)
 	{
+		// if (number_at_index(*a, 1) > number_at_index(*a, 2) 
+		// 	&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1] 
+		// 	|| number_at_index(*a, 2) != so->ordered_numbers[0]))
 		if (number_at_index(*a, 1) > number_at_index(*a, 2) \
-			&& number_at_index(*a, 1) != so->ordered_numbers[len - 1])
+			&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1]))
+		{
+			optimise_last_rotations(so->operations, len);
 			execute_and_save_operation(a, NULL, so->operations, SA);
-		execute_and_save_operation(a, NULL, so->operations, RA);
+		}
+		if (check_order(so) == false)
+			execute_and_save_operation(a, NULL, so->operations, RA);
 	}
 	if (DEBUG_SORT == true)
 	{
@@ -75,6 +82,7 @@ void			sort(t_so *so)
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
 	rotate_minimum_on_top(so);
+	optimise_last_rotations(so->operations, len);
 }
 
 void			pre_sort_stack_core(t_so *so, float median_ratio)

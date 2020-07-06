@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 23:48:23 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 17:00:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "libft.h"
 # define DISPLAY_INFOS true
 # define ENABLE_PRE_SORT true
-# define SMALL_STACK_THRESHOLD 10
+# define SMALL_STACK_THRESHOLD 15
 
 typedef	enum	e_operation
 {
@@ -82,8 +82,10 @@ int				get_minimum(t_stack *stack, int *nextmin);
 void			get_ordered_numbers_in_array(t_stack *a_stack, int numbers[]);
 
 void			pre_sort_stack(t_so *so);
-void			sort(t_so *so);
+void			sort_small(t_so *so);
 
 void			trim_operations(t_list **operations);
+int				out_of_order(t_so *so);
+void			optimise_last_rotations(t_list **operations, int stack_size);
 
 #endif

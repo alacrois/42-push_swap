@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 23:42:38 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 17:32:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,12 +146,17 @@ t_list		*generate_operations(t_stack *a_stack)
 	get_ordered_numbers_in_array(a_stack, numbers);
 	so.ordered_numbers = numbers;
 	len = a_stack->size;
+
+	// printf("Out of order : %i\n\n", out_of_order(&so));
+
 	if (len >= SMALL_STACK_THRESHOLD)
 		pre_sort_stack(&so);
 	else
 	{
-		sort(&so);
-		trim_operations(&operations);
+		sort_small(&so);
+		// trim_operations(&operations);
+		if (DEBUG_INFOS == true)
+			printf("Total number of operations (before trimming): %i\n", (int)ft_lstlen(operations));
 		return (operations);
 	}
 	i = -1;
@@ -184,7 +189,7 @@ t_list		*generate_operations(t_stack *a_stack)
 	all_b_to_a(a_stack, &b_stack, &operations);
 	if (DEBUG_INFOS == true)
 		printf("Total number of operations (before trimming): %i\n", (int)ft_lstlen(operations));
-	trim_operations(&operations);
+	// trim_operations(&operations);
 	return (operations);
 }
 
