@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 00:04:19 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/07 00:16:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ t_list		*generate_operations(t_stack *a_stack)
 	so.ordered_numbers = numbers;
 	len = a_stack->size;
 
-
+	// printf("Stack is of size : %i\n", len);
 	if (len >= SMALL_STACK_THRESHOLD)
 		pre_sort_stack(&so);
 	else
