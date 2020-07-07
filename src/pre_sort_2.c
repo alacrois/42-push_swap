@@ -6,74 +6,81 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 22:25:41 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/07 20:20:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-void			optimise_last_rotations(t_list **operations, int stack_size)
+void			remove_last_rotations(t_list **operations, t_list *elem, \
+									t_operation o, t_operation last_rotation)
+{
+	t_list		*tmp;
+
+	if (o != last_rotation)
+	{
+		tmp = elem;
+		elem = elem->next;
+		tmp->next = NULL;
+		free_list(&elem);
+	}
+	else
+	{
+		free_list(operations);
+		*operations = NULL;
+	}
+}
+
+int				olr_init(t_list **operations, t_list **elem, \
+							t_operation *o, t_operation *last_rotation)
 {
 	int			len;
-	t_list		*elem;
-	t_list		*tmp;
-	t_operation	o;
-	t_operation	last_rotation;
-	int			count;
-	int			index;
 
 	if (operations == NULL || *operations == NULL)
-		return ;
+		return (0);
+	len = ft_lstlen(*operations);
+	*elem = ft_lstelem(*operations, len);
+	*o = *((t_operation *)(*elem)->content);
+	*last_rotation = *o;
+	if (*o != RA && *o != RRA)
+		return (0);
+	return (1);
+}
+
+int				count_last_rotations(t_list **operations, \
+					t_operation last_rotation, t_operation *o, t_list **elem)
+{
+	int			count;
+	int			index;
+	int			len;
+
 	len = ft_lstlen(*operations);
 	index = len;
-	elem = ft_lstelem(*operations, index);
-	o = *((t_operation *)elem->content);
-	// ft_putendl("D11");
-	if (o != RA && o != RRA)
-		return ;
-	last_rotation = o;
 	count = 0;
-	// ft_putendl("D12");
-	while (o == last_rotation && index > 0)
+	while (*o == last_rotation && index > 0)
 	{
-		elem = ft_lstelem(*operations, index);
-		o = *((t_operation *)elem->content);
-		if (o == last_rotation)
+		*elem = ft_lstelem(*operations, index);
+		*o = *((t_operation *)(*elem)->content);
+		if (*o == last_rotation)
 			count++;
 		index--;
 	}
-	// ft_putendl("D13");
+	return (count);
+}
+
+void			optimise_last_rotations(t_list **operations, int stack_size)
+{
+	t_list		*elem;
+	t_operation	o;
+	t_operation	last_rotation;
+	int			count;
+
+	if (olr_init(operations, &elem, &o, &last_rotation) == 0)
+		return ;
+	count = count_last_rotations(operations, last_rotation, &o, &elem);
 	if (stack_size - count < count)
 	{
-		// if (last_rotation == RA)
-		// 	printf("Replacing last %i RA with %i RRA\n", count, stack_size - count);
-		// else
-		// 	printf("Replacing last %i RRA with %i RA\n", count, stack_size - count);
-		// printf("Sequence previously was :\n");
-		// display_operations(*operations);
-		// printf("===================\n");
-		if (o != last_rotation)
-		{
-			tmp = elem;
-			elem = elem->next;
-			tmp->next = NULL;
-			free_list(&elem);
-		}
-		else
-		{
-			free_list(operations);
-			*operations = NULL;
-		}
-		
-		// if (*operations == NULL)
-		// 	printf("*operations == NULL\n");
-		// else
-		// {
-		// 	printf("*operations != NULL\n");
-		// 	o = *((t_operation *)(*operations)->content);
-		// 	printf("o = %i\n", (int)o);
-		// }
-		
+		remove_last_rotations(operations, elem, o, last_rotation);
 		o = last_rotation == RA ? RRA : RA;
 		while (count < stack_size)
 		{
@@ -81,24 +88,26 @@ void			optimise_last_rotations(t_list **operations, int stack_size)
 			count++;
 		}
 	}
-	// ft_putendl("D14");
-
 }
 
-void	inverse_order(t_so *so)
+void			inverse_order(t_so *so)
 {
-	int	len;
-	int i;
+	int			len;
+	int			i;
 
 	len = so->a_stack->max_size;
 	i = len;
 	while (--i >= 2)
 	{
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+		execute_and_save_operation(so->a_stack, so->b_stack, \
+									so->operations, PB);
 		if (so->b_stack->size > 1)
-			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RB);
+			execute_and_save_operation(so->a_stack, so->b_stack, \
+										so->operations, RB);
 	}
-	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SA);
+	execute_and_save_operation(so->a_stack, so->b_stack, \
+								so->operations, SA);
 	while (so->b_stack->size > 0)
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+		execute_and_save_operation(so->a_stack, so->b_stack, \
+									so->operations, PA);
 }

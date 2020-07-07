@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 00:16:07 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/07 19:05:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int			check_for_next_targets(t_so so, int order_index, int index)
 		if (so.a_stack->data[so.a_stack->size - 1] == next_target)
 		{
 			execute_and_save_operation(so.a_stack, so.b_stack, so.operations, PB);
-			add_operation(so.pending_b_operations, SB);
+			// add_operation(so.pending_b_operations, SB);
 			if (DEBUG == true)
 				printf("Next target (%i) is on top ! (current target = %i & target index = %i)\n", \
 					next_target, target, index);
@@ -182,6 +182,19 @@ void		undo_all_operations(t_so *so)
 	*(so->operations) = NULL;
 }
 
+void		check_swap_b(t_so *so)
+{
+	int		a;
+	int		b;
+
+	if (so->b_stack->size < 2)
+		return ;
+	a = number_at_index(*so->b_stack, 1);
+	b = number_at_index(*so->b_stack, 2);
+	if (a < b)
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SB);
+}
+
 t_list		*generate_operations(t_stack *a_stack)
 {
 	t_list	*operations;
@@ -208,11 +221,19 @@ t_list		*generate_operations(t_stack *a_stack)
 
 	// printf("Stack is of size : %i\n", len);
 	if (len >= SMALL_STACK_THRESHOLD)
+	{
+		// ooo = out_of_order(&so);
+		// printf("Out of order (before): %i (size = %i)\n\n", ooo, a_stack->max_size);
+		// if (ooo >= (a_stack->max_size / 2) + 1)
+		// 	inverse_order(&so);
+		// ooo = out_of_order(&so);
+		// printf("Out of order (after): %i (size = %i)\n\n", ooo, a_stack->max_size);
+		
 		pre_sort_stack(&so);
+	}
 	else
 	{
 		ooo = out_of_order(&so);
-		// printf("Out of order : %i (size = %i)\n\n", ooo, a_stack->max_size);
 		// if (ooo >= (a_stack->max_size / 2) + 1)
 		if (ooo >= 1)
 		{
@@ -260,25 +281,27 @@ t_list		*generate_operations(t_stack *a_stack)
 		if (element_to_find_index != -1)
 		{
 			put_indexed_element_on_top(so, i, element_to_find_index);
+			check_swap_b(&so);
 			execute_and_save_operation(a_stack, &b_stack, &operations, PB);
-			if (pending_b_operations != NULL)
-			{
-				if (DEBUG == true)
-					printf("Before 'execute_pending_b_operations' : top a = %i && top b = %i\n", \
-						a_stack->data[a_stack->size - 1], b_stack.data[b_stack.size - 1]);
-				// display_infos(*a_stack, b_stack, operations);
-				// ft_putstr("=================\n");
+			check_swap_b(&so);
+			// if (pending_b_operations != NULL)
+			// {
+			// 	if (DEBUG == true)
+			// 		printf("Before 'execute_pending_b_operations' : top a = %i && top b = %i\n",
+			// 			a_stack->data[a_stack->size - 1], b_stack.data[b_stack.size - 1]);
+			// 	// display_infos(*a_stack, b_stack, operations);
+			// 	// ft_putstr("=================\n");
 
-				execute_pending_b_operations(so);
-			}
+			// 	execute_pending_b_operations(so);
+			// }
 		}
 	}
-	if (pending_b_operations != NULL)
-	{
-			if (DEBUG == true)
-				printf("D2\n");
-			execute_pending_b_operations(so);
-	}
+	// if (pending_b_operations != NULL)
+	// {
+	// 		if (DEBUG == true)
+	// 			printf("D2\n");
+	// 		execute_pending_b_operations(so);
+	// }
 	all_b_to_a(a_stack, &b_stack, &operations);
 	if (DEBUG_INFOS == true)
 		printf("Total number of operations (before trimming): %i\n", (int)ft_lstlen(operations));

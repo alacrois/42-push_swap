@@ -6,33 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 00:04:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/07 20:06:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
 #define DEBUG_SORT false
-
-t_bool			check_order(t_so *so)
-{
-	int			len;
-	int			i;
-	int			a;
-	int			b;
-
-	len = so->a_stack->max_size;
-	i = 0;
-	while (++i <= len)
-	{
-		a = number_at_index(*so->a_stack, i);
-		b = number_at_index(*so->a_stack, i < len ? i + 1 : 1);
-		if ((b != so->ordered_numbers[0] || a != so->ordered_numbers[len - 1]) \
-			&& a > b)
-			return (false);
-	}
-	return (true);
-}
 
 void			rotate_minimum_on_top(t_so *so)
 {
@@ -50,18 +30,11 @@ void			rotate_minimum_on_top(t_so *so)
 									so->operations, rotate_op);
 }
 
-void			sort_small(t_so *so)
+void			swap_min_max(t_so *so)
 {
 	int			len;
-	t_stack		*a;
 	int			min_index;
 
-	a = so->a_stack;
-	if (DEBUG_SORT == true)
-	{
-		ft_putendl("========== SORT TEST BEFORE ==========");
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-	}
 	len = so->a_stack->max_size;
 	if (out_of_order(so) >= 1 && len > 3)
 	{
@@ -70,32 +43,30 @@ void			sort_small(t_so *so)
 			== so->ordered_numbers[len - 1])
 		{
 			rotate_minimum_on_top(so);
-			execute_and_save_operation(a, NULL, so->operations, SA);
-			// printf("Swapped min / max !\n");
+			execute_and_save_operation(so->a_stack, NULL, so->operations, SA);
 		}
 	}
+}
+
+void			sort_small(t_so *so)
+{
+	int			len;
+	t_stack		*a;
+
+	a = so->a_stack;
+	len = so->a_stack->max_size;
+	swap_min_max(so);
 	while (check_order(so) == false)
 	{
 		if (number_at_index(*a, 1) > number_at_index(*a, 2) \
 			&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1] \
 			|| number_at_index(*a, 2) != so->ordered_numbers[0]))
-		// if (number_at_index(*a, 1) > number_at_index(*a, 2)
-		// 	&& (number_at_index(*a, 1) != so->ordered_numbers[len - 1]))
 		{
 			optimise_last_rotations(so->operations, len);
 			execute_and_save_operation(a, NULL, so->operations, SA);
 		}
 		if (check_order(so) == false)
 			execute_and_save_operation(a, NULL, so->operations, RA);
-	}
-	if (DEBUG_SORT == true)
-	{
-		ft_putendl("========== SORT TEST AFTER ==========");
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-		// if (check_order(so) == false)
-		// 	printf("Here, check_order(so) == false\n");
-		// else
-		// 	printf("Here, check_order(so) == true\n");
 	}
 	rotate_minimum_on_top(so);
 	optimise_last_rotations(so->operations, len);
@@ -117,7 +88,6 @@ void			pre_sort_stack_core(t_so *so, float median_ratio)
 		element_on_top = so->a_stack->data[so->a_stack->size - 1];
 		if (element_on_top < median)
 		{
-			// Check last rotations (RA ==> RRA ?)
 			execute_and_save_operation(so->a_stack, so->b_stack, \
 										so->operations, PB);
 		}
@@ -138,7 +108,6 @@ void			pre_sort_stack(t_so *so)
 	pre_sort_div = s < 1000 ? 8 : 16;
 	pre_sort_div = s < 100 ? 4 : pre_sort_div;
 	pre_sort_div = s < 50 ? 2 : pre_sort_div;
-	// printf("pre_sort_div = %i\n", pre_sort_div);
 	med_step = 1 / (float)pre_sort_div;
 	med = med_step;
 	while (med < 1)
