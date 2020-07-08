@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/03 19:24:12 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:23:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
-t_bool	is_int(char *s)
+t_bool		is_int(char *s)
 {
 	long long	value;
 	int			sign;
@@ -38,7 +38,7 @@ t_bool	is_int(char *s)
 	return (true);
 }
 
-int		nb_len(int n)
+static int	nb_len(int n)
 {
 	int	len;
 
@@ -56,7 +56,7 @@ int		nb_len(int n)
 	return (len);
 }
 
-void	display_infos(t_stack a_stack, t_stack b_stack, t_list *operations)
+void		display_infos(t_stack a_stack, t_stack b_stack, t_list *operations)
 {
 	int			n;
 	int			i;
@@ -85,7 +85,7 @@ void	display_infos(t_stack a_stack, t_stack b_stack, t_list *operations)
 	ft_putchar('\n');
 }
 
-void	display_operation(t_operation o)
+static void	display_operation(t_operation o)
 {
 	if (o == SA)
 		ft_putendl("sa");
@@ -111,7 +111,7 @@ void	display_operation(t_operation o)
 		ft_putendl("rrr");
 }
 
-void	display_operations(t_list *operations)
+void		display_operations(t_list *operations)
 {
 	t_list		*elem;
 	t_operation	o;

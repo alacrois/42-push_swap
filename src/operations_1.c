@@ -6,21 +6,23 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 17:22:14 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:12:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
 void		execute_and_save_operation(t_stack *a_stack, t_stack *b_stack, \
 										t_list **operations, t_operation o)
 {
-	t_list	*new_operation;
-
-	new_operation = NULL;
-	add_operation(&new_operation, o);
-	execute_stack_operations(a_stack, b_stack, new_operation);
-	free_list(&new_operation);
+	if (o < PA)
+		stack_swap(a_stack, b_stack, o);
+	else if (o < RA)
+		stack_push(a_stack, b_stack, o);
+	else if (o < RRA)
+		stack_rotate(a_stack, b_stack, o);
+	else
+		stack_reverse_rotate(a_stack, b_stack, o);
 	add_operation(operations, o);
 }
 

@@ -6,11 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 17:22:01 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:24:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
 void		add_operation(t_list **operations, t_operation o)
 {
@@ -25,7 +25,7 @@ void		add_operation(t_list **operations, t_operation o)
 	}
 }
 
-int			parse_operation(char *line, t_list **operations)
+static int	parse_operation(char *line, t_list **operations)
 {
 	if (ft_strequ(line, "sa"))
 		add_operation(operations, SA);
@@ -72,7 +72,7 @@ t_list		*parse_operations(void)
 	return (operations);
 }
 
-int			parse_number(char *s, int *n)
+static int	parse_number(char *s, int *n)
 {
 	int		i;
 

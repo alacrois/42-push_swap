@@ -6,15 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 20:06:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:19:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
-#define DEBUG_SORT false
-
-void			rotate_minimum_on_top(t_so *so)
+static void		rotate_minimum_on_top(t_so *so)
 {
 	int			len;
 	int			min;
@@ -30,7 +28,7 @@ void			rotate_minimum_on_top(t_so *so)
 									so->operations, rotate_op);
 }
 
-void			swap_min_max(t_so *so)
+static void		swap_min_max(t_so *so)
 {
 	int			len;
 	int			min_index;
@@ -72,7 +70,7 @@ void			sort_small(t_so *so)
 	optimise_last_rotations(so->operations, len);
 }
 
-void			pre_sort_stack_core(t_so *so, float median_ratio)
+static void		pre_sort_stack_core(t_so *so, float median_ratio)
 {
 	int		i;
 	int		median;

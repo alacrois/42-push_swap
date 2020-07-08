@@ -6,13 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 19:20:09 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:11:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
-
-#define DEBUG_SORT false
+#include "push_swap.h"
 
 t_bool			check_order(t_so *so)
 {

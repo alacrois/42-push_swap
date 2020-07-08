@@ -6,31 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/05 20:17:23 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:19:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
-
-t_bool		is_ordered(t_list *stack)
-{
-	int		a;
-	int		b;
-
-	if (stack == NULL)
-		return (true);
-	a = *(int *)(stack->content);
-	stack = stack->next;
-	while (stack != NULL)
-	{
-		b = *(int *)(stack->content);
-		if (a > b)
-			return (false);
-		stack = stack->next;
-		a = b;
-	}
-	return (true);
-}
+#include "push_swap.h"
 
 t_bool		stack_is_ordered(t_stack stack)
 {

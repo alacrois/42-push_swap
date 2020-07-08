@@ -6,19 +6,19 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 19:10:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:14:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
-int		return_error(void)
+static int		return_error(void)
 {
 	ft_putstr_fd("Error\n", 2);
 	return (0);
 }
 
-int		main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	t_stack		a_stack;
 	t_stack		b_stack;

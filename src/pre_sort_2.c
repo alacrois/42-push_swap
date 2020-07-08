@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 20:20:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 03:21:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
-void			remove_last_rotations(t_list **operations, t_list *elem, \
+static void		remove_last_rotations(t_list **operations, t_list *elem, \
 									t_operation o, t_operation last_rotation)
 {
 	t_list		*tmp;
@@ -31,7 +31,7 @@ void			remove_last_rotations(t_list **operations, t_list *elem, \
 	}
 }
 
-int				olr_init(t_list **operations, t_list **elem, \
+static int		olr_init(t_list **operations, t_list **elem, \
 							t_operation *o, t_operation *last_rotation)
 {
 	int			len;
@@ -47,7 +47,7 @@ int				olr_init(t_list **operations, t_list **elem, \
 	return (1);
 }
 
-int				count_last_rotations(t_list **operations, \
+static int		count_last_rotations(t_list **operations, \
 					t_operation last_rotation, t_operation *o, t_list **elem)
 {
 	int			count;
