@@ -6,136 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/06 16:24:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 02:12:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-static void		delete_next_n_elem(t_list *start, int n)
-{
-	t_list		*elem;
-	t_list		*nextnext;
-	int			i;
-
-	elem = start->next;
-	i = 0;
-	while (elem != NULL && i < n)
-	{
-		nextnext = elem->next;
-		if (elem->content != NULL)
-		{
-			// printf("Trimmed operation : %i(1)\n", *((t_operation *)elem->content));
-			free(elem->content);
-		}
-		free(elem);
-		elem = nextnext;
-		i++;
-	}
-	start->next = elem;
-}
-
-static int		trim_next(t_list *start, int count, t_operation o, t_list *before_cut)
-{
-	int			deleted;
-	t_list		*elem;
-	t_list		*next_elem;
-
-
-	elem = start;
-	deleted = 0;
-	// printf("D2\n");
-	while (elem != NULL && *((t_operation *)elem->content) == o && count > 0)
-	{
-		next_elem = elem->next;
-	// printf("D2.1\n");
-
-		if (elem->content != NULL)
-		{
-			// printf("Trimmed operation : %i(2)\n", *((t_operation *)elem->content));
-			free(elem->content);
-		}
-		free(elem);
-		count--;
-		deleted++;
-		elem = next_elem;
-	}
-	// printf("D3\n");
-	if (before_cut != NULL)
-		before_cut->next = elem;
-	// printf("D4\n");
-
-	return (deleted);
-}
-
-static void		trim_core(t_list *elem, t_list *previous)
-{
-	t_list		*ne;
-	t_list		*before_cut;
-	t_operation o;
-	int			count;
-	int			deleted;
-
-	o = *((t_operation *)elem->content);
-	count = 1;
-	before_cut = elem;
-	ne = elem->next;
-	// printf("D1\n");
-	// if (ne == NULL)
-		// printf("ne == NULL\n");
-	while (ne != NULL && *((t_operation *)ne->content) == o)
-	{
-		// printf("D1.1\n");
-		// printf("d1, o = %i\n", *((t_operation *)elem->content));
-		count++;
-		before_cut = ne;
-		ne = ne->next;
-	}
-	deleted = 0;
-	// printf("D2\n");
-	if (o == RA)
-		deleted = trim_next(ne, count, RRA, before_cut);
-	else if (o == RRA)
-		deleted = trim_next(ne, count, RA, before_cut);
-	else if (o == PA)
-		deleted = trim_next(ne, count, PB, before_cut);
-	else if (o == PB)
-		deleted = trim_next(ne, count, PA, before_cut);
-	// printf("D3\n");
-	if (deleted > 0)
-		delete_next_n_elem(previous, deleted);
-	// printf("D4\n");
-}
-
-void		trim_operations(t_list **operations)
-{
-	t_list	*elem;
-	t_list	*previous_elem;
-
-	if (operations == NULL || *operations == NULL)
-		return ;
-	elem = *operations;
-	// printf("Operations before trim :\n");
-	// display_operations(*operations);
-	// printf("========================\n");
-	previous_elem = NULL;
-	while (elem != NULL)
-	{
-		// if (previous_elem == NULL)
-		// 	*operations = trim_core(elem);
-		// else
-		// 	previous_elem->next = trim_core(elem);
-		// printf("D0\n");
-		if (previous_elem != NULL)
-			trim_core(elem, previous_elem);
-		previous_elem = elem;
-		elem = elem->next;
-	}
-	// printf("Operations AFTER trim :\n");
-
-}
-
-int		nb_at_index_mod(t_stack *stack, int index, int size)
+int			nb_at_index_mod(t_stack *stack, int index, int size)
 {
 	int	n;
 
@@ -148,34 +25,82 @@ int		nb_at_index_mod(t_stack *stack, int index, int size)
 	return (n);
 }
 
-int		out_of_order(t_so *so)
+int			out_of_order(t_so *so)
 {
-	int	min;
-	int	max;
 	int	count;
 	int	i;
 	int	a;
 	int	b;
 	int c;
-	int len;
 
-	min = so->ordered_numbers[0];
-	len = so->a_stack->max_size;
-	max = so->ordered_numbers[so->a_stack->max_size - 1];
 	count = 0;
-
 	i = 0;
 	while (++i < so->a_stack->max_size)
 	{
-		a = nb_at_index_mod(so->a_stack, i - 1, len);
-		b = nb_at_index_mod(so->a_stack, i, len);
-		c = nb_at_index_mod(so->a_stack, i + 1, len);
-		// printf("Considering '%i', comparing to %i(a) & %i(c)\n", b, a, c);
-		if ((c != min && b > c) || (a != max && a > b))
-		{
-			// printf("'%i' is out of order\n", b);
+		a = nb_at_index_mod(so->a_stack, i - 1, so->a_stack->size);
+		b = nb_at_index_mod(so->a_stack, i, so->a_stack->size);
+		c = nb_at_index_mod(so->a_stack, i + 1, so->a_stack->size);
+		if ((c != so->ordered_numbers[0] && b > c) \
+			|| (a != so->ordered_numbers[so->a_stack->max_size - 1] && a > b))
 			count++;
-		}
 	}
 	return (count);
+}
+
+static int	check_for_next_target(t_so so, int order_index)
+{
+	int		next_target;
+
+	if (order_index + 1 < so.a_stack->max_size)
+	{
+		next_target = so.ordered_numbers[order_index + 1];
+		if (so.a_stack->data[so.a_stack->size - 1] == next_target)
+		{
+			execute_and_save_operation(so.a_stack, so.b_stack, \
+				so.operations, PB);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+void		put_indexed_element_on_top(t_so so, int order_index, int index)
+{
+	int			len;
+	t_stack		*a_stack;
+	t_list		**operations;
+	int			step;
+	t_operation	rotation;
+
+	a_stack = so.a_stack;
+	operations = so.operations;
+	if (a_stack->size == 0)
+		return ;
+	len = a_stack->size;
+	step = index - 1 <= len / 2 ? -1 : 1;
+	rotation = index - 1 <= len / 2 ? RA : RRA;
+	while (index > 1 && index <= a_stack->size)
+	{
+		if (check_for_next_target(so, order_index) == 1)
+			index--;
+		else
+		{
+			execute_and_save_operation(a_stack, NULL, operations, rotation);
+			index += step;
+		}
+	}
+}
+
+void		check_swap_b(t_so *so)
+{
+	int		a;
+	int		b;
+
+	if (so->b_stack->size < 2)
+		return ;
+	a = number_at_index(*so->b_stack, 1);
+	b = number_at_index(*so->b_stack, 2);
+	if (a < b)
+		execute_and_save_operation(so->a_stack, so->b_stack, \
+									so->operations, SB);
 }

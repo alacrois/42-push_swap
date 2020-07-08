@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/07 19:20:43 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 02:15:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,10 @@ void			optimise_last_rotations(t_list **operations, int stack_size);
 void			inverse_order(t_so *so);
 void			undo_all_operations(t_so *so);
 int				nb_at_index_mod(t_stack *stack, int index, int size);
+
+void			put_indexed_element_on_top(t_so so, int order_index, int index);
+void			check_swap_b(t_so *so);
+void			undo_all_operations(t_so *so);
+
 
 #endif
