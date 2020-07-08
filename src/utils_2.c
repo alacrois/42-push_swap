@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:10:37 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 00:19:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,22 @@ void	free_list(t_list **list)
 	}
 	if (list != NULL)
 		*list = NULL;
+}
+
+int		get_index_distance(int a, int b, int size)
+{
+	int	d1;
+	int	d2;
+
+	if (a <= b)
+	{
+		d1 = b - a;
+		d2 = a + (size - b);
+	}
+	else
+	{
+		d1 = a - b;
+		d2 = b + (size - a);
+	}
+	return (d1 < d2 ? d1 : d2);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:16:12 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 00:43:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,38 @@ static void		generate_operations_core(t_so *so)
 	}
 }
 
+static void		get_numbers_isolation(t_so *so, int *numbers_isolation)
+{
+	int			i;
+	int			indexes[so->a_stack->max_size];
+	int			isolation;
+	float		average_isolation;
+
+	i = -1;
+	while (++i < so->a_stack->max_size)
+		indexes[i] = get_element_index(so->a_stack, so->ordered_numbers[i]);
+	i = -1;
+	average_isolation = 0;
+	while (++i < so->a_stack->max_size)
+	{
+		if (i == 0)
+			isolation = 0;
+		else if (i == 1)
+			isolation = get_index_distance(indexes[i], indexes[i - 1], \
+							so->a_stack->max_size);
+		else
+			isolation = get_index_distance(indexes[i], indexes[i - 1], so->a_stack->max_size) + \
+							get_index_distance(indexes[i - 1], indexes[i - 2], so->a_stack->max_size);
+		average_isolation += isolation;
+		numbers_isolation[i] = isolation;
+		// printf("isolation of number %i at index %i is %i\n",
+		// 		so->ordered_numbers[i], indexes[i], isolation);
+	}
+	average_isolation = average_isolation / (float)so->a_stack->max_size;
+	so->average_isolation = average_isolation;
+	// printf("average_isolation = %f\n", average_isolation);
+}
+
 t_list			*generate_operations(t_stack *a_stack)
 {
 	t_list	*operations;
@@ -84,6 +116,7 @@ t_list			*generate_operations(t_stack *a_stack)
 	t_so	so;
 	t_stack	b_stack;
 	int		numbers[a_stack->max_size];
+	int		numbers_isolation[a_stack->max_size];
 
 	operations = NULL;
 	pending_b_operations = NULL;
@@ -93,8 +126,12 @@ t_list			*generate_operations(t_stack *a_stack)
 							&operations, &pending_b_operations);
 	get_ordered_numbers_in_array(a_stack, numbers);
 	so.ordered_numbers = numbers;
+
 	if (first_sort(&so) == 1)
 		return (operations);
+	get_numbers_isolation(&so, numbers_isolation);
+	so.numbers_isolation = numbers_isolation;
+
 	generate_operations_core(&so);
 	all_b_to_a(a_stack, &b_stack, &operations);
 	return (operations);

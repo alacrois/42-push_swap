@@ -10,12 +10,14 @@ then
 	# time ./push_swapV3 $arg | ./checker $arg | grep "Total number"
 	# time ./push_swapV5 $arg | ./checker $arg | grep "Total number"
 	# time ./push_swapV6 $arg | ./checker $arg | grep "Total number"
-	time ./push_swapV7 $arg | ./checker $arg | grep -A 1 "Total number"
+	# time ./push_swapV7 $arg | ./checker $arg | grep -A 1 "Total number"
 	# echo "================================"
 	# echo "================================"
-	# time ./push_swap $arg | ./checker $arg | grep -e 'ra' -e 'Total'
+	time ./push_swapV8 $arg | ./checker $arg | grep -A 1 "Total number"
 	echo -e "\n"
-	time ./push_swap $arg | ./checker $arg | grep -A 1 "Total number"
+	# time ./push_swap $arg | ./checker $arg | grep -A 1 "Total number"
+	time ./push_swap $arg | ./checker $arg
+	time ./push_swap $arg
 	echo -e "\n"
 
 	# time ./push_swap $arg | grep "order"

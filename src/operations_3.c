@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:11:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 01:32:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,38 @@ int			out_of_order(t_so *so)
 
 static int	check_for_next_target(t_so so, int order_index)
 {
-	int		next_target;
+	// int		next_target;
+	int		next_targets_value[2];
+	int		next_targets_isolation[2];
 
+
+	next_targets_value[0] = order_index + 1 < so.a_stack->max_size ? \
+						so.ordered_numbers[order_index + 1] : so.ordered_numbers[0];
+	next_targets_value[1] = order_index + 2 < so.a_stack->max_size ? \
+						so.ordered_numbers[order_index + 2] : so.ordered_numbers[0];
+	next_targets_isolation[0] = order_index + 1 < so.a_stack->max_size ? \
+						so.numbers_isolation[order_index + 1] : 0;
+	next_targets_isolation[1] = order_index + 2 < so.a_stack->max_size ? \
+						so.numbers_isolation[order_index + 2] : 0;
+	if (((so.b_stack->size > 0 && so.a_stack->data[so.a_stack->size - 1] > so.b_stack->data[so.b_stack->size - 1]) && \
+		(so.b_stack->size > 1 && so.a_stack->data[so.a_stack->size - 1] > so.b_stack->data[so.b_stack->size - 2])) && \
+		((so.a_stack->data[so.a_stack->size - 1] == next_targets_value[0] && \
+		(float)next_targets_isolation[0] > so.average_isolation) || \
+		(so.a_stack->data[so.a_stack->size - 1] == next_targets_value[1] && \
+		(float)next_targets_isolation[1] > so.average_isolation)))
+	{
+		// display_infos(*so.a_stack, *so.b_stack, *so.operations);
+	
+		printf("nt put on b was %i when last on b was %i and %i before\n", so.a_stack->data[so.a_stack->size - 1], \
+					so.b_stack->data[so.b_stack->size - 1], so.b_stack->size >= 2 ? so.b_stack->data[so.b_stack->size - 2] : 666);
+
+		check_swap_b(&so);
+		execute_and_save_operation(so.a_stack, so.b_stack, \
+			so.operations, PB);
+		check_swap_b(&so);
+		return (1);
+	}
+/*
 	if (order_index + 1 < so.a_stack->max_size)
 	{
 		next_target = so.ordered_numbers[order_index + 1];
@@ -60,7 +90,7 @@ static int	check_for_next_target(t_so so, int order_index)
 				so.operations, PB);
 			return (1);
 		}
-	}
+	} */
 	return (0);
 }
 
@@ -101,6 +131,9 @@ void		check_swap_b(t_so *so)
 	a = number_at_index(*so->b_stack, 1);
 	b = number_at_index(*so->b_stack, 2);
 	if (a < b)
+	{
 		execute_and_save_operation(so->a_stack, so->b_stack, \
 									so->operations, SB);
+		// printf("Swapped B : %i & %i\n", a, b);
+	}
 }

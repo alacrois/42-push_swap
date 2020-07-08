@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:19:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/08 23:32:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,12 @@ void			pre_sort_stack(t_so *so)
 	int		s;
 
 	s = so->a_stack->max_size;
-	pre_sort_div = s < 1000 ? 8 : 16;
-	pre_sort_div = s < 100 ? 4 : pre_sort_div;
-	pre_sort_div = s < 50 ? 2 : pre_sort_div;
+	// pre_sort_div = s < 1000 ? 8 : 16;
+	// pre_sort_div = s < 100 ? 4 : pre_sort_div;
+	// pre_sort_div = s < 50 ? 2 : pre_sort_div;
+	pre_sort_div = s < 1000 ? 4 : 8;
+	pre_sort_div = s < 100 ? 2 : pre_sort_div;
+	// pre_sort_div = s < 50 ? 8 : pre_sort_div;
 	med_step = 1 / (float)pre_sort_div;
 	med = med_step;
 	while (med < 1)
