@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 16:43:23 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 16:44:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_bool		push_next_target(t_so so, int target, int *nt_value, int *nt_isolation)
 	if (target < b_top || target < b_top2 || a_top < b_top || a_top < b_top2)
 		return (false);
 	i_min = (int)((so.average_isolation + so.max_isolation) / 2);
+	// i_min = (int)((so.average_isolation + so.max_isolation) / 2);
 	if ((a_top == nt_value[0] && nt_isolation[0] >= i_min) || \
 		(a_top == nt_value[1] && nt_isolation[1] >= i_min))
 		return (true);
