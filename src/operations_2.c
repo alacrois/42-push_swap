@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 00:43:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 16:42:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static void		get_numbers_isolation(t_so *so, int *numbers_isolation)
 		indexes[i] = get_element_index(so->a_stack, so->ordered_numbers[i]);
 	i = -1;
 	average_isolation = 0;
+	so->max_isolation = -2147483648;
 	while (++i < so->a_stack->max_size)
 	{
 		if (i == 0)
@@ -101,6 +102,8 @@ static void		get_numbers_isolation(t_so *so, int *numbers_isolation)
 							get_index_distance(indexes[i - 1], indexes[i - 2], so->a_stack->max_size);
 		average_isolation += isolation;
 		numbers_isolation[i] = isolation;
+		if (isolation > so->max_isolation)
+			so->max_isolation = isolation;
 		// printf("isolation of number %i at index %i is %i\n",
 		// 		so->ordered_numbers[i], indexes[i], isolation);
 	}

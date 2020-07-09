@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 00:28:11 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 16:41:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct	s_so
 	int			*ordered_numbers;
 	int			*numbers_isolation;
 	float		average_isolation;
+	float		max_isolation;
 }				t_so;
 
 void			add_operation(t_list **operations, t_operation o);

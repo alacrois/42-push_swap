@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 01:22:45 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 16:39:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void		execute_and_save_operation(t_stack *a_stack, t_stack *b_stack, \
 	else
 		stack_reverse_rotate(a_stack, b_stack, o);
 	add_operation(operations, o);
-	if (o == PB)
-		display_infos(*a_stack, *b_stack, *operations);
+	// if (o == PB)
+	// 	display_infos(*a_stack, *b_stack, *operations);
 }
 
 int			get_element_index(t_stack *stack, int to_find)

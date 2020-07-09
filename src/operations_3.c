@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 01:32:24 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/09 16:43:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,32 @@ int			out_of_order(t_so *so)
 	return (count);
 }
 
+t_bool		push_next_target(t_so so, int target, int *nt_value, int *nt_isolation)
+{
+	int		a_top;
+	int		b_top;
+	int		b_top2;
+	float	i_min;
+
+	a_top = so.a_stack->data[so.a_stack->size - 1];
+	b_top = so.b_stack->size > 0 ? so.b_stack->data[so.b_stack->size - 1] : -2147483648;
+	b_top2 = so.b_stack->size > 1 ? so.b_stack->data[so.b_stack->size - 2] : -2147483648;
+	if (target < b_top || target < b_top2 || a_top < b_top || a_top < b_top2)
+		return (false);
+	i_min = (int)((so.average_isolation + so.max_isolation) / 2);
+	if ((a_top == nt_value[0] && nt_isolation[0] >= i_min) || \
+		(a_top == nt_value[1] && nt_isolation[1] >= i_min))
+		return (true);
+	return (false);
+}
+
 static int	check_for_next_target(t_so so, int order_index)
 {
-	// int		next_target;
+	int		target;
 	int		next_targets_value[2];
 	int		next_targets_isolation[2];
 
-
+	target = so.ordered_numbers[order_index];
 	next_targets_value[0] = order_index + 1 < so.a_stack->max_size ? \
 						so.ordered_numbers[order_index + 1] : so.ordered_numbers[0];
 	next_targets_value[1] = order_index + 2 < so.a_stack->max_size ? \
@@ -62,18 +81,20 @@ static int	check_for_next_target(t_so so, int order_index)
 						so.numbers_isolation[order_index + 1] : 0;
 	next_targets_isolation[1] = order_index + 2 < so.a_stack->max_size ? \
 						so.numbers_isolation[order_index + 2] : 0;
+						/*
 	if (((so.b_stack->size > 0 && so.a_stack->data[so.a_stack->size - 1] > so.b_stack->data[so.b_stack->size - 1]) && \
 		(so.b_stack->size > 1 && so.a_stack->data[so.a_stack->size - 1] > so.b_stack->data[so.b_stack->size - 2])) && \
 		((so.a_stack->data[so.a_stack->size - 1] == next_targets_value[0] && \
 		(float)next_targets_isolation[0] > so.average_isolation) || \
 		(so.a_stack->data[so.a_stack->size - 1] == next_targets_value[1] && \
-		(float)next_targets_isolation[1] > so.average_isolation)))
+		(float)next_targets_isolation[1] > so.average_isolation))) */
+	if (push_next_target(so, target, next_targets_value, next_targets_isolation) == true)
 	{
 		// display_infos(*so.a_stack, *so.b_stack, *so.operations);
-	
+	/*
 		printf("nt put on b was %i when last on b was %i and %i before\n", so.a_stack->data[so.a_stack->size - 1], \
 					so.b_stack->data[so.b_stack->size - 1], so.b_stack->size >= 2 ? so.b_stack->data[so.b_stack->size - 2] : 666);
-
+*/
 		check_swap_b(&so);
 		execute_and_save_operation(so.a_stack, so.b_stack, \
 			so.operations, PB);
