@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/10 11:51:48 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/10 12:55:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ static void	less_than_median(t_so *so, t_stack *s, \
 		index = start - i;
 		// index = index > so->a_stack->size ? index - so->a_stack->size : index;
 		nb = nb_at_index_mod(so->a_stack, index, so->a_stack->size);
-		printf("Considering %i for ltm...\n", nb);
+		// printf("Considering %i for ltm...\n", nb);
 		if (nb < med)
 		{
 			add_top(s, nb);
-			printf("Added %i in ltm\n", nb);
+			// printf("Added %i in ltm\n", nb);
 		}
 	}
 }
@@ -98,7 +98,16 @@ static void	put_indexed_on_top(t_so so, int index)
 	}
 }
 
-void		quicksort(t_so *so)
+static t_bool	only_min_and_max(t_so *so, t_stack ltm, t_stack gtm)
+{
+	if (ltm.data[0] == so->ordered_numbers[0] && \
+		gtm.data[0] == so->ordered_numbers[so->a_stack->max_size - 1])
+		return (true);
+	else
+		return (false);
+}
+
+void		quicksort(t_so *so, float median_ratio, int div)
 {
 	t_stack	more_than_med;
 	t_stack	less_than_med;
@@ -110,30 +119,55 @@ void		quicksort(t_so *so)
 	int		tmp;
 	int		i;
 
+	printf("quicksort start : median_ratio = %f, div = %i\n", median_ratio, div);
 	more_than_med = new_stack(so->a_stack->max_size);
 	more_than_med.size = 0;
 	less_than_med = new_stack(so->a_stack->max_size);
 	less_than_med.size = 0;
-	median_order_index = (int)((float)so->a_stack->max_size * 0.5);
+	median_order_index = (int)((float)so->a_stack->max_size * median_ratio);
 	median = so->ordered_numbers[median_order_index];
-	size = so->a_stack->size / 2;
+	printf("median = %i\n", median);
+	// size = so->a_stack->size / 2;
+	size = so->a_stack->size / div;
 	greater_than_median(so, &more_than_med, median, size);
 	less_than_median(so, &less_than_med, median, size);
 	max = more_than_med.size > less_than_med.size ? \
 			less_than_med.size : more_than_med.size;
-	printf("median = %i\n", median);
 	printf("max = %i\n", max);
+	if (check_order(so) == true)
+	{
+		printf("Leaving quicksort (stack already in order)\n");
+		return ;
+	}
+	if (max == 0)
+	{
+		printf("Leaving quicksort (max = 0)\n");
+		return ;
+	}
+	else if (max == 1 && \
+		only_min_and_max(so, less_than_med, more_than_med) == true)
+	{
+		if (more_than_med.size == 2)
+		{
+			less_than_med.data[0] = median;
+		}
+		else
+		{
+			printf("Leaving quicksort (only min and max)\n");
+			return ;
+		}
+	}
 	reverse_order(less_than_med, max);
 
 	i = -1;
 	while (++i < max)
-		printf("mtm[%i] = %i & ltm[%i] = %i\n", i, more_than_med.data[i], i, \
+		printf("mtm[%i] = %i & ltm[%i] = %i\n", i, more_than_med.data[i], i,
 						less_than_med.data[i]);
 
 	median_index = get_element_index(so->a_stack, median);
 	tmp = median_index - size;
 	tmp = tmp < 1 ? tmp + so->a_stack->size : tmp;
-	put_indexed_on_top(*so, tmp); // Necessary ??
+	//put_indexed_on_top(*so, tmp); // Necessary ??
 	i = -1;
 	while (++i < max)
 	{
@@ -156,14 +190,19 @@ void		quicksort(t_so *so)
 	median_index = get_element_index(so->a_stack, median);
 	// tmp = median_index - size;
 	// tmp = tmp < 1 ? tmp + so->a_stack->size : tmp;
-	// printf("Before all_b_to_a, putting %i on top\n", so->b_stack->size);
-	put_indexed_on_top(*so, median_index); // Necessary ??
+	printf("Before all_b_to_a, putting %i on top\n", so->b_stack->size);
+	put_indexed_on_top(*so, median_index);
+
 	printf("S2 Before all_b_to_a, b size = %i\n", so->b_stack->size);
 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+
 	all_b_to_a(so->a_stack, so->b_stack, so->operations);
+
 	printf("S3 After all_b_to_a, b size = %i\n", so->b_stack->size);
 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
-
-
+	
+	div = div * 2;
+	quicksort(so, median_ratio - (1 / (float)div), div);
+	quicksort(so, median_ratio + (1 / (float)div), div);
 
 }

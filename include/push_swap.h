@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 18:56:13 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/10 12:49:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void			check_swap_b(t_so *so);
 void			undo_all_operations(t_so *so);
 int				get_index_distance(int a, int b, int size);
 void			free_stack(t_stack s);
-void			quicksort(t_so *so);
+void			quicksort(t_so *so, float median_ratio, int div);
+void			rotate_minimum_on_top(t_so *so);
 
 #endif

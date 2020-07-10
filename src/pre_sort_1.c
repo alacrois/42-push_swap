@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 23:32:01 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/10 12:49:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void		rotate_minimum_on_top(t_so *so)
+void			rotate_minimum_on_top(t_so *so)
 {
 	int			len;
 	int			min;
