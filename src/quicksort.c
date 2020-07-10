@@ -6,22 +6,22 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/10 03:15:10 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/10 11:51:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	reverse_order(t_stack s)
+static void	reverse_order(t_stack s, int size)
 {
 	int		i;
 	int		tmp;
 
 	i = -1;
-	while (++i <= s.size / 2)
+	while (++i < size)
 	{
-		tmp = s.data[s.size - i];
-		s.data[s.size - i] = s.data[i];
+		tmp = s.data[size - 1 - i];
+		s.data[size - 1 - i] = s.data[i];
 		s.data[i] = tmp;
 	}
 }
@@ -37,13 +37,13 @@ static void	greater_than_median(t_so *so, t_stack *s, \
 	i = -1;
 	start = get_element_index(so->a_stack, med) - size;
 	start = start < 1 ? start + so->a_stack->size : start;
-	while (++i < size)
+	while (++i <= size)
 	{
 		index = start + i;
 		// index = index > so->a_stack->size ? index - so->a_stack->size : index;
 		nb = nb_at_index_mod(so->a_stack, index, so->a_stack->size);
 		printf("Considering %i for gtm...\n", nb);
-		if (nb > med)
+		if (nb >= med)
 		{
 			add_top(s, nb);
 			printf("Added %i in gtm\n", nb);
@@ -123,7 +123,13 @@ void		quicksort(t_so *so)
 			less_than_med.size : more_than_med.size;
 	printf("median = %i\n", median);
 	printf("max = %i\n", max);
-	reverse_order(less_than_med);
+	reverse_order(less_than_med, max);
+
+	i = -1;
+	while (++i < max)
+		printf("mtm[%i] = %i & ltm[%i] = %i\n", i, more_than_med.data[i], i, \
+						less_than_med.data[i]);
+
 	median_index = get_element_index(so->a_stack, median);
 	tmp = median_index - size;
 	tmp = tmp < 1 ? tmp + so->a_stack->size : tmp;
@@ -134,6 +140,10 @@ void		quicksort(t_so *so)
 		put_indexed_on_top(*so, get_element_index(so->a_stack, more_than_med.data[i]));
 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
 	}
+
+	printf("S1 \n");
+	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+
 	i = -1;
 	while (++i < max)
 	{
@@ -148,10 +158,10 @@ void		quicksort(t_so *so)
 	// tmp = tmp < 1 ? tmp + so->a_stack->size : tmp;
 	// printf("Before all_b_to_a, putting %i on top\n", so->b_stack->size);
 	put_indexed_on_top(*so, median_index); // Necessary ??
-	printf("Before all_b_to_a, b size = %i\n", so->b_stack->size);
+	printf("S2 Before all_b_to_a, b size = %i\n", so->b_stack->size);
 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	all_b_to_a(so->a_stack, so->b_stack, so->operations);
-	printf("After all_b_to_a, b size = %i\n", so->b_stack->size);
+	printf("S3 After all_b_to_a, b size = %i\n", so->b_stack->size);
 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
 
 
