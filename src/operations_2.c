@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 16:42:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/10 03:13:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void		generate_operations_core(t_so *so)
 	}
 }
 
+/*
 static void		get_numbers_isolation(t_so *so, int *numbers_isolation)
 {
 	int			i;
@@ -111,6 +112,7 @@ static void		get_numbers_isolation(t_so *so, int *numbers_isolation)
 	so->average_isolation = average_isolation;
 	// printf("average_isolation = %f\n", average_isolation);
 }
+*/
 
 t_list			*generate_operations(t_stack *a_stack)
 {
@@ -119,7 +121,7 @@ t_list			*generate_operations(t_stack *a_stack)
 	t_so	so;
 	t_stack	b_stack;
 	int		numbers[a_stack->max_size];
-	int		numbers_isolation[a_stack->max_size];
+	// int		numbers_isolation[a_stack->max_size];
 
 	operations = NULL;
 	pending_b_operations = NULL;
@@ -130,10 +132,17 @@ t_list			*generate_operations(t_stack *a_stack)
 	get_ordered_numbers_in_array(a_stack, numbers);
 	so.ordered_numbers = numbers;
 
+	printf("Before quicksort :\n");
+	display_infos(*a_stack, b_stack, operations);
+	quicksort(&so);
+	// printf("---------------------\nAfter quicksort :\n");
+	// display_infos(*a_stack, b_stack, operations);
+	// printf("---------------------\n");
+
 	if (first_sort(&so) == 1)
 		return (operations);
-	get_numbers_isolation(&so, numbers_isolation);
-	so.numbers_isolation = numbers_isolation;
+	// get_numbers_isolation(&so, numbers_isolation);
+	// so.numbers_isolation = numbers_isolation;
 
 	generate_operations_core(&so);
 	all_b_to_a(a_stack, &b_stack, &operations);
