@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/10 12:55:19 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/11 04:48:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void		quicksort(t_so *so, float median_ratio, int div)
 	printf("Before all_b_to_a, putting %i on top\n", so->b_stack->size);
 	put_indexed_on_top(*so, median_index);
 
-	printf("S2 Before all_b_to_a, b size = %i\n", so->b_stack->size);
+	printf("S2 Before all_b_to_a, b siz e = %i\n", so->b_stack->size);
 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
 
 	all_b_to_a(so->a_stack, so->b_stack, so->operations);
@@ -206,3 +206,52 @@ void		quicksort(t_so *so, float median_ratio, int div)
 	quicksort(so, median_ratio + (1 / (float)div), div);
 
 }
+
+float		get_median(t_so *so, int min, int max)
+{
+	int		i;
+	float	median;
+	int	nb_count;
+	int	min_index;
+
+	i = -1;
+	nb_count = 0;
+	while (so->ordered_numbers[++i] <= max)
+	{
+		if (so->ordered_numbers[i] == min)
+			min_index = i;
+		if (so->ordered_numbers[i] >= min ?)
+			nb_count++;
+	}
+	if (nb_count % 2 == 0)
+	{
+		median = (so->ordered_numbers[min_index + nb_count / 2] + \
+				so->ordered_numbers[min_index - 1 + nb_count / 2]) / 2;
+	}
+	else
+	{
+		median = so->ordered_numbers[min_index + (nb_count - 1) / 2]
+	}
+	return (median);
+}
+
+void		quicksort_core(t_so *so, int min, int max)
+{
+	t_stack	more_than_med;
+	t_stack	less_than_med;
+	float	median;
+	int 	max;
+
+	more_than_med = new_stack(so->a_stack->max_size);
+	more_than_med.size = 0;
+	less_than_med = new_stack(so->a_stack->max_size);
+	less_than_med.size = 0;
+	median = get_median(so, min, max);
+	put_indexed_on_top(*so, get_element_index(so->a_stack, min));
+	max = (get_element_index(so->a_stack, max) + 1) / 2;
+}
+
+void		new_quicksort(t_so *so
+{
+
+})
