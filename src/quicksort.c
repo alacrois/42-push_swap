@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/11 04:48:17 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/12 00:21:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ float		get_median(t_so *so, int min, int max)
 	{
 		if (so->ordered_numbers[i] == min)
 			min_index = i;
-		if (so->ordered_numbers[i] >= min ?)
+		if (so->ordered_numbers[i] >= min)
 			nb_count++;
 	}
 	if (nb_count % 2 == 0)
@@ -230,28 +230,108 @@ float		get_median(t_so *so, int min, int max)
 	}
 	else
 	{
-		median = so->ordered_numbers[min_index + (nb_count - 1) / 2]
+		median = so->ordered_numbers[min_index + (nb_count - 1) / 2];
 	}
 	return (median);
+}
+
+void		get_more_than_median(t_so *so, int index_max, t_stack *mtm, float median)
+{
+	int		a;
+	// int		b;
+	int		i;
+	int		i_max;
+	// float	median;
+
+
+	i = -1;
+	i_max = index_max / 2;
+	// median = get_median(so, min, max);
+	while (++i < i_max)
+	{
+		a = number_at_index(*so->a_stack, 1 + i);
+		// b = number_at_index(so->a_stack, index_max - i);
+		if ((float)a > median)
+			add_top(mtm, a);
+		// if ((float)b < median)
+			// add_top(ltm, b);
+	}
+}
+
+void		get_less_than_median(t_so *so, int index_max, t_stack *ltm, float median)
+{
+	// int		a;
+	int		b;
+	int		i;
+	int		i_max;
+	// float	median;
+
+
+	i = -1;
+	i_max = index_max / 2;
+	// median = get_median(so, min, max);
+	while (++i < i_max)
+	{
+		// a = number_at_index(so->a_stack, 1 + i);
+		b = number_at_index(*so->a_stack, index_max - i);
+		// if ((float)a > median)
+			// add_top(mtm, a);
+		if ((float)b < median)
+			add_top(ltm, b);
+	}
 }
 
 void		quicksort_core(t_so *so, int min, int max)
 {
 	t_stack	more_than_med;
 	t_stack	less_than_med;
+	int		i;
+	// int		max;
 	float	median;
-	int 	max;
 
 	more_than_med = new_stack(so->a_stack->max_size);
 	more_than_med.size = 0;
 	less_than_med = new_stack(so->a_stack->max_size);
 	less_than_med.size = 0;
-	median = get_median(so, min, max);
 	put_indexed_on_top(*so, get_element_index(so->a_stack, min));
-	max = (get_element_index(so->a_stack, max) + 1) / 2;
+	median = get_median(so, min, max);
+	get_more_than_median(so, get_element_index(so->a_stack, max), &more_than_med, median);
+	get_less_than_median(so, get_element_index(so->a_stack, max), &less_than_med, median);
+
+	max = more_than_med.size > less_than_med.size ? \
+			less_than_med.size : more_than_med.size;
+	printf("S1 \n");
+	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+
+	i = -1;
+	while (++i < max)
+	{
+		put_indexed_on_top(*so, get_element_index(so->a_stack, more_than_med.data[i]));
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+	}
+
+	printf("S2 \n");
+	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+
+	i = -1;
+	while (++i < max)
+	{
+		put_indexed_on_top(*so, get_element_index(so->a_stack, less_than_med.data[i]));
+		// Switch :
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+	}
+
+	printf("S3 \n");
+	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+
+	all_b_to_a(so->a_stack, so->b_stack, so->operations);
+
 }
 
-void		new_quicksort(t_so *so
+void		new_quicksort(t_so *so)
 {
-
-})
+	quicksort_core(so, so->ordered_numbers[0], \
+			so->ordered_numbers[so->a_stack->max_size - 1]);
+}
