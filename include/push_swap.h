@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/12 05:01:23 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/12 07:36:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ typedef struct	s_stack
 	int			max_size;
 }				t_stack;
 
+typedef struct s_to_switch
+{
+	int			elem;
+	int			relative_index;
+}				t_to_switch;
+
 typedef struct	s_so
 {
 	t_stack		*a_stack;
@@ -49,13 +55,10 @@ typedef struct	s_so
 	int			*numbers_isolation;
 	float		average_isolation;
 	float		max_isolation;
+	t_to_switch	*quicksort_less;
+	t_to_switch	*quicksort_more;
 }				t_so;
 
-typedef struct s_to_switch
-{
-	int			elem;
-	int			relative_index;
-}				t_to_switch;
 
 
 void			add_operation(t_list **operations, t_operation o);

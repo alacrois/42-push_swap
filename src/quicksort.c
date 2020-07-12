@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/12 05:45:08 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/12 07:59:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,7 +355,8 @@ t_bool		section_in_order(t_so *so, int min_order_index, int max_order_index)
 }
 
 // void		fill_to_swich(t_so *so, int max_stack_index, t_stack *more, t_stack *less)
-int		fill_to_swich(t_so *so, int max_stack_index, t_to_switch *more, t_to_switch *less)
+// int		fill_to_swich(t_so *so, int max_stack_index, t_to_switch *more, t_to_switch *less)
+int		fill_to_swich(t_so *so, int max_stack_index, float median)
 {
 	// int		i;
 	int		a_index;
@@ -367,32 +368,34 @@ int		fill_to_swich(t_so *so, int max_stack_index, t_to_switch *more, t_to_switch
 
 	a_index = 1;
 	b_index = max_stack_index;
+	/*
 	median = get_median(so, number_at_index(*so->a_stack, 1), \
 						number_at_index(*so->a_stack, max_stack_index));
+	*/
 	printf("median in 'fill_to_swich' = %f\n", median);
 	count = 0;
 	while (a_index < b_index)
 	{
 		a = number_at_index(*so->a_stack, a_index);
-		while ((float)a <= median && a_index < b_index)
+		while ((float)a < median && a_index < b_index)
 		{
 			a_index++;
 			a = number_at_index(*so->a_stack, a_index);
 		}
 		b = number_at_index(*so->a_stack, b_index);
-		while ((float)b >= median && a_index < b_index)
+		while ((float)b > median && a_index < b_index)
 		{
 			b_index--;
 			b = number_at_index(*so->a_stack, b_index);
 		}
-		if (a > median && b < median && a_index < b_index)
+		if (a >= median && b <= median && a_index < b_index)
 		{
 			// add_top(more, a);
 			// add_top(less, b);
-			more[count].elem = a;
-			more[count].relative_index = a_index - 1;
-			less[count].elem = b;
-			less[count].relative_index = b_index - max_stack_index;
+			so->quicksort_more[count].elem = a;
+			so->quicksort_more[count].relative_index = a_index - 1;
+			so->quicksort_less[count].elem = b;
+			so->quicksort_less[count].relative_index = b_index - max_stack_index;
 			printf("Added %i to more and %i to less\n", a, b);
 			a_index++;
 			b_index--;
@@ -408,8 +411,8 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	// t_stack	more_than_med;
 	// t_stack	less_than_med;
 	// t_stack	to_switch;
-	t_to_switch		more[so->a_stack->max_size];
-	t_to_switch		less[so->a_stack->max_size];
+	// t_to_switch		more[so->a_stack->max_size];
+	// t_to_switch		less[so->a_stack->max_size];
 	int		i;
 	int		min;
 	int		max;
@@ -425,6 +428,7 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	max = so->ordered_numbers[max_order_index];
 	put_at_correct_index(so, min_order_index);
 	put_at_correct_index(so, max_order_index);
+
 	// printf("After put_at_correct_index\n");
 	// put_at_correct_index(so, 2);
 
@@ -442,7 +446,8 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	// get_less_than_median(so, get_element_index(so->a_stack, max), &less_than_med, median);
 
 	// fill_to_swich(so, get_element_index(so->a_stack, max), &more_than_med, &less_than_med);
-	switches = fill_to_swich(so, get_element_index(so->a_stack, max), more, less);
+	// switches = fill_to_swich(so, get_element_index(so->a_stack, max), more, less);
+	switches = fill_to_swich(so, get_element_index(so->a_stack, max), median);
 
 	// switch_max = more_than_med.size > less_than_med.size ?
 	// 		less_than_med.size : more_than_med.size;
@@ -458,7 +463,7 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	while (++i < switch_max)
 	{
 		// put_indexed_on_top(*so, get_element_index(so->a_stack, more_than_med.data[i]));
-		put_indexed_on_top(*so, get_element_index(so->a_stack, more[i].elem));
+		put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_more[i].elem));
 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
 	}
 
@@ -469,7 +474,7 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	while (++i < switch_max)
 	{
 		// put_indexed_on_top(*so, get_element_index(so->a_stack, less_than_med.data[i]));
-		put_indexed_on_top(*so, get_element_index(so->a_stack, less[i].elem));
+		put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_less[i].elem));
 		// Switch :
 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
@@ -488,7 +493,7 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	relative_index = 0;
 	while (++i < switch_max)
 	{
-		while (relative_index != more[i].relative_index)
+		while (relative_index != so->quicksort_more[i].relative_index)
 		{
 			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
 			relative_index++;
@@ -505,6 +510,7 @@ void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 	// if 'section' in order == false ---> quicksort_core(section)
 	// return ;
 	mid_point_index = (min_order_index + max_order_index) / 2;
+	// Select median element as mid point index
 	if (section_in_order(so, min_order_index, mid_point_index) == false)
 		quicksort_core(so, min_order_index, mid_point_index);
 	if (section_in_order(so, mid_point_index, max_order_index) == false)
@@ -527,5 +533,11 @@ void		new_quicksort(t_so *so)
 	min_on_top_max_at_bottom(so);
 	// quicksort_core(so, so->ordered_numbers[0],
 	// 		so->ordered_numbers[so->a_stack->max_size - 1]);
+	so->quicksort_less = (t_to_switch *)malloc(sizeof(t_to_switch) * so->a_stack->max_size);
+	so->quicksort_more = (t_to_switch *)malloc(sizeof(t_to_switch) * so->a_stack->max_size);
+	if (so->quicksort_less == NULL || so->quicksort_more == NULL)
+		ft_exit("Malloc error");
 	quicksort_core(so, 0, so->a_stack->max_size - 1);
+	free(so->quicksort_less);
+	free(so->quicksort_more);
 }
