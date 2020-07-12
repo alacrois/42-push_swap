@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/12 00:01:33 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/12 21:45:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,6 @@ t_list			*generate_operations(t_stack *a_stack)
 		generate_operations_core(&so);
 
 	// all_b_to_a(a_stack, &b_stack, &operations);
+	printf("End of 'generate_operations'\n");
 	return (operations);
 }
