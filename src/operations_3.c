@@ -6,20 +6,20 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/09 16:44:39 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/12 03:03:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int			nb_at_index_mod(t_stack *stack, int index, int size)
+int			nb_at_index_mod(t_stack *stack, int index)
 {
 	int	n;
 
 	if (index < 1)
-		n = number_at_index(*stack, index + size);
-	else if (index > size)
-		n = number_at_index(*stack, index - size);
+		n = number_at_index(*stack, index + stack->size);
+	else if (index > stack->size)
+		n = number_at_index(*stack, index - stack->size);
 	else
 		n = number_at_index(*stack, index);
 	return (n);
@@ -37,9 +37,9 @@ int			out_of_order(t_so *so)
 	i = 0;
 	while (++i < so->a_stack->max_size)
 	{
-		a = nb_at_index_mod(so->a_stack, i - 1, so->a_stack->size);
-		b = nb_at_index_mod(so->a_stack, i, so->a_stack->size);
-		c = nb_at_index_mod(so->a_stack, i + 1, so->a_stack->size);
+		a = nb_at_index_mod(so->a_stack, i - 1);
+		b = nb_at_index_mod(so->a_stack, i);
+		c = nb_at_index_mod(so->a_stack, i + 1);
 		if ((c != so->ordered_numbers[0] && b > c) \
 			|| (a != so->ordered_numbers[so->a_stack->max_size - 1] && a > b))
 			count++;
