@@ -6,75 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/13 02:10:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/13 03:11:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 #define DEBUG false
-
-static void	reverse_order(t_stack s, int size)
-{
-	int		i;
-	int		tmp;
-
-	i = -1;
-	while (++i < size)
-	{
-		tmp = s.data[size - 1 - i];
-		s.data[size - 1 - i] = s.data[i];
-		s.data[i] = tmp;
-	}
-}
-
-static void	greater_than_median(t_so *so, t_stack *s, \
-										int med, int size)
-{
-	int		i;
-	int		start;
-	int		index;
-	int		nb;
-
-	i = -1;
-	start = get_element_index(so->a_stack, med) - size;
-	start = start < 1 ? start + so->a_stack->size : start;
-	while (++i <= size)
-	{
-		index = start + i;
-		// index = index > so->a_stack->size ? index - so->a_stack->size : index;
-		nb = nb_at_index_mod(so->a_stack, index);
-		if (nb >= med)
-		{
-			add_top(s, nb);
-		}
-	}
-}
-
-static void	less_than_median(t_so *so, t_stack *s, \
-										int med, int size)
-{
-	int		i;
-	int		start;
-	int		index;
-	int		nb;
-
-	i = -1;
-	start = get_element_index(so->a_stack, med) + size;
-	start = start < 1 ? start + so->a_stack->size : start;
-	while (++i < size)
-	{
-		index = start - i;
-		// index = index > so->a_stack->size ? index - so->a_stack->size : index;
-		nb = nb_at_index_mod(so->a_stack, index);
-		// printf("Considering %i for ltm...\n", nb);
-		if (nb < med)
-		{
-			add_top(s, nb);
-			// printf("Added %i in ltm\n", nb);
-		}
-	}
-}
+#define LIMIT_DEPTH false
+#define MAX_DEPTH 8
 
 static void	put_indexed_on_top(t_so so, int index)
 {
@@ -96,115 +36,6 @@ static void	put_indexed_on_top(t_so so, int index)
 		execute_and_save_operation(a_stack, NULL, operations, rotation);
 		index += step;
 	}
-}
-
-static t_bool	only_min_and_max(t_so *so, t_stack ltm, t_stack gtm)
-{
-	if (ltm.data[0] == so->ordered_numbers[0] && \
-		gtm.data[0] == so->ordered_numbers[so->a_stack->max_size - 1])
-		return (true);
-	else
-		return (false);
-}
-
-void		quicksort(t_so *so, float median_ratio, int div)
-{
-	t_stack	more_than_med;
-	t_stack	less_than_med;
-	int		median;
-	int		median_order_index;
-	int		median_index;
-	int		size;
-	int		max;
-	int		tmp;
-	int		i;
-
-	printf("quicksort start : median_ratio = %f, div = %i\n", median_ratio, div);
-	more_than_med = new_stack(so->a_stack->max_size);
-	more_than_med.size = 0;
-	less_than_med = new_stack(so->a_stack->max_size);
-	less_than_med.size = 0;
-	median_order_index = (int)((float)so->a_stack->max_size * median_ratio);
-	median = so->ordered_numbers[median_order_index];
-	printf("median = %i\n", median);
-	// size = so->a_stack->size / 2;
-	size = so->a_stack->size / div;
-	greater_than_median(so, &more_than_med, median, size);
-	less_than_median(so, &less_than_med, median, size);
-	max = more_than_med.size > less_than_med.size ? \
-			less_than_med.size : more_than_med.size;
-	printf("max = %i\n", max);
-	if (check_order(so) == true)
-	{
-		printf("Leaving quicksort (stack already in order)\n");
-		return ;
-	}
-	if (max == 0)
-	{
-		printf("Leaving quicksort (max = 0)\n");
-		return ;
-	}
-	else if (max == 1 && \
-		only_min_and_max(so, less_than_med, more_than_med) == true)
-	{
-		if (more_than_med.size == 2)
-		{
-			less_than_med.data[0] = median;
-		}
-		else
-		{
-			printf("Leaving quicksort (only min and max)\n");
-			return ;
-		}
-	}
-	reverse_order(less_than_med, max);
-
-	i = -1;
-	while (++i < max)
-		printf("mtm[%i] = %i & ltm[%i] = %i\n", i, more_than_med.data[i], i,
-						less_than_med.data[i]);
-
-	median_index = get_element_index(so->a_stack, median);
-	tmp = median_index - size;
-	tmp = tmp < 1 ? tmp + so->a_stack->size : tmp;
-	//put_indexed_on_top(*so, tmp); // Necessary ??
-	i = -1;
-	while (++i < max)
-	{
-		put_indexed_on_top(*so, get_element_index(so->a_stack, more_than_med.data[i]));
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
-	}
-
-	printf("S1 \n");
-	display_infos(*so->a_stack, *so->b_stack, *so->operations);
-
-	i = -1;
-	while (++i < max)
-	{
-		put_indexed_on_top(*so, get_element_index(so->a_stack, less_than_med.data[i]));
-		// Switch :
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
-	}
-	median_index = get_element_index(so->a_stack, median);
-	// tmp = median_index - size;
-	// tmp = tmp < 1 ? tmp + so->a_stack->size : tmp;
-	printf("Before all_b_to_a, putting %i on top\n", so->b_stack->size);
-	put_indexed_on_top(*so, median_index);
-
-	printf("S2 Before all_b_to_a, b siz e = %i\n", so->b_stack->size);
-	display_infos(*so->a_stack, *so->b_stack, *so->operations);
-
-	all_b_to_a(so->a_stack, so->b_stack, so->operations);
-
-	printf("S3 After all_b_to_a, b size = %i\n", so->b_stack->size);
-	display_infos(*so->a_stack, *so->b_stack, *so->operations);
-	
-	div = div * 2;
-	quicksort(so, median_ratio - (1 / (float)div), div);
-	quicksort(so, median_ratio + (1 / (float)div), div);
-
 }
 
 void		more_and_less_than_elem(t_so *so, int max_index, int elem, int *ml_diff)
@@ -308,50 +139,19 @@ void		get_less_than_median(t_so *so, int index_max, t_stack *ltm, float median)
 	}
 }
 
-void		put_at_correct_index(t_so *so, int order_index)
-{
-	int		nb;
-	int		stack_index;
-	int		min_stack_index;
-	int		index_diff;
-
-	nb = so->ordered_numbers[order_index];
-	stack_index = get_element_index(so->a_stack, nb);
-	if (stack_index == -1)
-		ft_exit("error, stack_index not found.");
-	min_stack_index = get_element_index(so->a_stack, so->ordered_numbers[0]);
-	index_diff = stack_index - min_stack_index;
-	index_diff = index_diff < 0 ? index_diff + so->a_stack->max_size : index_diff;
-	if (index_diff != order_index)
-	{
-		printf("Index of '%i' WRONG (+%i relative to min)\nCorrecting...\n", nb, index_diff);
-		put_indexed_on_top(*so, stack_index);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
-		rotate_minimum_on_top(so);
-		while (order_index > 0)
-		{
-			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
-			order_index--;
-		}
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
-	}
-	else
-	{
-		printf("Index of '%i' OK (+%i relative to min)\n", nb, index_diff);
-	}
-	
-}
-
 t_bool		section_in_order(t_so *so, int min_stack_index, int max_stack_index)
 {
 	int		i;
 	int		a;
 	int		b;
 	int		size;
+	// int		out_of_order;
+	// int		index_to_swap;
 
 	size = max_stack_index - min_stack_index;
 	size = size < 0 ? size + so->a_stack->max_size : size;
 	i = -1;
+	// out_of_order = 0;
 	while (++i < size)
 	{
 		a = nb_at_index_mod(so->a_stack, min_stack_index + i);
@@ -360,9 +160,24 @@ t_bool		section_in_order(t_so *so, int min_stack_index, int max_stack_index)
 		{
 			if (DEBUG == true)
 				printf("section in order returns false, %i > %i\n", a, b);
+			// out_of_order++;
+			// index_to_swap = min_stack_index + i;
 			return (false);
 		}
 	}
+	// if (out_of_order > 1)
+	// {
+	// 	if (DEBUG == true)
+	// 		printf("section in order returns false with out_of_order = %i\n", out_of_order);
+	// 	return (false);
+	// }
+	// if (out_of_order == 1)
+	// {
+	// 	put_indexed_on_top(*so, index_to_swap);
+	// 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SA);
+	// 	if (DEBUG == true)
+	// 		printf("Swapped in section_in_order !\n");
+	// }
 	return (true);
 }
 
@@ -441,7 +256,7 @@ int			relative_to_real_index(t_so *so, int relative_index)
 }
 
 // void		quicksort_core(t_so *so, int min, int max)
-void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index)
+void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, int depth)
 // void		quicksort_core(t_so *so, int min_order_index, int max_order_index)
 {
 	int		i;
@@ -462,7 +277,8 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index)
 	int		section_min_index;
 	int		section_max_index;
 
-
+	if (LIMIT_DEPTH == true && depth > MAX_DEPTH)
+		return ;
 	// stack_min_index = get_element_index(so->a_stack, so->ordered_numbers[0]);
 	section_min_index = relative_to_real_index(so, min_relative_index);
 	section_max_index = relative_to_real_index(so, max_relative_index);
@@ -532,7 +348,9 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index)
 			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
 			relative_index++;
 		}
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
+		optimise_last_rotations(so->operations, so->a_stack->size);
+		if (so->b_stack->size > 1)
+			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
 	}
 	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
@@ -574,7 +392,7 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index)
 	{
 		// printf("Would call quicksort_core with min = %i, max = %i\n", min, mid_point_elem);
 		// quicksort_core(so, min, mid_point_elem);
-		quicksort_core(so, min_relative_index, min_relative_index + mid_point_relative_index);
+		quicksort_core(so, min_relative_index, min_relative_index + mid_point_relative_index, depth + 1);
 	}
 	else if (DEBUG == true)
 		printf("Section %i to %i is in order !\n", next_min, mid_point_elem);
@@ -599,7 +417,7 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index)
 	{
 		// quicksort_core(so, mid_point_elem, max);
 		// printf("Would call quicksort_core with min = %i, max = %i\n", mid_point_elem, max);
-		quicksort_core(so, min_relative_index + mid_point_relative_index, max_relative_index);
+		quicksort_core(so, min_relative_index + mid_point_relative_index, max_relative_index, depth + 1);
 
 	}
 	else if (DEBUG == true)
@@ -629,7 +447,8 @@ void		new_quicksort(t_so *so)
 		ft_exit("Malloc error");
 	// quicksort_core(so, 0, so->a_stack->max_size - 1);
 	// quicksort_core(so, so->ordered_numbers[0], so->ordered_numbers[so->a_stack->max_size - 1]);
-	quicksort_core(so, 0, so->a_stack->max_size - 1);
+	quicksort_core(so, 0, so->a_stack->max_size - 1, 0);
 	free(so->quicksort_less);
 	free(so->quicksort_more);
+	rotate_minimum_on_top(so);
 }

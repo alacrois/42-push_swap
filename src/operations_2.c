@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/13 02:10:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/13 03:09:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,16 @@ t_list			*generate_operations(t_stack *a_stack)
 	// printf("Before quicksort :\n");
 	// display_infos(*a_stack, b_stack, operations);
 
-	// quicksort(&so, 0.5, 2);
-	new_quicksort(&so);
+	
 
-	rotate_minimum_on_top(&so);
+	if (true == false && first_sort(&so) == 1)
+		return (operations);
+
+	new_quicksort(&so);
+	// sort_small(&so);
 	// printf("---------------------\nAfter quicksort :\n");
 	// display_infos(*a_stack, b_stack, operations);
 	// printf("---------------------\n");
-
-	if (false == true && first_sort(&so) == 1)
-		return (operations);
-
 
 	// get_numbers_isolation(&so, numbers_isolation);
 	// so.numbers_isolation = numbers_isolation;
