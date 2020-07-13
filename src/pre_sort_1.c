@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/10 12:49:03 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/13 02:12:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void		swap_min_max(t_so *so)
 	if (out_of_order(so) >= 1 && len > 3)
 	{
 		min_index = get_element_index(so->a_stack, so->ordered_numbers[0]);
-		if (nb_at_index_mod(so->a_stack, min_index + 1, so->a_stack->size) \
+		if (nb_at_index_mod(so->a_stack, min_index + 1) \
 			== so->ordered_numbers[len - 1])
 		{
 			rotate_minimum_on_top(so);

@@ -16,7 +16,7 @@ then
 	time ./push_swapV8 $arg | ./checker $arg | grep -A 1 "Total number"
 	echo -e "\n"
 	# time ./push_swap $arg | ./checker $arg | grep -A 1 "Total number"
-	time ./push_swap $arg | ./checker $arg
+	time ./push_swap $arg | ./checker $arg | grep -A 1 "Total number"
 	# time ./push_swap $arg
 	echo -e "\n"
 

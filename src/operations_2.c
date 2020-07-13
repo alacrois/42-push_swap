@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/12 21:45:45 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/13 02:10:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,16 +132,16 @@ t_list			*generate_operations(t_stack *a_stack)
 	get_ordered_numbers_in_array(a_stack, numbers);
 	so.ordered_numbers = numbers;
 
-	printf("Before quicksort :\n");
-	display_infos(*a_stack, b_stack, operations);
+	// printf("Before quicksort :\n");
+	// display_infos(*a_stack, b_stack, operations);
 
 	// quicksort(&so, 0.5, 2);
 	new_quicksort(&so);
 
 	rotate_minimum_on_top(&so);
-	printf("---------------------\nAfter quicksort :\n");
-	display_infos(*a_stack, b_stack, operations);
-	printf("---------------------\n");
+	// printf("---------------------\nAfter quicksort :\n");
+	// display_infos(*a_stack, b_stack, operations);
+	// printf("---------------------\n");
 
 	if (false == true && first_sort(&so) == 1)
 		return (operations);
@@ -154,6 +154,6 @@ t_list			*generate_operations(t_stack *a_stack)
 		generate_operations_core(&so);
 
 	// all_b_to_a(a_stack, &b_stack, &operations);
-	printf("End of 'generate_operations'\n");
+	// printf("End of 'generate_operations'\n");
 	return (operations);
 }
