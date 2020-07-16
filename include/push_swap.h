@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/13 02:24:12 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/16 22:57:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define DISPLAY_INFOS true
 # define ENABLE_PRE_SORT true
 # define SMALL_STACK_THRESHOLD 12
+# define DEBUG_CHECKER false
 
 typedef	enum	e_operation
 {

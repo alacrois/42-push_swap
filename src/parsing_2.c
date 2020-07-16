@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:19:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/16 22:28:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,12 @@ t_bool		stack_is_ordered(t_stack stack)
 		a = stack.data[index];
 		b = stack.data[index + 1];
 		if (a < b)
+		{
+			if (DEBUG_CHECKER == true)
+				printf("stack_is_ordered ==> false, %i < %i at index %i\n", \
+						a, b, index);
 			return (false);
+		}
 	}
 	return (true);
 }

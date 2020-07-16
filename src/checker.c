@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/13 02:11:43 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/16 22:24:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,16 @@ int				main(int ac, char **av)
 	execute_stack_operations(&a_stack, &b_stack, operations);
 	if (DISPLAY_INFOS == true)
 		display_infos(a_stack, b_stack, operations);
-	if (b_stack.size > 0 || stack_is_ordered(a_stack) == false)
-		ft_putendl("\e[1;31mKO\e[0m");
+	if (b_stack.size > 0)
+		ft_putendl("\e[1;31mKO\e[0m (B stack not empty)");
+	else if (stack_is_ordered(a_stack) == false)
+		ft_putendl("\e[1;31mKO\e[0m (not in order)");
 	else
 		ft_putendl("\e[1;32mOK\e[0m");
+	// if (b_stack.size > 0 || stack_is_ordered(a_stack) == false)
+	// 	ft_putendl("\e[1;31mKO\e[0m");
+	// else
+	// 	ft_putendl("\e[1;32mOK\e[0m");
 	free_list(&operations);
 	return (0);
 }

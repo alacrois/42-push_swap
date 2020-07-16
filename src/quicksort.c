@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/16 19:38:27 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 01:11:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-#define DEBUG true
+#define DEBUG false
 #define LIMIT_DEPTH false
 #define MAX_DEPTH 8
 
@@ -247,19 +247,23 @@ t_bool		new_section_in_order(t_so *so, int relative_min_index, int relative_max_
 {
 	int		size;
 	int		ooo;
-	float	ooo_percent;
+	// float	ooo_percent;
 
 	size = relative_max_index - relative_min_index;
 	size = size < 0 ? size + so->a_stack->max_size + 1 : size + 1;
 	ooo = section_out_of_order(so, relative_to_real_index(so, relative_min_index), size);
-	ooo_percent = 100 * ((float)ooo / (float)size);
+	// ooo_percent = 100 * ((float)ooo / (float)size);
 	if (ooo == 0)
 	{
 		if (DEBUG == true)
 			printf("ooo = %i, returns true\n", ooo);
 		return (true);
 	}
-	else if (ooo_percent > 25 && size > 8)
+	// else if (ooo_percent > 15 && size > 8)
+	// else if (ooo > 3 && size > 6)
+	else if (ooo > 3 && size > 5)
+	// else if (ooo_percent > 70 && size > 15)
+	// else if (false)
 	{
 		if (DEBUG == true)
 			printf("ooo = %i, returns false\n", ooo);
@@ -416,6 +420,67 @@ int		fill_to_swich(t_so *so, int max_stack_index, float median, int *mid_point_r
 	return (count);
 }
 
+void		new_quicksort_switch(t_so *so, int min_relative_index, int max_relative_index, \
+								int median, int *mid_relative_index)
+{
+	int		i;
+	int 	size;
+	int		min;
+	int		max;
+	int		switches;
+
+	size = max_relative_index - min_relative_index;
+	size = size < 0 ? size + so->a_stack->max_size + 1 : size + 1;
+	min = nb_at_index_mod(so->a_stack, relative_to_real_index(so, min_relative_index));
+	max = nb_at_index_mod(so->a_stack, relative_to_real_index(so, max_relative_index));
+	switches = 0;
+	if (DEBUG == true)
+	{
+		printf("Section %i to %i S0 (size = %i):\n", min, max, size);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index));
+	i = 0;
+	while (i < size)
+	{
+		if (i == 0)
+			optimise_last_rotations(so->operations, so->a_stack->size);
+		if (nb_at_index_mod(so->a_stack, 1) > median)
+		{
+			if (i == size - 1)
+				execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+			else
+			{
+				// Sort B stack before (and after ?) this :
+				execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+			}
+			switches++;
+		}
+		else
+			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+		i++;
+		// if (i < size)
+	}
+	// execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+	if (DEBUG == true)
+	{
+		printf("Section %i to %i S1 :\n", min, max);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	// put_indexed_on_top(*so, get_element_index(so->a_stack, max));
+	// if (max < median)
+		// execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+	all_b_to_a(so->a_stack, so->b_stack, so->operations);
+	*mid_relative_index = size - switches - 1;
+	if (DEBUG == true)
+	{
+		printf("Section %i to %i S2 :\n", min, max);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+		printf("mid_relative_index = %i\n", *mid_relative_index);
+	}
+
+}
+
 void		quicksort_switch(t_so *so, int min_relative_index, int max_relative_index, \
 								int mid_relative_index, int switches)
 {
@@ -427,6 +492,8 @@ void		quicksort_switch(t_so *so, int min_relative_index, int max_relative_index,
 
 	size = max_relative_index - min_relative_index;
 	size = size < 0 ? size + so->a_stack->max_size + 1 : size + 1;
+	min = nb_at_index_mod(so->a_stack, relative_to_real_index(so, min_relative_index));
+	max = nb_at_index_mod(so->a_stack, relative_to_real_index(so, max_relative_index));
 	// ===================== STEP 1 =====================
 	i = -1;
 	while (++i < switches)
@@ -438,33 +505,82 @@ void		quicksort_switch(t_so *so, int min_relative_index, int max_relative_index,
 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
 	}
 
-	// ===================== STEP 2 =====================
-	i = -1;
-	while (++i < switches)
-	{
-		// put_indexed_on_top(*so, get_element_index(so->a_stack, less_than_med.data[i]));
-		put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_less[i].elem));
-		if (i == 0)
-			optimise_last_rotations(so->operations, so->a_stack->size);
-		// Switch :
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
-	}
-	
-	// ===================== STEP 3 =====================
+	// // ===================== STEP 2 =====================
+	// i = -1;
+	// while (++i < switches)
+	// {
+	// 	// put_indexed_on_top(*so, get_element_index(so->a_stack, less_than_med.data[i]));
+	// 	put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_less[i].elem));
+	// 	if (i == 0)
+	// 		optimise_last_rotations(so->operations, so->a_stack->size);
+	// 	// Switch :
+	// 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+	// 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
+	// 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+	// }
 
 	if (DEBUG == true)
 	{
-		min = nb_at_index_mod(so->a_stack, relative_to_real_index(so, min_relative_index));
-		max = nb_at_index_mod(so->a_stack, relative_to_real_index(so, max_relative_index));
-		printf("Section %i to %i BEFORE step 3 :\n", min, max);
+		printf("Section %i to %i new step 2 --- 1 :\n", min, max);
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
+	// ===================== NEW STEP 2 =====================
+	i = -1;
+	while (++i < switches)
+	{
+		put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_less[i].elem));
+		if (i == 0)
+			optimise_last_rotations(so->operations, so->a_stack->size);
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+	}
+	if (DEBUG == true)
+	{
+		printf("Section %i to %i new step 2 --- 2 :\n", min, max);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	// Dispatching 'less' in 1st half :
+	if (so->quicksort_more[0].relative_index == 0)
+		put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index));
+	else
+		put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index + 1));
+	i = -1;
+	while (++i < switches)
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+	if (DEBUG == true)
+	{
+		printf("Section %i to %i new step 2 --- 3 :\n", min, max);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	// Dispatching 'more' in 2nd half :
+	put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index + mid_relative_index + 1 + switches));
+	i = -1;
+	while (++i < switches)
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+	
+	// ============================================================
+	// ============================================================
+	// ===================== STEP 3 =====================
 
-	// put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index) + 1);
-	put_indexed_on_top(*so, relative_to_real_index(so, mid_relative_index));
-	all_b_to_a(so->a_stack, so->b_stack, so->operations);
+	// if (DEBUG == true && mid_relative_index != -324626345)
+	// {
+	// 	// min = nb_at_index_mod(so->a_stack, relative_to_real_index(so, min_relative_index));
+	// 	// max = nb_at_index_mod(so->a_stack, relative_to_real_index(so, max_relative_index));
+	// 	printf("Section %i to %i BEFORE step 3 :\n", min, max);
+	// 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	// }
+	// if (so->quicksort_more[0].relative_index == 0)
+	// 	put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index));
+	// else
+	// 	put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index + 1));
+
+	// // all_b_to_a(so->a_stack, so->b_stack, so->operations);
+	// i = -1;
+	// while (++i < switches)
+	// {
+	// 	if (so->b_stack->size > 1)
+	// 		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
+	// 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+	// }
 
 	// put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index));
 	// i = -1;
@@ -528,7 +644,7 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 	switch_max = switches;
 
 	if (DEBUG == true)
-		printf("Quicksorting between %i and %i\nswitch_max = %i, median = %f\n", \
+		printf("\e[1;32mQuicksorting between %i and %i\e[0m\nswitch_max = %i, median = %f\n", \
 				min, max, switch_max, median);
 	// printf("switch_max = %i, median = %f\n", switch_max, median);
 	if (DEBUG == true)
@@ -537,78 +653,16 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
 
-	quicksort_switch(so, min_relative_index, max_relative_index, \
-						mid_point_relative_index, switches);
-	/*
-	i = -1;
-	while (++i < switch_max)
-	{
-		// put_indexed_on_top(*so, get_element_index(so->a_stack, more_than_med.data[i]));
-		put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_more[i].elem));
-		if (i == 0)
-			optimise_last_rotations(so->operations, so->a_stack->size);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
-	}
-
-	if (DEBUG == true)
-	{
-		printf("S2 \n");
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-	}
-	i = -1;
-	while (++i < switch_max)
-	{
-		// put_indexed_on_top(*so, get_element_index(so->a_stack, less_than_med.data[i]));
-		put_indexed_on_top(*so, get_element_index(so->a_stack, so->quicksort_less[i].elem));
-		if (i == 0)
-			optimise_last_rotations(so->operations, so->a_stack->size);
-		// Switch :
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
-	}
-
-	if (DEBUG == true)
-	{
-		printf("S3 \n");
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-	}
-	// put_indexed_on_top(*so, get_element_index(so->a_stack, min));
-	put_indexed_on_top(*so, relative_to_real_index(so, min_relative_index));
-	// if min not in stack A ??
-
-	// execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
-
-	// Put at correct indexes
-	i = -1;
-	relative_index = 0;
-	while (++i < switch_max)
-	{
-		while (relative_index != so->quicksort_more[i].relative_index)
-		{
-			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
-			relative_index++;
-		}
-		optimise_last_rotations(so->operations, so->a_stack->size);
-		if (so->b_stack->size > 1)
-			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RRB);
-		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
-	}
-	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
-	*/
+	// quicksort_switch(so, min_relative_index, max_relative_index, mid_point_relative_index, switches);
+	new_quicksort_switch(so, min_relative_index, max_relative_index, median, &mid_point_relative_index);
+	
 	if (DEBUG == true)
 	{
 		printf("Quicksorting done : \n");
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 		printf("====================\n");
-
 		printf("Reminder : min = %i, max = %i, median = %f\n", min, max, median);
-
 		printf("mid_point_relative_index = %i\n", mid_point_relative_index);
-		// ft_exit("");
-
-		// if (ft_lstlen(*so->operations) > 200)
-		// 	ft_exit("Killing program, too many operations !");
 	}
 
 	mid_point_index = relative_to_real_index(so, min_relative_index + mid_point_relative_index);
@@ -635,6 +689,7 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 
 	// mid_point_index = relative_to_real_index(so, min_relative_index + mid_point_relative_index);
 	// mid_point_elem = nb_at_index_mod(so->a_stack, mid_point_index);
+	mid_point_relative_index++;
 
 	if (DEBUG == true)
 		printf("Considering section %i to %i...\n", mid_point_elem, next_max);	
@@ -678,5 +733,11 @@ void		new_quicksort(t_so *so)
 	{
 		printf("---------------------\nAfter quicksort :\n");
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+		if (stack_is_ordered(*so->a_stack) == true)
+			ft_putendl("\e[1;32mStack is ordered.\e[0m");
+		else
+			ft_putendl("\e[1;31mStack is not ordered.\e[0m");
 	}
+
+
 }

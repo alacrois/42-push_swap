@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/16 19:14:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 01:01:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ t_list			*generate_operations(t_stack *a_stack)
 
 	
 
-	if (true == false && first_sort(&so) == 1)
+	if (false == true && first_sort(&so) == 1)
 		return (operations);
 
 	new_quicksort(&so);
