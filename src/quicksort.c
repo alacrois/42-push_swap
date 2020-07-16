@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/13 03:11:04 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/16 02:07:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,32 @@
 #define DEBUG false
 #define LIMIT_DEPTH false
 #define MAX_DEPTH 8
+
+int			relative_to_real_index(t_so *so, int relative_index)
+{
+	int		index;
+	int		stack_min_index;
+
+
+	stack_min_index = get_element_index(so->a_stack, so->ordered_numbers[0]);
+	index = stack_min_index + relative_index;
+	index = index > so->a_stack->max_size ? \
+					index - so->a_stack->max_size : index;
+	index = index < 1 ? index + so->a_stack->max_size : index;
+	return (index);
+}
+
+int			real_to_relative_index(t_so *so, int real_index)
+{
+	int		index;
+	int		stack_min_index;
+
+
+	stack_min_index = get_element_index(so->a_stack, so->ordered_numbers[0]);
+	index = real_index - stack_min_index;
+	index = index < 0 ? index + so->a_stack->max_size + 1 : index;
+	return (index);
+}
 
 static void	put_indexed_on_top(t_so so, int index)
 {
@@ -25,6 +51,8 @@ static void	put_indexed_on_top(t_so so, int index)
 	t_operation	rotation;
 
 	a_stack = so.a_stack;
+	index = index > a_stack->size ? index - a_stack->size : index;
+	index = index < 1 ? index + a_stack->size : index;
 	operations = so.operations;
 	if (a_stack->size == 0)
 		return ;
@@ -139,45 +167,146 @@ void		get_less_than_median(t_so *so, int index_max, t_stack *ltm, float median)
 	}
 }
 
+int			array_out_of_order(int *array, int size)
+{
+	int		i;
+	int		i2;
+	int		count;
+
+	count = 0;
+	i = -1;
+	while (++i < size)
+	{
+		i2 = -1;
+		while (++i2 < size)
+		{
+			if ((i2 < i && array[i2] > array[i]) || (i2 > i && array[i2] < array[i]))
+			{
+				count++;
+				break;
+			}
+		}
+	}
+	i = -1;
+	printf("array_out_of_order returns %i, size is %i, array is :  ", count, size);
+	while (++i < size)
+		printf("%i   ", array[i]);
+	printf("\n");
+	return (count);
+}
+
+int			section_out_of_order(t_so *so, int start_index, int size)
+{
+	int		numbers[size];
+	int		i;
+
+	i = -1;
+	while (++i < size)
+		numbers[i] = nb_at_index_mod(so->a_stack, start_index + i);
+	return (array_out_of_order(numbers, size));
+}
+
+void		sort_section(t_so *so, int relative_min_index, int relative_max_index)
+{
+
+}
+
+t_bool		new_section_in_order(t_so *so, int relative_min_index, int relative_max_index)
+{
+	int		size;
+	int		ooo;
+
+	size = relative_max_index - relative_min_index;
+	size = size < 0 ? size + so->a_stack->max_size + 1 : size;
+	ooo = section_out_of_order(so, relative_to_real_index(so, relative_min_index), size);
+	if (ooo == 0)
+		return (true)
+	else if (ooo > 2)
+		return (false);
+	else
+	{
+		sort_section(so, relative_min_index, relative_max_index);
+		return (true);
+	}
+	
+}
+
 t_bool		section_in_order(t_so *so, int min_stack_index, int max_stack_index)
 {
 	int		i;
 	int		a;
 	int		b;
 	int		size;
-	// int		out_of_order;
-	// int		index_to_swap;
+	int		out_of_order;
+	int		index_to_correct;
+	int		tmp;
+	int		first;
+	int		last;
+	// int		min;
 
+	if (DEBUG == true)
+		printf("IN section_in_order ==> min_stack_index = %i && max_stack_index = %i\n", \
+				min_stack_index, max_stack_index);
 	size = max_stack_index - min_stack_index;
 	size = size < 0 ? size + so->a_stack->max_size : size;
 	i = -1;
-	// out_of_order = 0;
+	out_of_order = 0;
+	index_to_correct = -1;
+	first = nb_at_index_mod(so->a_stack, min_stack_index);
+	last = nb_at_index_mod(so->a_stack, max_stack_index);
 	while (++i < size)
 	{
 		a = nb_at_index_mod(so->a_stack, min_stack_index + i);
 		b = nb_at_index_mod(so->a_stack, min_stack_index + i + 1);
 		if (a > b)
 		{
-			if (DEBUG == true)
-				printf("section in order returns false, %i > %i\n", a, b);
-			// out_of_order++;
-			// index_to_swap = min_stack_index + i;
-			return (false);
+			// if (DEBUG == true)
+			// 	printf("section in order returns false, %i > %i\n", a, b);
+			index_to_correct = min_stack_index + i;
+			out_of_order++;
+			tmp = b;
+			// return (false);
 		}
 	}
-	// if (out_of_order > 1)
+	// if (DEBUG == false)
 	// {
-	// 	if (DEBUG == true)
-	// 		printf("section in order returns false with out_of_order = %i\n", out_of_order);
-	// 	return (false);
+	// 	printf("About to call section_out_of_order with relative min = %i and relative max = %i\n",
+	// 			real_to_relative_index(so, min_stack_index), real_to_relative_index(so, max_stack_index));
 	// }
-	// if (out_of_order == 1)
-	// {
-	// 	put_indexed_on_top(*so, index_to_swap);
-	// 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SA);
-	// 	if (DEBUG == true)
-	// 		printf("Swapped in section_in_order !\n");
-	// }
+	if (section_out_of_order(so, min_stack_index, size) > 2 || out_of_order > 1)
+	{
+		if (DEBUG == true)
+			printf("section in order returns false with out_of_order = %i\n", out_of_order);
+		return (false);
+	}
+	if (out_of_order == 1)
+	{
+		put_indexed_on_top(*so, index_to_correct);
+		// a = nb_at_index_mod(so->a_stack, 1);
+
+		// execute_and_save_operation(so->a_stack, so->b_stack, so->operations, SA);
+		b = nb_at_index_mod(so->a_stack, 1);
+
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+		a = nb_at_index_mod(so->a_stack, 1);
+		while (a < b)
+		{
+			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+			a = nb_at_index_mod(so->a_stack, 1);
+		}
+		execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PA);
+
+		if (DEBUG == true)
+		{
+			display_infos(*so->a_stack, *so->b_stack, *so->operations);
+			printf("Corrected %i-%i ! %i was not in order (put on top of %i, was on top of %i before)\n", \
+					first, last, b, a, tmp);
+		}
+		// put_indexed_on_top(*so, get_element_index(so->a_stack, first));
+		return (section_in_order(so, get_element_index(so->a_stack, first), get_element_index(so->a_stack, last)));
+		// return (true);
+	}
+	// printf("section in order returns true with out_of_order = %i\n", out_of_order);
 	return (true);
 }
 
@@ -239,20 +368,6 @@ int		fill_to_swich(t_so *so, int max_stack_index, float median, int *mid_point_r
 	}
 	*mid_point_relative_index = b_index - 1;
 	return (count);
-}
-
-int			relative_to_real_index(t_so *so, int relative_index)
-{
-	int		index;
-	int		stack_min_index;
-
-
-	stack_min_index = get_element_index(so->a_stack, so->ordered_numbers[0]);
-	index = stack_min_index + relative_index;
-	index = index > so->a_stack->max_size ? \
-					index - so->a_stack->max_size : index;
-	index = index < 1 ? index + so->a_stack->max_size : index;
-	return (index);
 }
 
 // void		quicksort_core(t_so *so, int min, int max)
@@ -365,8 +480,8 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 		printf("mid_point_relative_index = %i\n", mid_point_relative_index);
 		// ft_exit("");
 
-		if (ft_lstlen(*so->operations) > 200)
-			ft_exit("Killing program, too many operations !");
+		// if (ft_lstlen(*so->operations) > 200)
+		// 	ft_exit("Killing program, too many operations !");
 	}
 	// mid_point_index = get_element_index(so->a_stack, min) + mid_point_relative_index;
 	// mid_point_index = mid_point_index > so->a_stack->max_size ?
@@ -407,6 +522,7 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 	// mid_point_elem = nb_at_index_mod(so->a_stack, mid_point_index);
 
 	// mid_point_index = relative_to_real_index(so, min_relative_index + mid_point_relative_index + 1);
+	
 	mid_point_index = relative_to_real_index(so, min_relative_index + mid_point_relative_index);
 	mid_point_elem = nb_at_index_mod(so->a_stack, mid_point_index);
 
@@ -451,4 +567,9 @@ void		new_quicksort(t_so *so)
 	free(so->quicksort_less);
 	free(so->quicksort_more);
 	rotate_minimum_on_top(so);
+	if (DEBUG == true)
+	{
+		printf("---------------------\nAfter quicksort :\n");
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
 }
