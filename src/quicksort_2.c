@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 18:06:15 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:24:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,28 @@ static t_bool	in_section(t_so *so, int index, int section_rel_min, int section_r
 		return (false);
 }
 
+static int	get_tmp_min(t_so *so, int size)
+{
+	float	section_percent;
+	int		i;
+	int		max_index;
+	int		min;
+
+	min = nb_at_index_mod(so->a_stack, 1);
+	section_percent = 0.33;
+	max_index = (int)((float)size * section_percent) + 1;
+	max_index = max_index > size ? size : max_index;
+	if (DEBUG_NEW_SORT == true)
+		printf("In get_tmp_min, max_index = %i (size = %i)\n", max_index, size);
+	i = 0;
+	while (++i < max_index)
+	{
+		if (nb_at_index_mod(so->a_stack, 1 + i) < min)
+			min = nb_at_index_mod(so->a_stack, 1 + i);
+	}
+	return (min);
+}
+
 void		new_sort_section(t_so *so, int relative_min_index, int relative_max_index)
 {
 	int		size;
@@ -135,20 +157,46 @@ void		new_sort_section(t_so *so, int relative_min_index, int relative_max_index)
 	int		c;
 	// t_operation		rotation;
 	int		i;
+	int		tmp_min;
+	t_bool	tmp_min_found;
 
 	size = relative_max_index - relative_min_index;
 	size = size < 0 ? size + so->a_stack->max_size + 1 : size + 1;
 	// put_indexed_on_top(*so, relative_to_real_index(so, relative_min_index));
-	put_indexed_on_top(*so, relative_to_real_index(so, relative_min_index + 1));
+	put_indexed_on_top(*so, relative_to_real_index(so, relative_min_index));
+
+	// if (nb_at_index_mod(so->a_stack, 1) > nb_at_index_mod(so->a_stack, 2))
+	// 	do_operation(so, SA);
+	// do_operation(so, RA);
+	tmp_min = get_tmp_min(so, size);
+	if (DEBUG_NEW_SORT == true)
+	{
+		printf("First elem in section : %i\n", nb_at_index_mod(so->a_stack, 1));
+		printf("tmp_min set to %i\n", tmp_min);
+	}
 	i = -1;
-	while (++i < size - 1)
+	// while (++i < size - 1)
+	tmp_min_found = true;
+	while (++i < size)
 	{
 		// a = nb_at_index_mod(so->a_stack, so->a_stack->size);
 		// b = nb_at_index_mod(so->a_stack, 1);
 		// c = nb_at_index_mod(so->a_stack, 2);
-		a = nb_at_index_mod(so->a_stack, so->a_stack->size);
+		if (in_section(so, so->a_stack->size, relative_min_index, relative_max_index - so->b_stack->size) == true)
+		{
+
+			a = nb_at_index_mod(so->a_stack, so->a_stack->size);
+		}
+		else
+		{
+			tmp_min_found = false;
+			a = tmp_min;
+		}
+		
 		b = nb_at_index_mod(so->a_stack, 1);
-		// c = nb_at_index_mod(so->a_stack, 2);
+		if (b == tmp_min)
+			tmp_min_found = true;
+		c = nb_at_index_mod(so->a_stack, 2);
 		if (DEBUG_NEW_SORT == true)
 			printf("S1 - Considering %i and comparing to %i... ", b, a);
 		// if (c < b && c < a)
@@ -157,11 +205,25 @@ void		new_sort_section(t_so *so, int relative_min_index, int relative_max_index)
 		// 	do_operation(so, RA);
 		// }
 		// else if (c < b)
-		if (b < a)
+		if (b < a || tmp_min_found == false)
 		{
 			if (DEBUG_NEW_SORT == true)
-				printf("%i put in B !\n", b);
+			{
+				printf("%i put in B !", b);
+				if (tmp_min_found == false)
+					printf("(tmp_min not found)\n");
+				else
+					printf("\n");
+			}
 			put_in_ordered_b(so);
+		}
+		else if (c < b && c > a)
+		{
+			// if c out of section ??
+			if (DEBUG_NEW_SORT == true)
+				printf("%i and %i swapped !\n", b, c);
+			do_operation(so, SA);
+			do_operation(so, RA);
 		}
 		else
 		{

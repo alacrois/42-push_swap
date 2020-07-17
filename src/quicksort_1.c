@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 18:31:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:18:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -682,7 +682,7 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 	if (DEBUG == true)
 	{
 		printf("Reminder : min = %i, max = %i\n", min, max);
-		printf("Considering section %i to %i...\n", next_min, mid_point_elem);
+		printf("\e[1;32mConsidering section %i to %i...\e[0m\n", next_min, mid_point_elem);
 	}
 	// if (section_in_order(so, relative_to_real_index(so, min_relative_index), mid_point_index) == false)
 	if (new_section_in_order(so, min_relative_index, min_relative_index + mid_point_relative_index) == false)
@@ -692,12 +692,12 @@ void		quicksort_core(t_so *so, int min_relative_index, int max_relative_index, i
 	else if (DEBUG == true)
 		printf("Section %i to %i is in order !\n", next_min, mid_point_elem);
 
-	// mid_point_index = relative_to_real_index(so, min_relative_index + mid_point_relative_index);
-	// mid_point_elem = nb_at_index_mod(so->a_stack, mid_point_index);
 	mid_point_relative_index++;
+	mid_point_index = relative_to_real_index(so, min_relative_index + mid_point_relative_index);
+	mid_point_elem = nb_at_index_mod(so->a_stack, mid_point_index);
 
 	if (DEBUG == true)
-		printf("Considering section %i to %i...\n", mid_point_elem, next_max);	
+		printf("\e[1;32mConsidering section %i to %i...\e[0m\n", mid_point_elem, next_max);	
 	// if (section_in_order(so, mid_point_index, relative_to_real_index(so, max_relative_index)) == false)
 	if (new_section_in_order(so, min_relative_index + mid_point_relative_index, max_relative_index) == false)
 	{
