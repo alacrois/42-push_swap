@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 21:24:50 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 23:13:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 #define DEBUG_NEW_SORT false
+
 
 void		do_operation(t_so *so, t_operation o)
 {
@@ -148,6 +149,83 @@ static int	get_tmp_min(t_so *so, int size)
 	return (min);
 }
 
+// static void	select_elements_to_remove(t_so *so, int size, int *selected)
+// {
+// 	int		i;
+// 	int		elements[size];
+
+// 	i = -1;
+// 	while (++i < size)
+// 	{
+// 		elements[i] = nb_at_index_mod(so->a_stack, 1 + i);
+// 		if (DEBUG_NEW_SORT == true)
+// 			printf("elems[%i] = %i\n", i, elements[i]);
+// 	}
+// 	i = -1;
+// 	while (++i < size)
+// 	{
+// 		if (elements[i] == 0)
+// 			selected[i] = 1;
+// 		else
+// 			selected[i] = 0;
+
+// 	}
+// 	if (DEBUG_NEW_SORT == true)
+// 	{
+// 		printf("Selected to remove :\n");
+// 		i = -1;
+// 		while (++i < size)
+// 			printf("selected[%i] = %i\n", i, selected[i]);
+// 	}
+// }
+
+static void	new_sort_section_core(t_so *so, int a, int b, int c, t_bool tmp_min_found, int *selected, int i)
+{
+	// int		elems[size];
+	// int		selected[size];
+	// int		i;
+
+	// select_elements_to_remove(elems, size, (int *)selected);
+	if (selected[i] == 1)
+	{
+		put_in_ordered_b(so);
+		if (DEBUG_NEW_SORT == true)
+			printf("\e[1;33m%i is selected to remove\n\e[0m", b);
+	}
+	else
+		do_operation(so, RA);
+	
+	if (true == false && a == c && tmp_min_found == false)
+		printf("The sky is falling !\n");
+		
+	// if (b < a || tmp_min_found == false)
+	// {
+	// 	if (DEBUG_NEW_SORT == true)
+	// 	{
+	// 		printf("%i put in B !", b);
+	// 		if (tmp_min_found == false)
+	// 			printf("(tmp_min not found)\n");
+	// 		else
+	// 			printf("\n");
+	// 	}
+	// 	put_in_ordered_b(so);
+	// }
+	// else if (c < b && c > a)
+	// {
+	// 	// if c out of section ??
+	// 	if (DEBUG_NEW_SORT == true)
+	// 		printf("%i and %i swapped !\n", b, c);
+	// 	do_operation(so, SA);
+	// 	do_operation(so, RA);
+	// }
+	// else
+	// {
+	// 	if (DEBUG_NEW_SORT == true)
+	// 		printf("OK\n");
+	// 	do_operation(so, RA);
+	// }
+}
+
 void		new_sort_section(t_so *so, int relative_min_index, int relative_max_index)
 {
 	int		size;
@@ -162,8 +240,11 @@ void		new_sort_section(t_so *so, int relative_min_index, int relative_max_index)
 
 	size = relative_max_index - relative_min_index;
 	size = size < 0 ? size + so->a_stack->max_size + 1 : size + 1;
+	
 	// put_indexed_on_top(*so, relative_to_real_index(so, relative_min_index));
 	put_indexed_on_top(*so, relative_to_real_index(so, relative_min_index));
+	int		selected[size];
+	select_elements_to_remove(so, size, (int *)selected);
 
 	// if (nb_at_index_mod(so->a_stack, 1) > nb_at_index_mod(so->a_stack, 2))
 	// 	do_operation(so, SA);
@@ -199,38 +280,34 @@ void		new_sort_section(t_so *so, int relative_min_index, int relative_max_index)
 		c = nb_at_index_mod(so->a_stack, 2);
 		if (DEBUG_NEW_SORT == true)
 			printf("S1 - Considering %i and comparing to %i... ", b, a);
-		// if (c < b && c < a)
+
+		new_sort_section_core(so, a, b, c, tmp_min_found, selected, i);
+		// if (b < a || tmp_min_found == false)
 		// {
+		// 	if (DEBUG_NEW_SORT == true)
+		// 	{
+		// 		printf("%i put in B !", b);
+		// 		if (tmp_min_found == false)
+		// 			printf("(tmp_min not found)\n");
+		// 		else
+		// 			printf("\n");
+		// 	}
+		// 	put_in_ordered_b(so);
+		// }
+		// else if (c < b && c > a)
+		// {
+		// 	// if c out of section ??
+		// 	if (DEBUG_NEW_SORT == true)
+		// 		printf("%i and %i swapped !\n", b, c);
 		// 	do_operation(so, SA);
 		// 	do_operation(so, RA);
 		// }
-		// else if (c < b)
-		if (b < a || tmp_min_found == false)
-		{
-			if (DEBUG_NEW_SORT == true)
-			{
-				printf("%i put in B !", b);
-				if (tmp_min_found == false)
-					printf("(tmp_min not found)\n");
-				else
-					printf("\n");
-			}
-			put_in_ordered_b(so);
-		}
-		else if (c < b && c > a)
-		{
-			// if c out of section ??
-			if (DEBUG_NEW_SORT == true)
-				printf("%i and %i swapped !\n", b, c);
-			do_operation(so, SA);
-			do_operation(so, RA);
-		}
-		else
-		{
-			if (DEBUG_NEW_SORT == true)
-				printf("OK\n");
-			do_operation(so, RA);
-		}
+		// else
+		// {
+		// 	if (DEBUG_NEW_SORT == true)
+		// 		printf("OK\n");
+		// 	do_operation(so, RA);
+		// }
 	}
 	if (so->b_stack->size > 1)
 		rotate_elem_on_top(so, false, stack_max(so->b_stack));

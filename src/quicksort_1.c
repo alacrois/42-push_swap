@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 21:18:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/18 01:43:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,9 @@ int			section_out_of_order(t_so *so, int start_index, int size)
 	i = -1;
 	while (++i < size)
 		numbers[i] = nb_at_index_mod(so->a_stack, start_index + i);
+		
 	return (array_out_of_order(numbers, size));
+	// return (count_unsorted(numbers, size));
 }
 
 void		sort_section(t_so *so, int relative_min_index, int relative_max_index)
@@ -261,7 +263,8 @@ t_bool		new_section_in_order(t_so *so, int relative_min_index, int relative_max_
 		return (true);
 	}
 	else if (ooo_percent > 60 && size > 50)
-	// else if (ooo > 40)
+	// else if (ooo_percent > 40 && size > 40)
+	// else if (ooo > 75)
 	// else if (ooo > 50 || (ooo_percent > 60 && size > 50))
 	// else if (ooo_percent > 70 && size > 20)
 	// else if (ooo > 3 && size > 5)
@@ -450,19 +453,29 @@ void		new_quicksort_switch(t_so *so, int min_relative_index, int max_relative_in
 	{
 		if (i == 0)
 			optimise_last_rotations(so->operations, so->a_stack->size);
+		// if (i < size - 1)
+		// 	check_swap(so);
 		if (nb_at_index_mod(so->a_stack, 1) > median)
 		{
 			if (i == size - 1)
-				execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+			{
+				if (size < so->a_stack->max_size - 1)
+					execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+			}
 			else
 			{
 				// Sort B stack before (and after ?) this :
 				execute_and_save_operation(so->a_stack, so->b_stack, so->operations, PB);
+				// check_swap(so);
+				// put_in_ordered_b(so);
 			}
 			switches++;
 		}
 		else
+		{
+
 			execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
+		}
 		i++;
 		// if (i < size)
 	}
@@ -475,7 +488,21 @@ void		new_quicksort_switch(t_so *so, int min_relative_index, int max_relative_in
 	// put_indexed_on_top(*so, get_element_index(so->a_stack, max));
 	// if (max < median)
 		// execute_and_save_operation(so->a_stack, so->b_stack, so->operations, RA);
-	all_b_to_a(so->a_stack, so->b_stack, so->operations);
+	
+
+	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
+	while (so->b_stack->size > 0)
+	{
+		// if (so->b_stack->size > 1 &&
+		// 	nb_at_index_mod(so->b_stack, 1) < nb_at_index_mod(so->b_stack, 1))
+		// 	do_operation(so, SB);
+		do_operation(so, PA);
+		// if (so->a_stack->size > 1 &&
+		// 	nb_at_index_mod(so->a_stack, 1) > nb_at_index_mod(so->a_stack, 1))
+		// 	do_operation(so, SA);
+		// check_swap(so);
+	}
+
 	*mid_relative_index = size - switches - 1;
 	if (DEBUG == true)
 	{
@@ -722,15 +749,15 @@ void		min_on_top_max_at_bottom(t_so *so)
 void		new_quicksort(t_so *so)
 {
 	min_on_top_max_at_bottom(so);
-	// quicksort_core(so, so->ordered_numbers[0],
-	// 		so->ordered_numbers[so->a_stack->max_size - 1]);
 	so->quicksort_less = (t_to_switch *)malloc(sizeof(t_to_switch) * so->a_stack->max_size);
 	so->quicksort_more = (t_to_switch *)malloc(sizeof(t_to_switch) * so->a_stack->max_size);
 	if (so->quicksort_less == NULL || so->quicksort_more == NULL)
 		ft_exit("Malloc error");
-	// quicksort_core(so, 0, so->a_stack->max_size - 1);
-	// quicksort_core(so, so->ordered_numbers[0], so->ordered_numbers[so->a_stack->max_size - 1]);
+
+	
 	quicksort_core(so, 0, so->a_stack->max_size - 1, 0);
+	// sort_section(so, 0, so->a_stack->max_size - 1);
+
 	free(so->quicksort_less);
 	free(so->quicksort_more);
 	rotate_minimum_on_top(so);

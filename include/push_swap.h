@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 17:56:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/18 01:31:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,14 @@ typedef struct	s_so
 	t_to_switch	*quicksort_less;
 	t_to_switch	*quicksort_more;
 }				t_so;
+
+typedef struct	s_to_sort
+{
+	int			value;
+	int			ooo;
+	t_bool		used;
+}				t_to_sort;
+
 
 
 
@@ -121,4 +129,13 @@ void			do_operation(t_so *so, t_operation o);
 int				real_to_relative_index(t_so *so, int real_index);
 int				relative_to_real_index(t_so *so, int relative_index);
 void			put_indexed_on_top(t_so so, int index);
+void			select_elements_to_remove(t_so *so, int size, int *selected);
+
+void			optimize_rotations(t_list **operations);
+int				next_rotation_to_delete(t_list *start, t_operation o);
+void			replace_next_rotations(t_list *start, t_operation o, int n);
+int				count_unsorted(int *elements, int size);
+void			put_in_ordered_b(t_so *so);
+void			check_swap(t_so *so);
+
 #endif
