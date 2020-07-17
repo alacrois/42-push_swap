@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/16 22:57:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 17:56:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,10 @@ void			free_stack(t_stack s);
 void			rotate_minimum_on_top(t_so *so);
 
 void			new_quicksort(t_so *so);
+void			new_sort_section(t_so *so, int relative_min_index, int relative_max_index);
+void			do_operation(t_so *so, t_operation o);
 
-
+int				real_to_relative_index(t_so *so, int real_index);
+int				relative_to_real_index(t_so *so, int relative_index);
+void			put_indexed_on_top(t_so so, int index);
 #endif

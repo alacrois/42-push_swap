@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quicksort.c                                        :+:      :+:    :+:   */
+/*   quicksort_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 01:11:12 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/17 18:31:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int			real_to_relative_index(t_so *so, int real_index)
 	return (index);
 }
 
-static void	put_indexed_on_top(t_so so, int index)
+void		put_indexed_on_top(t_so so, int index)
 {
 	int			len;
 	t_stack		*a_stack;
@@ -181,6 +181,7 @@ int			array_out_of_order(int *array, int size)
 		while (++i2 < size)
 		{
 			if ((i2 < i && array[i2] > array[i]) || (i2 > i && array[i2] < array[i]))
+			// if (i2 > i && array[i2] < array[i])
 			{
 				count++;
 				break;
@@ -247,21 +248,24 @@ t_bool		new_section_in_order(t_so *so, int relative_min_index, int relative_max_
 {
 	int		size;
 	int		ooo;
-	// float	ooo_percent;
+	float	ooo_percent;
 
 	size = relative_max_index - relative_min_index;
 	size = size < 0 ? size + so->a_stack->max_size + 1 : size + 1;
 	ooo = section_out_of_order(so, relative_to_real_index(so, relative_min_index), size);
-	// ooo_percent = 100 * ((float)ooo / (float)size);
+	ooo_percent = 100 * ((float)ooo / (float)size);
 	if (ooo == 0)
 	{
 		if (DEBUG == true)
 			printf("ooo = %i, returns true\n", ooo);
 		return (true);
 	}
-	// else if (ooo_percent > 15 && size > 8)
-	// else if (ooo > 3 && size > 6)
-	else if (ooo > 3 && size > 5)
+	else if (ooo_percent > 60 && size > 50)
+	// else if (ooo > 40)
+	// else if (ooo > 50 || (ooo_percent > 60 && size > 50))
+	// else if (ooo_percent > 70 && size > 20)
+	// else if (ooo > 3 && size > 5)
+	// else if (ooo_percent > 65 && size > 12)
 	// else if (ooo_percent > 70 && size > 15)
 	// else if (false)
 	{
@@ -276,7 +280,8 @@ t_bool		new_section_in_order(t_so *so, int relative_min_index, int relative_max_
 			printf("ooo = %i, returns true (sorting...)\n", ooo);
 			printf("Sorting section %i to %i (relative)...\n", relative_min_index, relative_max_index);
 		}
-		sort_section(so, relative_min_index, relative_max_index);
+		// sort_section(so, relative_min_index, relative_max_index);
+		new_sort_section(so, relative_min_index, relative_max_index);
 		return (true);
 	}
 	
