@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/18 01:31:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/18 18:39:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define ENABLE_PRE_SORT true
 # define SMALL_STACK_THRESHOLD 12
 # define DEBUG_CHECKER false
+# define DEBUG_MIDSORT true
 
 typedef	enum	e_operation
 {
@@ -138,4 +139,7 @@ int				count_unsorted(int *elements, int size);
 void			put_in_ordered_b(t_so *so);
 void			check_swap(t_so *so);
 
+void			midsort(t_so *so);
+t_bool			section_is_sorted(t_so *so, int size, t_bool from_a);
+int				set_median(t_stack *s, int size);
 #endif
