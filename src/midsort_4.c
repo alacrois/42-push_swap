@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/18 19:04:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/18 20:25:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ int			set_median(t_stack *s, int size)
 	while (++i < size)
 		array[i] = nb_at_index_mod(s, 1 + i);
 	sort_array(array, size);
-	if (DEBUG_MIDSORT == true)
-	{
-		i = -1;
-		printf("Array sorted is :\n");
-		while (++i < size)
-			printf("%i\n", array[i]);
-	}
+	// if (DEBUG_MIDSORT == true)
+	// {
+	// 	i = -1;
+	// 	printf("Array sorted is :\n");
+	// 	while (++i < size)
+	// 		printf("%i\n", array[i]);
+	// }
 	return (array[size / 2]);
 }
