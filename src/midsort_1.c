@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/18 21:05:33 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/19 21:46:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,15 +125,12 @@ void	midsort_section(t_so *so, int size, t_bool from_a, int depth)
 		while (++i < size - push_count)
 			do_operation(so, rrotate);
 	}
-		
 	midsort_section(so, size - push_count, from_a, depth + 1);
 	i = -1;
 	while (depth > -1 && ++i < size)
 	{
 		do_operation(so, push);
 	}
-
-
 	// i = -1;
 	// while (++i < push_count)
 	// 	do_operation(so, rotate);
@@ -152,9 +149,10 @@ void	midsort_section(t_so *so, int size, t_bool from_a, int depth)
 
 void	midsort(t_so *so)
 {
-	midsort_section(so, so->a_stack->max_size, true, 0);
-	all_b_to_a(so->a_stack, so->b_stack, so->operations);
-	rotate_minimum_on_top(so);
+	// midsort_section(so, so->a_stack->max_size, true, 0);
+	midpoint_sort(so);
+	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
+	// rotate_minimum_on_top(so);
 	if (DEBUG_MIDSORT == true)
 	{
 		printf("MIDSORT DONE :\n");

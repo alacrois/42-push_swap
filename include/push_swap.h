@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/18 20:24:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/19 22:29:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ typedef struct	s_to_sort
 	t_bool		used;
 }				t_to_sort;
 
+typedef struct s_section
+{
+	int			first_elem;
+	int			last_elem;
+	int			size;
+}				t_section;
 
 
 
@@ -142,4 +148,7 @@ void			check_swap(t_so *so);
 void			midsort(t_so *so);
 t_bool			section_is_sorted(t_so *so, int size, t_bool from_a);
 int				set_median(t_stack *s, int size);
+void			midpoint_sort(t_so *so);
+void			recursive_sort_section(t_so *so, t_section section, int median);
+
 #endif
