@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/19 22:29:46 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/19 23:36:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,9 @@ void			check_swap(t_so *so);
 
 void			midsort(t_so *so);
 t_bool			section_is_sorted(t_so *so, int size, t_bool from_a);
+t_bool			section_sorted(t_so *so, t_section section, t_bool a);
 int				set_median(t_stack *s, int size);
 void			midpoint_sort(t_so *so);
 void			recursive_sort_section(t_so *so, t_section section, int median);
-
+void			indexed_on_top(t_so *so, int index, t_bool a);
 #endif
