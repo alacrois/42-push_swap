@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/20 04:29:10 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 00:34:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define SMALL_STACK_THRESHOLD 12
 # define DEBUG_CHECKER false
 # define DEBUG_MIDSORT false
+# define DEBUG_SIMPLE_SORT false
 # define SIMPLE_SORT_THRESHOLD 5
 
 typedef	enum	e_operation
@@ -156,5 +157,6 @@ void			indexed_on_top(t_so *so, int index, t_bool a);
 t_bool			b_in_a(t_so *so, t_section *section);
 int				stack_minimum(t_stack *s);
 void			optimize_operations(t_list **operations);
-
+void			simple_sort(t_so *so, t_section *section, t_bool a);
+void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)l
 #endif

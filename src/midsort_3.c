@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/20 04:32:26 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/20 23:36:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,6 @@ int			sort_by_median(t_so *so, t_bool a_to_b, int size, int median)
 }
 
 // ==================== TO DO ===================
-/*
-void		select_elements_to_remove(t_so *so, int size, int *selected)
-{
-	int			i;
-	int			elements[size];
-	t_to_sort	elems[size];
-
-	init(so, size, elements, elems);
-	i = -1;
-	set_unsorted(elems, size);
-	while (remove_first_most_unsorted(elems, size) == 1)
-		set_unsorted(elems, size);
-	while (++i < size)
-		selected[i] = elems[i].used == true ? 0 : 1;
-	print_array(selected, size);
-}
 
 t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 {
@@ -96,9 +80,9 @@ t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 		numbers[i] = nb_at_index_mod(s, 1 + i);
 	if (count_unsorted(numbers, section->size) > SIMPLE_SORT_THRESHOLD)
 		return (false);
-	
+	simple_sort(so, section, a);
 }
-*/
+
 
 void		a_in_b(t_so *so, t_section *section)
 {

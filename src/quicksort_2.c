@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/17 23:13:16 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 00:34:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		do_operation(t_so *so, t_operation o)
 	execute_and_save_operation(so->a_stack, so->b_stack, so->operations, o);
 }
 
-static void	rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)
+void		rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)
 {
 	t_stack		*s;
 	int			len;
