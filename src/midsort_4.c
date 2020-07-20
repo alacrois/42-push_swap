@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/19 23:48:42 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/20 02:06:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,19 @@ int			set_median(t_stack *s, int size)
 	// 		printf("%i\n", array[i]);
 	// }
 	return (array[size / 2]);
+}
+
+int				stack_minimum(t_stack *s)
+{
+	int			min;
+	int			i;
+
+	min = nb_at_index_mod(s, 1);
+	i = -1;
+	while (++i < s->size)
+	{
+		if (nb_at_index_mod(s, 1 + i) < min)
+			min = nb_at_index_mod(s, 1 + i);
+	}
+	return (min);
 }

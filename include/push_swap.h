@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/19 23:36:30 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/20 02:27:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define ENABLE_PRE_SORT true
 # define SMALL_STACK_THRESHOLD 12
 # define DEBUG_CHECKER false
-# define DEBUG_MIDSORT true
+# define DEBUG_MIDSORT false
 
 typedef	enum	e_operation
 {
@@ -152,4 +152,8 @@ int				set_median(t_stack *s, int size);
 void			midpoint_sort(t_so *so);
 void			recursive_sort_section(t_so *so, t_section section, int median);
 void			indexed_on_top(t_so *so, int index, t_bool a);
+t_bool			b_in_a(t_so *so, t_section *section);
+int				stack_minimum(t_stack *s);
+void			optimize_operations(t_list **operations);
+
 #endif

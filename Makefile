@@ -7,6 +7,7 @@ SRCS = 	src/parsing_1.c \
 		src/utils_1.c \
 		src/utils_2.c \
 		src/utils_3.c \
+		src/utils_4.c \
 		src/operations_1.c \
 		src/operations_2.c \
 		src/operations_3.c \
