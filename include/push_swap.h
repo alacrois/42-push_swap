@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/20 02:27:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/20 04:29:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define SMALL_STACK_THRESHOLD 12
 # define DEBUG_CHECKER false
 # define DEBUG_MIDSORT false
+# define SIMPLE_SORT_THRESHOLD 5
 
 typedef	enum	e_operation
 {
