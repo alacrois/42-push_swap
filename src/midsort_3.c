@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 03:33:39 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 04:18:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 		return (false);
 	if (DEBUG_SIMPLE_SORT == true)
 	{
-		printf("\e[1;36mCalling simple_sort on section %i - %i\e[0m\n", \
+		printf("\e[1;36mCalling simple_sort on section %i to %i\e[0m\n", \
 				section->first_elem, section->last_elem);
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
@@ -132,7 +132,7 @@ void		a_in_b(t_so *so, t_section *section)
 	if (check_simple_sort(so, section, true) == true)
 	{
 		if (DEBUG_MIDSORT == true)
-			printf("Section sorted with simple_sort in a_in_b, returning...\n");
+			printf("\e[1;36Section sorted with simple_sort in a_in_b, returning...\e[0m\n");
 		return ;
 	}
 
@@ -220,6 +220,14 @@ t_bool			b_in_a(t_so *so, t_section *section)
 			do_operation(so, PA);
 		return (true);
 	}
+	if (check_simple_sort(so, section, false) == true)
+	{
+		if (DEBUG_MIDSORT == true)
+			printf("\e[1;36Section sorted with simple_sort in b_in_a, returning true...\e[0m\n");
+		// Push from B to A ??
+		return (true);
+	}
+
 	pushed_to_a = sort_by_median(so, false, section->size, median);
 	if (DEBUG_MIDSORT == true)
 	{
