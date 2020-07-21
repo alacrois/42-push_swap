@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/20 23:36:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 02:35:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,20 @@ t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 		numbers[i] = nb_at_index_mod(s, 1 + i);
 	if (count_unsorted(numbers, section->size) > SIMPLE_SORT_THRESHOLD)
 		return (false);
+	if (DEBUG_SIMPLE_SORT == true)
+	{
+		printf("\e[1;36mCalling simple_sort on section %i - %i\e[0m\n", \
+				section->first_elem, section->last_elem);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
 	simple_sort(so, section, a);
+	if (DEBUG_SIMPLE_SORT == true)
+	{
+		printf("After simple_sort ( =%i - %i)\n", \
+				section->first_elem, section->last_elem);
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	return (true);
 }
 
 

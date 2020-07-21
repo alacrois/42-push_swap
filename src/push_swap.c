@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/20 02:06:34 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 02:35:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int			main(int ac, char **av)
 		return (return_error());
 	operations = generate_operations(&a_stack);
 	// printf("before 'display_operations'\n");
-	if (DEBUG_MIDSORT == false)
+	if (DEBUG_SIMPLE_SORT == false)
 		display_operations(operations);
 	free_list(&operations);
 	return (0);

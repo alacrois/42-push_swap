@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 00:59:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 02:29:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	init(t_to_sort *elems, t_stack *s, int size)
 	}
 }
 
-void		print_array(t_to_sort *elems, int size)
+void		print_simple_sort_array(t_to_sort *elems, int size)
 {
 	int		i;
 
@@ -117,7 +117,7 @@ void			insert_back(t_so *so, t_bool a, int unsorted_count, int rotations_count)
 	int			x;
 	int			y;
 
-	rotation = a == true ? RA : RB;
+	rotation = a == true ? RRA : RRB;
 	push = a == true ? PA : PB;
 	while (unsorted_count > 0 && rotations_count > 0)
 	{
@@ -138,6 +138,7 @@ void			insert_back(t_so *so, t_bool a, int unsorted_count, int rotations_count)
 		do_operation(so, push);
 }
 
+/*
 static int	section_max(t_so *so, t_bool a, t_section *section)
 {
 	int		i;
@@ -157,6 +158,7 @@ static int	section_max(t_so *so, t_bool a, t_section *section)
 	}
 	return (max);
 }
+*/
 
 static int	max_less_than_in_b(t_so *so, int a, t_section *section)
 {
@@ -167,22 +169,41 @@ static int	max_less_than_in_b(t_so *so, int a, t_section *section)
 
 	i = -1;
 	tmp = a;
-	start_index = nb_at_index_mod(so->b_stack, \
-		get_element_index(so->b_stack, section->first_elem));
+	start_index = get_element_index(so->b_stack, section->first_elem);
 	// rotate_elem_on_top(so, false, section->first_elem);
+	if (DEBUG_SIMPLE_SORT == true)
+	{
+		printf("In max_less_than_in_b, trying to find for %i...\n", a);
+		printf("Section : first = %i last = %i  size = %i, start_index = %i\n", \
+				section->first_elem, section->last_elem, section->size, start_index);
+	}
 	while (++i < section->size)
 	{
 		elem = nb_at_index_mod(so->b_stack, start_index + i);
+		if (DEBUG_SIMPLE_SORT == true)
+			printf("In loop, comparing %i to %i... (tmp is %i)\n", elem, a, tmp);
 		if ((tmp == a || elem > tmp) && elem < a)
 			tmp = elem;
 	}
-	tmp = tmp == a ? section_max(so, false, section) : tmp;
+	if (DEBUG_SIMPLE_SORT == true)
+		printf("After loop, tmp =  %i\n", tmp);
+	// tmp = tmp == a ? section_max(so, false, section) : tmp;
+	if (tmp == a)
+	{
+		// Found no elements less then a, must put a the end(bottom) of section
+		tmp = nb_at_index_mod(so->b_stack, start_index + section->size);
+		if (DEBUG_SIMPLE_SORT == true)
+			printf("Found no elements less then a, tmp =  %i\n", tmp);
+	}
 	return (tmp);
 }
 
 static int	min_more_than_in_a(t_so *so, int a, t_section *section)
 {
 	ft_exit("Noooooooooooooo !!");
+	if (so != NULL && a == 0 && section != NULL)
+		return (0);
+	return (0);
 }
 
 void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section)
@@ -190,6 +211,7 @@ void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section)
 	t_stack		*s;
 	t_operation	push;
 	int			new_elem;
+	int			tmp;
 
 
 	s = b == true ? so->b_stack : so->a_stack;
@@ -203,8 +225,11 @@ void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section)
 		section->last_elem = nb_at_index_mod(s, 1);
 		return ;
 	}
+	tmp = max_less_than_in_b(so, new_elem, section);
+	if (DEBUG_SIMPLE_SORT == true)
+		printf("In put_in_ordered_stack, rotating %i on top...\n", tmp);
 	if (b == true)
-		rotate_elem_on_top(so, false, max_less_than_in_b(so, new_elem, section));
+		rotate_elem_on_top(so, false, tmp);
 	else
 		rotate_elem_on_top(so, true, min_more_than_in_a(so, new_elem, section));
 	do_operation(so, push);
@@ -224,7 +249,7 @@ void			simple_sort(t_so *so, t_section *section, t_bool a)
 	t_to_sort	elems[section->size];
 	int			unsorted_count;
 	int			i;
-	int			nb;
+	// int			nb;
 	t_stack		*s;
 	int			rotations;
 	t_section	unsorted;
@@ -236,21 +261,54 @@ void			simple_sort(t_so *so, t_section *section, t_bool a)
 	set_unsorted(elems, section->size);
 	while (remove_first_most_unsorted(elems, section->size) == 1)
 		set_unsorted(elems, section->size);
-	print_array(elems, section->size);
+	print_simple_sort_array(elems, section->size);
 	i = -1;
 	unsorted_count = 0;
+	rotations = 0;
 	unsorted.size = 0;
 	while (++i < section->size)
 	{
-		nb = nb_at_index_mod(s, 1 + i);
+		// nb = nb_at_index_mod(s, 1 + i);
 		if (elems[i].used == false)
 		{
 			// do_operation(so, a == true ? PB : PA);
+			if (DEBUG_SIMPLE_SORT == true)
+			{
+				printf("\e[1;36mBefore put_in_ordered_stack, elem is %i\e[0m\n", \
+							elems[i].value);
+				display_infos(*so->a_stack, *so->b_stack, *so->operations);
+			}
 			put_in_ordered_stack(so, a, &unsorted);
+			if (DEBUG_SIMPLE_SORT == true)
+			{
+				printf("\e[1;36mAfter put_in_ordered_stack, elem is %i\e[0m\n", \
+							elems[i].value);
+				display_infos(*so->a_stack, *so->b_stack, *so->operations);
+			}
 			unsorted_count++;
 		}
 		else
+		{
 			do_operation(so, a == true ? RA : RB);
+			rotations++;
+		}
 	}
+	if (DEBUG_SIMPLE_SORT == true)
+	{
+		printf("\e[1;36mBefore insert_back :\e[0m\n");
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	}
+	rotate_elem_on_top(so, false, unsorted.first_elem);
 	insert_back(so, a, unsorted_count, section->size - unsorted_count);
+	if (DEBUG_SIMPLE_SORT == true)
+	{
+		printf("\e[1;36mAfter insert_back :\e[0m\n");
+		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+		printf("\e[1;36mRotating back %i times :\e[0m\n", rotations);
+	}
+	while (rotations > 0)
+	{
+		do_operation(so, a == true ? RRA : RRB);
+		rotations--;
+	}
 }
