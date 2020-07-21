@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 02:35:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 03:33:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
 	simple_sort(so, section, a);
-	if (DEBUG_SIMPLE_SORT == true)
-	{
-		printf("After simple_sort ( =%i - %i)\n", \
-				section->first_elem, section->last_elem);
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-	}
+	// if (DEBUG_SIMPLE_SORT == true)
+	// {
+	// 	printf("After simple_sort ( =%i - %i)\n",
+	// 			section->first_elem, section->last_elem);
+	// 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	// }
 	return (true);
 }
 
@@ -285,4 +285,5 @@ void		recursive_sort_section(t_so *so, t_section section, int median)
 	// i = -1;
 	// while (++i < section.size)
 	// 	do_operation(so, PA);
+
 }

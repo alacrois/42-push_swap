@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:23:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 03:32:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void		display_infos(t_stack a_stack, t_stack b_stack, t_list *operations)
 	int			n;
 	int			i;
 
+	// if (DEBUG_SIMPLE_SORT == true && ft_lstlen(operations) < 250)
+	// 	return ;
 	ft_putendl("A		B\n");
 	i = 0;
 	while (++i <= a_stack.max_size)
@@ -83,6 +85,9 @@ void		display_infos(t_stack a_stack, t_stack b_stack, t_list *operations)
 	ft_putstr("\nTotal number of operations : ");
 	ft_putnbr(ft_lstlen(operations));
 	ft_putchar('\n');
+	
+	// if (DEBUG_SIMPLE_SORT == true && ft_lstlen(operations) >= 350)
+	// 	ft_exit("After 342 operations.");
 }
 
 static void	display_operation(t_operation o)

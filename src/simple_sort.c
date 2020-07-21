@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 02:29:07 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 03:33:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ static int	remove_first_most_unsorted(t_to_sort *elements, int size)
 
 // ===================================================
 
-void			insert_back(t_so *so, t_bool a, int unsorted_count, int rotations_count)
+// void			insert_back(t_so *so, t_bool a, int unsorted_count, int rotations_count)
+void			insert_back(t_so *so, t_bool a, int unsorted_count, int *rotations_count)
 {
 	t_operation	rotation;
 	t_operation	push;
@@ -119,7 +120,7 @@ void			insert_back(t_so *so, t_bool a, int unsorted_count, int rotations_count)
 
 	rotation = a == true ? RRA : RRB;
 	push = a == true ? PA : PB;
-	while (unsorted_count > 0 && rotations_count > 0)
+	while (unsorted_count > 0 && *rotations_count > 0)
 	{
 		x = nb_at_index_mod(a == true ? so->a_stack : so->b_stack, 0);
 		y = nb_at_index_mod(a == true ? so->b_stack : so->a_stack, 1);
@@ -131,11 +132,14 @@ void			insert_back(t_so *so, t_bool a, int unsorted_count, int rotations_count)
 		else
 		{
 			do_operation(so, rotation);
-			rotations_count--;
+			*rotations_count = *rotations_count - 1;
 		}
 	}
-	if (unsorted_count > 0)
+	while (unsorted_count > 0)
+	{
 		do_operation(so, push);
+		unsorted_count--;
+	}
 }
 
 /*
@@ -295,14 +299,17 @@ void			simple_sort(t_so *so, t_section *section, t_bool a)
 	}
 	if (DEBUG_SIMPLE_SORT == true)
 	{
-		printf("\e[1;36mBefore insert_back :\e[0m\n");
+		printf("\e[1;36mBefore insert_back (section %i to %i, size = %i, unsorted_count = %i) :\e[0m\n", \
+				section->first_elem, section->last_elem, section->size, unsorted_count);
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 	}
 	rotate_elem_on_top(so, false, unsorted.first_elem);
-	insert_back(so, a, unsorted_count, section->size - unsorted_count);
+	// insert_back(so, a, unsorted_count, section->size - unsorted_count);
+	insert_back(so, a, unsorted_count, &rotations);
 	if (DEBUG_SIMPLE_SORT == true)
 	{
-		printf("\e[1;36mAfter insert_back :\e[0m\n");
+		printf("\e[1;36mAfter insert_back (section %i to %i, size = %i, unsorted_count = %i) :\e[0m\n", \
+				section->first_elem, section->last_elem, section->size, unsorted_count);
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);
 		printf("\e[1;36mRotating back %i times :\e[0m\n", rotations);
 	}
