@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 03:36:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 06:17:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # define ENABLE_PRE_SORT true
 # define SMALL_STACK_THRESHOLD 12
 # define DEBUG_CHECKER false
-# define DEBUG_MIDSORT true
-# define DEBUG_SIMPLE_SORT true
-# define SIMPLE_SORT_THRESHOLD 10
+# define DEBUG_MIDSORT false
+# define DEBUG_SIMPLE_SORT false
+# define SIMPLE_SORT_THRESHOLD 15
 
 typedef	enum	e_operation
 {

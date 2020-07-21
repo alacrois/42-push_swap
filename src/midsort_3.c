@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 04:18:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/21 06:52:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,21 @@ t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 	int		numbers[section->size];
 	int		i;
 	t_stack	*s;
+	int		unsorted;
+	float	unsorted_percent;
 
 	i = -1;
 	s = a == true ? so->a_stack : so->b_stack;
 	while (++i < section->size)
 		numbers[i] = nb_at_index_mod(s, 1 + i);
-	if (count_unsorted(numbers, section->size) > SIMPLE_SORT_THRESHOLD)
+	unsorted = count_unsorted(numbers, section->size);
+	unsorted_percent = 100 * ((float)unsorted / (float)section->size);
+	// if (unsorted > 15 || section->size > 30)
+	if (unsorted_percent > 35 && section->size > 20)
+	// if (unsorted_percent > 30 && section->size > 20)
+	// if (unsorted > 15 || (a == true && unsorted > 7))
+	// if (unsorted > 15 || (unsorted_percent > 25 && section->size > 20))
+	// if (unsorted > 10 && section->size > 40)
 		return (false);
 	if (DEBUG_SIMPLE_SORT == true)
 	{
