@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 06:14:11 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 09:18:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int		get_next_to_sort_index(t_stack *s, int median)
+
+int				get_next_to_sort_index(t_stack *s, int median)
 {
 	int			best_index_diff;
 	int			index_diff;
@@ -51,8 +52,10 @@ static t_section	sort_a_in_b_by_median(t_so *so, t_section section)
 	int				median;
 
 	// to remove ? get next_to_sort_index from given first elem index instead of 1
-	indexed_on_top(so, get_element_index(so->a_stack, section.first_elem), true);
+	// indexed_on_top(so, get_element_index(so->a_stack, section.first_elem), true);
 	median = set_median(so->a_stack, section.size);
+	if (DEBUG_MIDSORT == true)
+		printf("sort_a_in_b_by_median, median = %i\n", median);
 	new_section.size = 0;
 	next_to_sort_index = get_next_to_sort_index(so->a_stack, median);
 	if (next_to_sort_index != -1)
@@ -63,10 +66,22 @@ static t_section	sort_a_in_b_by_median(t_so *so, t_section section)
 		new_section.size++;
 		new_section.first_elem = nb_at_index_mod(so->a_stack, 1);
 		do_operation(so, PB);
+		
+		/*
+		//=====================
+		if (new_section.size >= 2 \
+			// && nb_at_index_mod(so->a_stack, 1) > nb_at_index_mod(so->a_stack, 2)
+			&& nb_at_index_mod(so->b_stack, 1) < nb_at_index_mod(so->b_stack, 2))
+			do_operation(so, SB);
+		new_section.first_elem = nb_at_index_mod(so->b_stack, 1);
+		//=====================
+		*/
+
 		next_to_sort_index = get_next_to_sort_index(so->a_stack, median);
 	}
 	return (new_section);
 }
+
 
 void			sort_section_b_in_a(t_so *so, t_section section)
 {
@@ -119,7 +134,10 @@ void			midpoint_sort(t_so *so)
 		if (DEBUG_MIDSORT == true)
 			printf("Before sort_a_in_b_by_median, all_a : fe = %i, le = %i, size = %i\n", \
 						all_a.first_elem, all_a.last_elem, all_a.size);
-		sections[sections_count] = sort_a_in_b_by_median(so, all_a);
+		// if (true == true)
+			sections[sections_count] = sort_a_in_b_by_median(so, all_a);
+		// else
+			// sections[sections_count] = first_sort_a_in_b_by_median(so, all_a);
 		all_a.first_elem = nb_at_index_mod(so->a_stack, 1);
 		all_a.last_elem = nb_at_index_mod(so->a_stack, 0);
 		all_a.size = so->a_stack->size;

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/18 01:36:17 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 10:05:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	optimize_rotations(t_list **operations)
 
 	if (operations == NULL || *operations == NULL)
 		return ;
+	if (DEBUG_OPTIMIZE == true)
+		printf("optimize_rotations START\n");
 	// previous = NULL;
 	elem = *operations;
 	while (elem->next != NULL)
@@ -76,6 +78,8 @@ void	optimize_rotations(t_list **operations)
 		}
 		elem = elem->next;
 	}
+	if (DEBUG_OPTIMIZE == true)
+		printf("optimize_rotations END\n");
 }
 
 void		check_swap(t_so *so)

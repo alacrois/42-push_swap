@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 07:03:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 08:50:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ t_bool		check_simple_sort(t_so *so, t_section *section, t_bool a)
 		numbers[i] = nb_at_index_mod(s, 1 + i);
 	unsorted = count_unsorted(numbers, section->size);
 	unsorted_percent = 100 * ((float)unsorted / (float)section->size);
-	// if (unsorted > 15 || section->size > 30)
 	if (unsorted_percent > 35 && section->size > 20)
+	// if (unsorted > 20)
+	// if (unsorted > 15 || section->size > 30)
 	// if (unsorted_percent > 30 && section->size > 20)
 	// if (unsorted > 15 || (a == true && unsorted > 7))
 	// if (unsorted > 15 || (unsorted_percent > 25 && section->size > 20))
@@ -118,15 +119,15 @@ void		a_in_b(t_so *so, t_section *section)
 	median = set_median(so->a_stack, section->size);
 	if (DEBUG_MIDSORT == true)
 		printf("In a_in_b, median = %i, size = %i\n", median, section->size);
-	// if (section->size == 2)
-	if (section->size <= 20)
+	if (section->size == 2)
+	// if (section->size <= SECTION_SMALL_SORT_THRESHOLD)
 	{
-		// do_operation(so, SA);
-		// section->first_elem = nb_at_index_mod(so->a_stack, 1);
-		// section->last_elem = nb_at_index_mod(so->a_stack, 2);
+		do_operation(so, SA);
+		section->first_elem = nb_at_index_mod(so->a_stack, 1);
+		section->last_elem = nb_at_index_mod(so->a_stack, 2);
 		// if (DEBUG_MIDSORT == true)
 		// 	printf("In a_in_b, swapped the only 2 elements\n");
-		section_small_sort(so, section, true);
+		// section_small_sort(so, section, true);
 	}
 	if (section_sorted(so, *section, true) == true)
 	{
@@ -212,6 +213,15 @@ t_bool			b_in_a(t_so *so, t_section *section)
 	{
 		printf("In b_in_a, median = %i\n", median);
 	}
+	// if (section->size <= SECTION_SMALL_SORT_THRESHOLD)
+	// {
+	// 	// do_operation(so, SA);
+	// 	// section->first_elem = nb_at_index_mod(so->a_stack, 1);
+	// 	// section->last_elem = nb_at_index_mod(so->a_stack, 2);
+	// 	// if (DEBUG_MIDSORT == true)
+	// 	// 	printf("In a_in_b, swapped the only 2 elements\n");
+	// 	section_small_sort(so, section, false);
+	// }
 	if (section->size == 2)
 	{
 		do_operation(so, SB);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/20 02:48:27 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 09:55:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ static int		first_sort(t_so *so)
 {
 	size_t	op_len;
 
-	if (so->a_stack->size >= SMALL_STACK_THRESHOLD)
-		pre_sort_stack(so);
-	else
-	{
+	// if (so->a_stack->size >= SMALL_STACK_THRESHOLD)
+	// 	// pre_sort_stack(so);
+	// 	return (0);
+	// else
+	// {
 		if (out_of_order(so) >= 1)
 		{
 			sort_small(so);
@@ -48,8 +49,8 @@ static int		first_sort(t_so *so)
 		else
 			sort_small(so);
 		return (1);
-	}
-	return (0);
+	// }
+	// return (0);
 }
 
 static void		generate_operations_core(t_so *so)
@@ -121,7 +122,10 @@ t_list			*generate_operations(t_stack *a_stack)
 	t_so	so;
 	t_stack	b_stack;
 	int		numbers[a_stack->max_size];
+	t_section	all_a;
 	// int		numbers_isolation[a_stack->max_size];
+	int		method;
+	size_t		best_len;
 
 	operations = NULL;
 	pending_b_operations = NULL;
@@ -141,7 +145,58 @@ t_list			*generate_operations(t_stack *a_stack)
 		return (operations);
 
 	// new_quicksort(&so);
-	midsort(&so);
+	if (so.a_stack->size <= 20)
+	{
+		// 1
+		method = 1;
+		all_a.size = so.a_stack->size;
+		all_a.first_elem = nb_at_index_mod(so.a_stack, 1);
+		all_a.last_elem = nb_at_index_mod(so.a_stack, 0);
+		simple_sort(&so, &all_a, true);
+		optimize_operations(so.operations);
+		optimize_rotations(so.operations);
+		best_len = ft_lstlen(*so.operations);
+		undo_all_operations(&so);
+
+		// 2
+		first_sort(&so);
+		optimize_operations(so.operations);
+		optimize_rotations(so.operations);
+		if (ft_lstlen(*so.operations) < best_len)
+		{
+			best_len = ft_lstlen(*so.operations);
+			method = 2;
+		}
+		undo_all_operations(&so);
+
+		//3
+		midsort(&so);
+		optimize_operations(so.operations);
+		optimize_rotations(so.operations);
+		if (ft_lstlen(*so.operations) < best_len)
+		{
+			best_len = ft_lstlen(*so.operations);
+			method = 3;
+		}
+		else
+		{
+			undo_all_operations(&so);
+			if (method == 1)
+				simple_sort(&so, &all_a, true);
+			else
+				first_sort(&so);
+		}
+		
+	}
+	else
+	{
+		// all_a.size = so.a_stack->size;
+		// all_a.first_elem = nb_at_index_mod(so.a_stack, 1);
+		// all_a.last_elem = nb_at_index_mod(so.a_stack, 0);
+		// simple_sort(&so, &all_a, true);
+		midsort(&so);
+	}
+	rotate_elem_on_top(&so, true, stack_minimum(so.a_stack));
 	// sort_small(&so);
 	// printf("---------------------\nAfter quicksort :\n");
 	// display_infos(*a_stack, b_stack, operations);
