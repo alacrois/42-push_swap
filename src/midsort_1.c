@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 06:14:15 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 07:02:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	midsort(t_so *so)
 	midpoint_sort(so);
 	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
 	// rotate_minimum_on_top(so);
-	if (DEBUG_SIMPLE_SORT == true)
+	if (DEBUG_MIDSORT == true)
 	{
 		printf("MIDSORT DONE :\n");
 		display_infos(*so->a_stack, *so->b_stack, *so->operations);

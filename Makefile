@@ -24,6 +24,7 @@ SRCS = 	src/parsing_1.c \
 		src/midsort_2.c \
 		src/midsort_3.c \
 		src/midsort_4.c \
+		src/midsort_5.c \
 		src/simple_sort.c
 
 SRCS1 =	src/push_swap.c $(SRCS)

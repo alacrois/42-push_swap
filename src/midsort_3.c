@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 06:52:18 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 07:03:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,16 @@ void		a_in_b(t_so *so, t_section *section)
 	indexed_on_top(so, get_element_index(so->a_stack, section->first_elem), true);
 	median = set_median(so->a_stack, section->size);
 	if (DEBUG_MIDSORT == true)
-		printf("In a_in_b, median = %i\n", median);
-	if (section->size == 2)
+		printf("In a_in_b, median = %i, size = %i\n", median, section->size);
+	// if (section->size == 2)
+	if (section->size <= 20)
 	{
-		do_operation(so, SA);
-		section->first_elem = nb_at_index_mod(so->a_stack, 1);
-		section->last_elem = nb_at_index_mod(so->a_stack, 2);
-		if (DEBUG_MIDSORT == true)
-			printf("In a_in_b, swapped the only 2 elements\n");
-		// return ;
+		// do_operation(so, SA);
+		// section->first_elem = nb_at_index_mod(so->a_stack, 1);
+		// section->last_elem = nb_at_index_mod(so->a_stack, 2);
+		// if (DEBUG_MIDSORT == true)
+		// 	printf("In a_in_b, swapped the only 2 elements\n");
+		section_small_sort(so, section, true);
 	}
 	if (section_sorted(so, *section, true) == true)
 	{
@@ -141,7 +142,7 @@ void		a_in_b(t_so *so, t_section *section)
 	if (check_simple_sort(so, section, true) == true)
 	{
 		if (DEBUG_MIDSORT == true)
-			printf("\e[1;36Section sorted with simple_sort in a_in_b, returning...\e[0m\n");
+			printf("\e[1;36mSection sorted with simple_sort in a_in_b, returning...\e[0m\n");
 		return ;
 	}
 
