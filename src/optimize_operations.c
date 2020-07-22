@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 22:52:26 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 22:54:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ static void		replace_with_new_sequence(t_list *start, t_sequence *old, \
 		*((t_operation *)elem->content) = new[id].o[i];
 	}
 	to_delete = old[id].size - new[id].size;
+	elem = ft_lstelem(start, new[id].size);
+	delete_next_n_elem(elem, to_delete);
 }
 
 void	optimize_operations_sequences(t_list **operations)
