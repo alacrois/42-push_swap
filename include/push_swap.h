@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 10:05:37 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 22:43:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define DEBUG_SIMPLE_SORT false
 # define SIMPLE_SORT_THRESHOLD 15
 # define SECTION_SMALL_SORT_THRESHOLD 7
-# define DEBUG_OPTIMIZE false
+# define DEBUG_OPTIMIZE true
 
 typedef	enum	e_operation
 {
@@ -78,6 +78,31 @@ typedef struct s_section
 	int			last_elem;
 	int			size;
 }				t_section;
+
+typedef struct	s_sequence
+{
+	t_operation	*o;
+	int			size;
+}				t_sequence;
+
+// typedef struct	s_sequences
+// {
+// 	t_operation	s1[] = {RA, PB, RRA};
+// 	t_operation	s1[] = {RA, PB, RRA};
+// }				t_sequences;
+
+// typedef struct	s_known_sequences
+// {
+	// t_operation		original_a[] = {RA, PB, RRA};
+	// t_operation		original_b[] = {RB, PA, RRB};
+	// t_operation		original_c[] = {RA, PA, RRA};
+	// t_operation		original_d[] = {RB, PB, RRB};
+
+	// t_operation		new_a[] = {SA, PB};
+	// t_operation		new_b[] = {SB, PA};
+	// t_operation		new_c[] = {PA, SA};
+	// t_operation		new_d[] = {PB, SB};
+// }				t_known_sequences;
 
 
 
@@ -164,5 +189,7 @@ void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem);
 void			section_small_sort(t_so *so, t_section *section, t_bool a);
 t_section		first_sort_a_in_b_by_median(t_so *so, t_section section);
 int				get_next_to_sort_index(t_stack *s, int median);
+void			delete_next_n_elem(t_list *start, int n);
+void			optimize_operations_sequences(t_list **operations);
 
 #endif

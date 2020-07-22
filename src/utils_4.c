@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 10:05:40 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/22 21:30:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int				next_operations_to_delete(t_list *start, t_operation rotation)
 	return (to_delete);
 }
 
-static void		delete_next_n_elem(t_list *start, int n)
+void			delete_next_n_elem(t_list *start, int n)
 {
 	t_list		*elem;
 	t_list		*nextnext;
@@ -124,39 +124,40 @@ void	optimize_operations(t_list **operations)
 
 	if (operations == NULL || *operations == NULL)
 		return ;
-	if (DEBUG_OPTIMIZE == true)
-		printf("optimize_operations START\n");
+	// if (DEBUG_OPTIMIZE == true)
+	// 	printf("optimize_operations START\n");
 	previous = NULL;
 	// pp = NULL;
 	index = 1;
 	elem = *operations;
 	while (elem != NULL && elem->next != NULL)
 	{
-		if (DEBUG_OPTIMIZE == true)
-			printf("D1\n");
+		// if (DEBUG_OPTIMIZE == true)
+		// 	printf("D1\n");
 		o = *((t_operation *)elem->content);
 		to_delete = next_operations_to_delete(elem, o);
-		if (DEBUG_OPTIMIZE == true)
-			printf("D2\n");
+		// if (DEBUG_OPTIMIZE == true)
+		// 	printf("D2\n");
 		if (previous != NULL && to_delete > 0)
 		{
-			if (DEBUG_OPTIMIZE == true)
-				printf("D3\n");			
+			// if (DEBUG_OPTIMIZE == true)
+			// 	printf("D3\n");			
 			delete_next_n_elem(previous, to_delete * 2);
 			elem = previous->next;
 			// previous = ft_lstelem(*operations, index - 1);
 		}
 		else
 		{
-			if (DEBUG_OPTIMIZE == true)
-				printf("D4\n");				
+			// if (DEBUG_OPTIMIZE == true)
+			// 	printf("D4\n");				
 			previous = elem;
 			elem = elem->next;
 			index++;
 		}
-		if (DEBUG_OPTIMIZE == true)
-			printf("D5\n");			
+		// if (DEBUG_OPTIMIZE == true)
+		// 	printf("D5\n");			
 	}
-	if (DEBUG_OPTIMIZE == true)
-		printf("optimize_operations END\n");
+	// if (DEBUG_OPTIMIZE == true)
+	// 	printf("optimize_operations END\n");
+	optimize_operations_sequences(operations);
 }
