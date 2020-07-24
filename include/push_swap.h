@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 10:08:27 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 13:55:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,26 @@ typedef struct	s_sequence
 int				return_error(void);
 t_bool			is_int(char *s);
 void			free_list(t_list **list);
+void			get_ordered_numbers_in_array(t_stack *a_stack, \
+					int numbers[]);
+int				out_of_order(t_so *so);
+int				nb_at_index_mod(t_stack *stack, int index);
+int				get_element_index(t_stack *stack, int to_find);
+t_bool			check_order(t_so *so);
+void			delete_next_n_elem(t_list *start, int n);
 
 t_stack			new_stack(int size);
 void			add_top(t_stack *s, int n);
 void			remove_top(t_stack *s);
+void			stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o);
+void			stack_push(t_stack *a_stack, t_stack *b_stack, t_operation o);
+void			stack_rotate(t_stack *a_stack, t_stack *b_stack, t_operation o);
+void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
+					t_operation o);
+void			inverse_order(t_so *so);
+void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem);
+
+
 int				number_at_index(t_stack s, int index);
 t_bool			stack_is_ordered(t_stack stack);
 t_bool			stack_has_duplicates(t_stack a_stack);
@@ -116,18 +132,22 @@ void			display_operations(t_list *operations);
 
 void			execute_all_operations(t_stack *a_stack, \
 					t_stack *b_stack, t_list *operations);
+void			undo_all_operations(t_so *so);
+
+t_sequence		new_sequence(t_operation s[], int size);
+void			free_sequences(t_sequence *so, t_sequence *sr);
+void			optimize_operations_sequences(t_list **operations);
+
+
+void			optimize_last_rotations(t_list **operations, int stack_size);
+void			optimize_operations(t_list **operations);
+void			optimize_rotations(t_list **operations);
+
+
+void			sort_small(t_so *so);
 
 /* MISSING :
-				out_of_order
-				sort_small
-				undo_all_operations
-				inverse_order
-				optimize_operations
-				optimize_rotations
 				midsort
-				nb_at_index_mod
 				simple_sort
-				get_ordered_numbers_in_array
-				rotate_elem_on_top
 */
 #endif

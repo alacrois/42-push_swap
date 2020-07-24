@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 09:09:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 13:21:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void		stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o)
+void			stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o)
 {
 	t_stack		*stack;
 	int			tmp;
@@ -35,7 +35,7 @@ static void		stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o)
 	}
 }
 
-static void		stack_push(t_stack *a_stack, t_stack *b_stack, t_operation o)
+void			stack_push(t_stack *a_stack, t_stack *b_stack, t_operation o)
 {
 	t_stack		*stack1;
 	t_stack		*stack2;
@@ -51,7 +51,7 @@ static void		stack_push(t_stack *a_stack, t_stack *b_stack, t_operation o)
 	}
 }
 
-static void		stack_rotate(t_stack *a_stack, t_stack *b_stack, t_operation o)
+void			stack_rotate(t_stack *a_stack, t_stack *b_stack, t_operation o)
 {
 	t_stack		*stack;
 	int			index;
@@ -77,8 +77,8 @@ static void		stack_rotate(t_stack *a_stack, t_stack *b_stack, t_operation o)
 	}
 }
 
-static void		stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
-				t_operation o)
+void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
+					t_operation o)
 {
 	t_stack		*stack;
 	int			index;
