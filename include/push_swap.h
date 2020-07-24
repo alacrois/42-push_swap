@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:55:30 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:31:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,16 @@ typedef struct	s_sequence
 	int			size;
 }				t_sequence;
 
+typedef struct	s_simple_sort
+{
+	int			unsorted_count;
+	int			rotations;
+	t_section	unsorted;
+	t_bool		a;
+	t_to_sort	*elems;
+}				t_simple_sort;
+
+
 int				return_error(void);
 t_bool			is_int(char *s);
 void			free_list(t_list **list);
@@ -143,11 +153,18 @@ void			optimize_last_rotations(t_list **operations, int stack_size);
 void			optimize_operations(t_list **operations);
 void			optimize_rotations(t_list **operations);
 
-
+// void			get_unsorted(t_to_sort *elements, int size, t_bool in_order);
 void			sort_small(t_so *so);
+int				get_max(t_to_sort *elems, int size, t_bool used);
+int				get_min(t_to_sort *elems, int size);
+void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section);
+void			insert_back(t_so *so, t_bool a, int unsorted_count, \
+					int *rotations_count);
+void			simple_sort(t_so *so, t_section *section, t_bool a);
+
 
 /* MISSING :
+				do_operation
 				midsort
-				simple_sort
 */
 #endif
