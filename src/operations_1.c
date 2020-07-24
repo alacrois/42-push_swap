@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 10:05:44 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 16:01:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static void		small_sort(t_so *so)
 	all_a.first_elem = nb_at_index_mod(so.a_stack, 1);
 	all_a.last_elem = nb_at_index_mod(so.a_stack, 0);
 	simple_sort(so, &all_a, true);
+	/*
 	optimize_operations(so->operations);
 	optimize_rotations(so->operations);
 	best_len = ft_lstlen(*so->operations);
@@ -88,6 +89,7 @@ static void		small_sort(t_so *so)
 		else
 			first_sort(so);
 	}
+	*/
 }
 
 t_list			*generate_operations(t_stack *a_stack)
@@ -99,10 +101,10 @@ t_list			*generate_operations(t_stack *a_stack)
 	so = init(a_stack, &b_stack);
 	get_ordered_numbers_in_array(a_stack, numbers);
 	so.ordered_numbers = numbers;
-	if (so.a_stack->size <= SMALL_SORT_THRESHOLD)
+	// if (so.a_stack->size <= SMALL_SORT_THRESHOLD)
 		small_sort(&so)
-	else
-		midsort(&so);
+	// else
+		// midsort(&so);
 	rotate_elem_on_top(&so, true, stack_minimum(so.a_stack));
 	optimize_operations(so.operations);
 	optimize_rotations(so.operations);

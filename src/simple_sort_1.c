@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 15:30:50 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:53:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void				simple_sort_1(t_so *so, t_section *section, \
 		}
 		else
 		{
-			do_operation(so, ss->a == true ? RA : RB);
+			operation(so, ss->a == true ? RA : RB);
 			ss->rotations += ss->a == true ? 1 : 0;
 		}
 	}
@@ -58,7 +58,7 @@ void				simple_sort_1(t_so *so, t_section *section, \
 	{
 		rotate_elem_on_top(so, false, get_max(ss->elems, section->size, true));
 		rotate_elem_on_top(so, true, get_max(ss->elems, section->size, false));
-		do_operation(so, RA);
+		operation(so, RA);
 		ss->rotations = ss->unsorted_count;
 	}
 }
@@ -78,7 +78,7 @@ void				simple_sort(t_so *so, t_section *section, t_bool a)
 				(section->size - ss->unsorted_count), &(ss->rotations));
 	while (a == true && ss->rotations > 0)
 	{
-		do_operation(so, RRA);
+		operation(so, RRA);
 		ss->rotations--;
 	}
 	if (a == false)

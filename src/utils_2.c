@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:27:34 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,13 @@ void		inverse_order(t_so *so)
 	i = len;
 	while (--i >= 2)
 	{
-		execute_and_save_operation(so->a_stack, so->b_stack, \
-									so->operations, PB);
+		operation(so, PB);
 		if (so->b_stack->size > 1)
-			execute_and_save_operation(so->a_stack, so->b_stack, \
-										so->operations, RB);
+			operation(so, RB);
 	}
-	execute_and_save_operation(so->a_stack, so->b_stack, \
-								so->operations, SA);
+	operation(so, SA);
 	while (so->b_stack->size > 0)
-		execute_and_save_operation(so->a_stack, so->b_stack, \
-									so->operations, PA);
+		operation(so, PA);
 }
 
 t_bool		check_order(t_so *so)

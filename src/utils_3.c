@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:46:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:55:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)
 	else
 		rotate_op = index - 1 <= len / 2 ? RB : RRB;
 	while (number_at_index(*s, 1) != elem)
-		execute_and_save_operation(so->a_stack, so->b_stack, \
-									so->operations, rotate_op);
+		operation(so, rotate_op);
 }
 
 t_sequence		new_sequence(t_operation s[], int size)

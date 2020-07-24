@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:16:15 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:57:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static void		rotate_minimum_on_top(t_so *so)
 	index = get_element_index(so->a_stack, min);
 	rotate_op = index - 1 <= len / 2 ? RA : RRA;
 	while (number_at_index(*so->a_stack, 1) != min)
-		execute_and_save_operation(so->a_stack, so->b_stack, \
-									so->operations, rotate_op);
+		operation(so, rotate_op);
 }
 
 static void		swap_min_max(t_so *so)
@@ -41,7 +40,7 @@ static void		swap_min_max(t_so *so)
 			== so->ordered_numbers[len - 1])
 		{
 			rotate_minimum_on_top(so);
-			execute_and_save_operation(so->a_stack, NULL, so->operations, SA);
+			operation(so, SA);
 		}
 	}
 }
@@ -61,10 +60,10 @@ void			sort_small(t_so *so)
 			|| nb_at_index_mod(a, 2) != so->ordered_numbers[0]))
 		{
 			optimise_last_rotations(so->operations, len);
-			execute_and_save_operation(a, NULL, so->operations, SA);
+			operation(so, SA);
 		}
 		if (check_order(so) == false)
-			execute_and_save_operation(a, NULL, so->operations, RA);
+			operation(so, RA);
 	}
 	rotate_minimum_on_top(so);
 	optimise_last_rotations(so->operations, len);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 09:24:55 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:52:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,17 @@ t_bool		stack_has_duplicates(t_stack a_stack)
 		}
 	}
 	return (false);
+}
+
+void		operation(t_so *so, t_operation o)
+{
+	if (o < PA)
+		stack_swap(so->a_stack, so->b_stack, o);
+	else if (o < RA)
+		stack_push(so->a_stack, so->b_stack, o);
+	else if (o < RRA)
+		stack_rotate(so->a_stack, so->b_stack, o);
+	else
+		stack_reverse_rotate(so->a_stack, so->b_stack, o);
+	add_operation(so->operations, o);
 }

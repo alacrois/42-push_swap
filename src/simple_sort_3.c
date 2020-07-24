@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 15:02:40 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:53:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section)
 	new_elem = nb_at_index_mod(b == false ? so->b_stack : so->a_stack, 1);
 	if (section->size == 0)
 	{
-		do_operation(so, push);
+		operation(so, push);
 		section->size = 1;
 		section->first_elem = nb_at_index_mod(s, 1);
 		section->last_elem = nb_at_index_mod(s, 1);
@@ -93,7 +93,7 @@ void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section)
 	tmp = b == true ? max_less_than_in_b(so, new_elem, section) : \
 						min_more_than_in_a(so, new_elem, section);
 	rotate_elem_on_top(so, b == true ? false : true, tmp);
-	do_operation(so, push);
+	operation(so, push);
 	update_section_values(new_elem, section, b);
 }
 
@@ -113,15 +113,15 @@ void			insert_back(t_so *so, t_bool a, int unsorted_count, \
 		y = nb_at_index_mod(so->b_stack, 1);
 		if ((a == true && y > x) || (a == false && y > x))
 		{
-			do_operation(so, push);
+			operation(so, push);
 			unsorted_count--;
 		}
 		else
 		{
-			do_operation(so, rotation);
+			operation(so, rotation);
 			*rotations_count = *rotations_count - 1;
 		}
 	}
 	while (--unsorted_count >= 0)
-		do_operation(so, push);
+		operation(so, push);
 }
