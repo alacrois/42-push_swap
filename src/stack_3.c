@@ -1,30 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   stack_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 09:27:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 09:24:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int				main(int ac, char **av)
+t_bool		stack_is_ordered(t_stack stack)
 {
-	t_stack		a_stack;
-	t_list		*operations;
+	int		a;
+	int		b;
+	int		index;
 
-	if (ac < 2)
-		return (0);
-	a_stack = parse_stack(ac, av);
-	if (a_stack.size == 0 || stack_has_duplicates(a_stack) == true)
-		return (return_error());
-	operations = generate_operations(&a_stack);
-	if (DEBUG == false)
-		display_operations(operations);
-	free_list(&operations);
-	return (0);
+	if (stack.size == 0)
+		return (true);
+	index = -1;
+	while (++index < stack.size - 1)
+	{
+		a = stack.data[index];
+		b = stack.data[index + 1];
+		if (a < b)
+			return (false);
+	}
+	return (true);
+}
+
+t_bool		stack_has_duplicates(t_stack a_stack)
+{
+	int		i1;
+	int		i2;
+
+	i1 = -1;
+	while (++i1 < a_stack.size)
+	{
+		i2 = -1;
+		while (++i2 < a_stack.size)
+		{
+			if (a_stack.data[i1] == a_stack.data[i2] && i1 != i2)
+				return (true);
+		}
+	}
+	return (false);
 }
