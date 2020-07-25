@@ -6,11 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 09:06:26 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 11:03:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+/*
 
 // Adapt for size > 3 ?
 void		section_small_sort(t_so *so, t_section *section, t_bool a)
@@ -107,3 +109,4 @@ t_section			first_sort_a_in_b_by_median(t_so *so, t_section section)
 	}
 	return (new_section);
 }
+*/

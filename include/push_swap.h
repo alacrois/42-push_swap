@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/25 08:40:42 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 11:30:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
 void			inverse_order(t_so *so);
 void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem);
 int				stack_minimum(t_stack *s);
+int				set_median(t_stack *s, int size);
+
 
 
 int				number_at_index(t_stack s, int index);
@@ -159,6 +161,7 @@ void			optimize_rotations(t_list **operations);
 // void			get_unsorted(t_to_sort *elements, int size, t_bool in_order);
 void			set_unsorted(t_to_sort *elements, int size, t_bool in_order);
 int				remove_first_most_unsorted(t_to_sort *elements, int size);
+int				count_unsorted(int *elements, int size, t_bool in_order);
 
 t_bool			section_sorted(t_so *so, t_section section, t_bool is_a);
 void			sort_small(t_so *so);
@@ -171,7 +174,12 @@ void			simple_sort(t_so *so, t_section *section, t_bool a);
 void			midsort(t_so *so);
 
 // =================================
+t_bool			b_in_a(t_so *so, t_section *section);
+void			indexed_on_top(t_so *so, int index, t_bool a);
 void			midpoint_sort(t_so *so);
+void			recursive_sort_section(t_so *so, t_section section, \
+					int median);
+
 // =================================
 
 t_list			*generate_operations(t_stack *a_stack);

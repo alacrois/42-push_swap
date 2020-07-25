@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/25 08:15:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 10:38:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ void			delete_next_n_elem(t_list *start, int n)
 	}
 }
 
-t_bool		section_sorted(t_so *so, t_section section, t_bool is_a)
+t_bool			section_sorted(t_so *so, t_section section, t_bool is_a)
 {
-	int		i;
-	int		a;
-	int		b;
-	int		start_index;
-	t_stack	*s;
+	int			i;
+	int			a;
+	int			b;
+	int			start_index;
+	t_stack		*s;
 
 	s = is_a == true ? so->a_stack : so->b_stack;
 	start_index = get_element_index(s, section.first_elem);

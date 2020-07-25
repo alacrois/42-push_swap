@@ -21,7 +21,11 @@ then
 	# time ./push_swapV16 $arg | ./checker $arg | grep -A 3 "Total number"
 	# echo -e "\n"
 	# time ./push_swap $arg | ./checker $arg | grep -A 3 "Total number"
-	time ./push_swap $arg | ./checker $arg
+	time ./push_swapV1 $arg | ./checker $arg | grep -A 3 "Total number"
+	echo -e "\n"
+	time ./push_swapV2 $arg | ./checker $arg | grep -A 3 "Total number"
+	echo -e "\n"
+	time ./push_swap $arg | ./checker $arg | grep -A 3 "Total number"
 	echo -e "\n"
 	# time ./push_swapV11 $arg | grep "sa"
 	# time ./push_swap $arg

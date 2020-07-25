@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:44:37 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 11:24:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ static int			identify_sequence(t_list *start, t_sequence *so)
 		while (++si < so[i].size)
 		{
 			elem = ft_lstelem(start, 1 + si);
-			o = *((t_operation *)elem->content);
-			if (so[i].o[si] != o)
+			o = elem != NULL ? *((t_operation *)elem->content) : o;
+			if (elem == NULL || so[i].o[si] != o)
 			{
 				id = false;
 				break ;
@@ -103,8 +103,10 @@ void				optimize_operations_sequences(t_list **operations)
 	{
 		seq_id = identify_sequence(elem, seq_original);
 		if (seq_id != -1)
+		{
 			replace_with_new_sequence(elem, seq_original, \
 										seq_replacement, seq_id);
+		}
 		elem = elem->next;
 		index++;
 	}

@@ -6,11 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 08:25:33 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 10:57:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+/*
 
 static int	sort_section_core(t_so *so, int size, t_bool from_a, int median)
 {
@@ -147,19 +149,22 @@ void	midsort_section(t_so *so, int size, t_bool from_a, int depth)
 	}
 }
 
+*/
+
 void	midsort(t_so *so)
 {
 	// midsort_section(so, so->a_stack->max_size, true, 0);
 	midpoint_sort(so);
 	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
 	// rotate_minimum_on_top(so);
-	if (DEBUG_MIDSORT == true)
-	{
-		printf("MIDSORT DONE :\n");
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-		if (stack_is_ordered(*so->a_stack) == true)
-			ft_putendl("\e[1;32mStack is ordered.\e[0m");
-		else
-			ft_putendl("\e[1;31mStack is not ordered.\e[0m");
-	}
+	// if (DEBUG_MIDSORT == true)
+	// {
+	// 	printf("MIDSORT DONE :\n");
+	// 	// display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	// 	display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	// 	if (stack_is_ordered(*so->a_stack) == true)
+	// 		ft_putendl("\e[1;32mStack is ordered.\e[0m");
+	// 	else
+	// 		ft_putendl("\e[1;31mStack is not ordered.\e[0m");
+	// }
 }
