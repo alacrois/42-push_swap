@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 08:57:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 16:52:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,40 @@ static int		nb_len(int n)
 	return (len);
 }
 
-void			display_infos(t_stack a_stack, t_stack b_stack, \
-								t_list *operations)
+static void		display_stacks(t_stack a, t_stack b, t_options options)
 {
 	int			n;
 	int			i;
 
+	if (options.details == 0 || a.max_size > DISPLAY_STACK_MAX_SIZE)
+		return ;
 	ft_putendl("A		B\n");
 	i = 0;
-	while (++i <= a_stack.max_size)
+	while (++i <= a.max_size)
 	{
-		if (i <= a_stack.size)
+		if (i <= a.size)
 		{
-			n = number_at_index(a_stack, i);
+			n = number_at_index(a, i);
 			ft_putnbr(n);
 			ft_putnchar(' ', 16 - nb_len(n));
 		}
 		else
 			ft_putnchar(' ', 16);
-		if (i <= b_stack.size)
+		if (i <= b.size)
 		{
-			n = number_at_index(b_stack, i);
+			n = number_at_index(b, i);
 			ft_putnbr(n);
 		}
 		ft_putchar('\n');
 	}
+}
+
+void			display_infos(t_stack a_stack, t_stack b_stack, \
+								t_list *operations, t_options options)
+{
+	display_stacks(a_stack, b_stack, options);
+	if (options.details == 0)
+		return ;
 	ft_putstr("\nTotal number of operations : ");
 	ft_putnbr(ft_lstlen(operations));
 	ft_putchar('\n');

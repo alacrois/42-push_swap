@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 15:53:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 08:19:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 static void			init(t_to_sort *elems, t_stack *s, int size, \
-							t_simple_sort ss)
+							t_simple_sort *ss)
 {
 	int				i;
 
@@ -41,7 +41,7 @@ void				simple_sort_1(t_so *so, t_section *section, \
 	i = -1;
 	while (++i < section->size)
 	{
-		if (elems[i].used == false)
+		if (ss->elems[i].used == false)
 		{
 			put_in_ordered_stack(so, ss->a, &(ss->unsorted));
 			ss->unsorted_count++;
@@ -66,20 +66,19 @@ void				simple_sort_1(t_so *so, t_section *section, \
 void				simple_sort(t_so *so, t_section *section, t_bool a)
 {
 	t_to_sort		elems[section->size];
-	int				unsorted_count;
-	int				rotations;
 	t_simple_sort	ss;
-	t_section		unsorted;
 
+	if (section_sorted(so, *section, a) == true)
+		return ;
 	ss.a = a;
 	init(elems, a == true ? so->a_stack : so->b_stack, section->size, &ss);
 	simple_sort_1(so, section, &ss);
-	insert_back(so, a, a == true ? ss->unsorted_count : \
-				(section->size - ss->unsorted_count), &(ss->rotations));
-	while (a == true && ss->rotations > 0)
+	insert_back(so, a, a == true ? ss.unsorted_count : \
+				(section->size - ss.unsorted_count), &(ss.rotations));
+	while (a == true && ss.rotations > 0)
 	{
 		operation(so, RRA);
-		ss->rotations--;
+		ss.rotations--;
 	}
 	if (a == false)
 		rotate_elem_on_top(so, true, get_min(elems, section->size));

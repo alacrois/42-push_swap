@@ -6,14 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 15:52:23 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 08:40:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 # include "libft.h"
-# define DISPLAY_STACKS false
+# define DISPLAY_STACKS true
+# define DISPLAY_COLOR true
+# define DISPLAY_STACK_MAX_SIZE 30
 # define DEBUG false
 # define SMALL_SORT_THRESHOLD 20
 
@@ -21,7 +23,7 @@
 // # define ENABLE_PRE_SORT true
 // # define SMALL_STACK_THRESHOLD 12
 // # define DEBUG_CHECKER false
-// # define DEBUG_MIDSORT false
+# define DEBUG_MIDSORT false
 // # define DEBUG_SIMPLE_SORT false
 // # define SIMPLE_SORT_THRESHOLD 15
 // # define SECTION_SMALL_SORT_THRESHOLD 7
@@ -126,6 +128,7 @@ void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
 					t_operation o);
 void			inverse_order(t_so *so);
 void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem);
+int				stack_minimum(t_stack *s);
 
 
 int				number_at_index(t_stack s, int index);
@@ -137,7 +140,7 @@ t_list			*parse_operations(void);
 t_stack			parse_stack(int ac, char **av);
 
 void			display_infos(t_stack a_stack, t_stack b_stack, \
-					t_list *operations);
+					t_list *operations, t_options options);
 void			display_operations(t_list *operations);
 void			operation(t_so *so, t_operation o);
 void			execute_all_operations(t_stack *a_stack, \
@@ -154,6 +157,10 @@ void			optimize_operations(t_list **operations);
 void			optimize_rotations(t_list **operations);
 
 // void			get_unsorted(t_to_sort *elements, int size, t_bool in_order);
+void			set_unsorted(t_to_sort *elements, int size, t_bool in_order);
+int				remove_first_most_unsorted(t_to_sort *elements, int size);
+
+t_bool			section_sorted(t_so *so, t_section section, t_bool is_a);
 void			sort_small(t_so *so);
 int				get_max(t_to_sort *elems, int size, t_bool used);
 int				get_min(t_to_sort *elems, int size);
@@ -161,10 +168,15 @@ void			put_in_ordered_stack(t_so *so, t_bool b, t_section *section);
 void			insert_back(t_so *so, t_bool a, int unsorted_count, \
 					int *rotations_count);
 void			simple_sort(t_so *so, t_section *section, t_bool a);
+void			midsort(t_so *so);
 
+// =================================
+void			midpoint_sort(t_so *so);
+// =================================
+
+t_list			*generate_operations(t_stack *a_stack);
 
 /* MISSING :
-				do_operation
 				midsort
 */
 #endif

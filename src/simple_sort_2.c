@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 14:47:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 16:12:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static t_bool	not_in_order(t_to_sort *e, int index1, int index2, \
 	return (false);
 }
 
-static void		set_unsorted(t_to_sort *elements, int size, t_bool in_order)
+void			set_unsorted(t_to_sort *elements, int size, t_bool in_order)
 {
 	int			i1;
 	int			i2;
@@ -54,7 +54,7 @@ static void		set_unsorted(t_to_sort *elements, int size, t_bool in_order)
 	}
 }
 
-static int		remove_first_most_unsorted(t_to_sort *elements, int size)
+int				remove_first_most_unsorted(t_to_sort *elements, int size)
 {
 	int			ooo_max;
 	int			selected_index;

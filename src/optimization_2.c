@@ -6,12 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:54:17 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/25 08:34:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
 
 static t_operation	get_mirror_rotation(t_operation o)
 {
@@ -22,8 +21,27 @@ static t_operation	get_mirror_rotation(t_operation o)
 	else if (o == RB)
 		return (RA);
 	else if (o == RRB)
-		return (RRA);				
+		return (RRA);
 	return (-1);
+}
+
+static int			iterate_through_list(t_list **elem, t_operation to_compare)
+{
+	t_operation		o;
+	int				count;
+
+	if (elem == NULL || *elem == NULL)
+		return (0);
+	count = 0;
+	o = *((t_operation *)(*elem)->content);
+	while (*elem != NULL && o == to_compare)
+	{
+		count++;
+		*elem = (*elem)->next;
+		if (*elem != NULL)
+			o = *((t_operation *)(*elem)->content);
+	}
+	return (count);
 }
 
 static int			next_rotation_to_delete(t_list *start, t_operation rotation)
@@ -32,28 +50,12 @@ static int			next_rotation_to_delete(t_list *start, t_operation rotation)
 	int				mirror_rotation_count;
 	t_list			*elem;
 	t_operation		mirror_rotation;
-	t_operation		o;
 	int				to_delete;
 
 	elem = start;
-	same_rotation_count = 0;
 	mirror_rotation = get_mirror_rotation(rotation);
-	o = *((t_operation *)elem->content);
-	while (elem != NULL && o == rotation)
-	{
-		same_rotation_count++;
-		elem = elem->next;
-		if (elem != NULL)
-			o = *((t_operation *)elem->content);
-	}
-	mirror_rotation_count = 0;
-	while (elem != NULL && o == mirror_rotation)
-	{
-		mirror_rotation_count++;
-		elem = elem->next;
-		if (elem != NULL)
-			o = *((t_operation *)elem->content);
-	}
+	same_rotation_count = iterate_through_list(&elem, rotation);
+	mirror_rotation_count = iterate_through_list(&elem, mirror_rotation);
 	if (same_rotation_count == 0 || mirror_rotation_count == 0)
 		to_delete = 0;
 	else if (same_rotation_count > mirror_rotation_count)

@@ -6,18 +6,17 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 09:18:53 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 16:54:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 static void			checker_result(t_stack a, t_stack b, \
-						t_operation *operations, t_options options)
+						t_list *operations, t_options options)
 {
-	if (DISPLAY_STACKS == true)
-		display_infos(a, b, operations);
-	if (b_stack.size > 0)
+	display_infos(a, b, operations, options);
+	if (b.size > 0)
 	{
 		if (options.color == true)
 			ft_putendl("\e[1;31mKO\e[0m (B stack not empty)");
@@ -44,16 +43,10 @@ static t_options	set_options(int ac, char **av)
 {
 	t_options		options;
 
-	if (ac > 0 && av != NULL)
-	{
-		options.details = 0;
-		options.color = false;
-	}
-	else
-	{
-		options.details = 1;
-		options.color = true;
-	}
+	if (ac == 0 || av == NULL)
+		ft_exit("Help !!");
+	options.color = true;
+	options.details = 1;
 	return (options);
 }
 

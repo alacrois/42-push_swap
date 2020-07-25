@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 15:52:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 16:59:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,21 @@ t_bool		stack_has_duplicates(t_stack a_stack)
 		}
 	}
 	return (false);
+}
+
+int			stack_minimum(t_stack *s)
+{
+	int		min;
+	int		i;
+
+	min = nb_at_index_mod(s, 1);
+	i = -1;
+	while (++i < s->size)
+	{
+		if (nb_at_index_mod(s, 1 + i) < min)
+			min = nb_at_index_mod(s, 1 + i);
+	}
+	return (min);
 }
 
 void		operation(t_so *so, t_operation o)

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 15:57:16 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 16:10:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ void			sort_small(t_so *so)
 			&& (nb_at_index_mod(a, 1) != so->ordered_numbers[len - 1] \
 			|| nb_at_index_mod(a, 2) != so->ordered_numbers[0]))
 		{
-			optimise_last_rotations(so->operations, len);
+			optimize_last_rotations(so->operations, len);
 			operation(so, SA);
 		}
 		if (check_order(so) == false)
 			operation(so, RA);
 	}
 	rotate_minimum_on_top(so);
-	optimise_last_rotations(so->operations, len);
+	optimize_last_rotations(so->operations, len);
 }

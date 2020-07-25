@@ -9,7 +9,6 @@ SRCS = 	src/parsing_1.c \
 		src/operations_1.c \
 		src/operations_2.c \
 		src/operations_3.c \
-		src/operations_4.c \
 		src/optimization_1.c \
 		src/optimization_2.c \
 		src/optimization_3.c \
@@ -20,7 +19,13 @@ SRCS = 	src/parsing_1.c \
 		src/simple_sort_1.c \
 		src/simple_sort_2.c \
 		src/simple_sort_3.c \
-		src/simple_sort_4.c
+		src/simple_sort_4.c \
+		src/display_1.c \
+		src/midsort_1.c \
+		src/midsort_2.c \
+		src/midsort_3.c \
+		src/midsort_4.c \
+		src/midsort_5.c
 
 SRCS1 =	src/push_swap.c $(SRCS)
 
