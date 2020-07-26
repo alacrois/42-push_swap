@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 13:45:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 17:14:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static t_so		init(t_stack *a_stack, t_stack *b_stack, t_list **operations)
 	so.b_stack = b_stack;
 	*operations = NULL;
 	so.operations = operations;
+	so.checker = false;
 	return (so);
 }
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:21:29 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 17:49:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,27 @@ void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
 	}
 }
 
-void			execute_all_operations(t_stack *a_stack, t_stack *b_stack, \
-									t_list *operations)
+// void			execute_all_operations(t_stack *a_stack, t_stack *b_stack, 
+// 									t_list *operations)
+void			execute_all_operations(t_so *so)
 {
 	t_operation	o;
+	t_list		*elem;
+	int			i;
 
-	while (operations != NULL)
+	elem = *so->operations;
+	i = 0;
+	if (elem == NULL)
+		display_infos(so, i, -1);
+	while (elem != NULL)
 	{
-		o = *(t_operation *)operations->content;
-		stack_swap(a_stack, b_stack, o);
-		stack_push(a_stack, b_stack, o);
-		stack_rotate(a_stack, b_stack, o);
-		stack_reverse_rotate(a_stack, b_stack, o);
-		operations = operations->next;
+		i++;
+		o = *(t_operation *)elem->content;
+		stack_swap(so->a_stack, so->b_stack, o);
+		stack_push(so->a_stack, so->b_stack, o);
+		stack_rotate(so->a_stack, so->b_stack, o);
+		stack_reverse_rotate(so->a_stack, so->b_stack, o);
+		elem = elem->next;
+		display_infos(so, i, o);
 	}
 }

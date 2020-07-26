@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 14:28:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 18:28:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define DISPLAY_COLOR true
 # define DISPLAY_STACK_MAX_SIZE 30
 # define SMALL_SORT_THRESHOLD 20
+# define DISPLAY_SLEEP_INTERVAL 2
 
 typedef	enum	e_operation
 {
@@ -40,19 +41,24 @@ typedef struct	s_stack
 	int			max_size;
 }				t_stack;
 
+
+typedef struct	s_options
+{
+	t_bool		color;
+	int			details;
+	int			display_stacks;
+}				t_options;
+
 typedef struct	s_so
 {
 	t_stack		*a_stack;
 	t_stack		*b_stack;
 	t_list		**operations;
 	int			*ordered_numbers;
+	t_options	options;
+	int			printed_lines;
+	t_bool		checker;
 }				t_so;
-
-typedef struct	s_options
-{
-	t_bool		color;
-	int			details;
-}				t_options;
 
 typedef struct	s_to_sort
 {
@@ -98,8 +104,14 @@ void			set_unsorted(t_to_sort *elements, int size, t_bool in_order);
 int				remove_first_most_unsorted(t_to_sort *elements, int size);
 int				count_unsorted(int *elements, int size, t_bool in_order);
 
+void			display_test(void);
+/*
 void			display_infos(t_stack a_stack, t_stack b_stack, \
 					t_list *operations, t_options options);
+*/
+void			move_cursor_back_n_lines(int n);
+void			display_infos(t_so *so, int number_of_operations, \
+					t_operation last_o);
 void			display_operations(t_list *operations);
 
 t_stack			new_stack(int size);
@@ -124,8 +136,9 @@ t_list			*parse_operations(void);
 t_stack			parse_stack(int ac, char **av);
 
 void			operation(t_so *so, t_operation o);
-void			execute_all_operations(t_stack *a_stack, \
-					t_stack *b_stack, t_list *operations);
+// void			execute_all_operations(t_stack *a_stack, 
+					// t_stack *b_stack, t_list *operations);
+void			execute_all_operations(t_so *so);
 void			undo_all_operations(t_so *so);
 
 t_sequence		new_sequence(int size, t_operation o1, \

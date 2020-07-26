@@ -22,6 +22,7 @@ SRCS = 	src/parsing_1.c \
 		src/simple_sort_3.c \
 		src/simple_sort_4.c \
 		src/display_1.c \
+		src/display_2.c \
 		src/midsort_1.c \
 		src/midsort_2.c \
 		src/midsort_3.c
