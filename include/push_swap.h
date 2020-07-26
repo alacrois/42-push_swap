@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/25 11:30:15 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 11:38:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,7 @@
 # define DISPLAY_STACKS true
 # define DISPLAY_COLOR true
 # define DISPLAY_STACK_MAX_SIZE 30
-# define DEBUG false
 # define SMALL_SORT_THRESHOLD 20
-
-// # define DISPLAY_INFOS true
-// # define ENABLE_PRE_SORT true
-// # define SMALL_STACK_THRESHOLD 12
-// # define DEBUG_CHECKER false
-# define DEBUG_MIDSORT false
-// # define DEBUG_SIMPLE_SORT false
-// # define SIMPLE_SORT_THRESHOLD 15
-// # define SECTION_SMALL_SORT_THRESHOLD 7
-// # define DEBUG_OPTIMIZE false
 
 typedef	enum	e_operation
 {
@@ -51,24 +40,12 @@ typedef struct	s_stack
 	int			max_size;
 }				t_stack;
 
-typedef struct	s_to_switch
-{
-	int			elem;
-	int			relative_index;
-}				t_to_switch;
-
 typedef struct	s_so
 {
 	t_stack		*a_stack;
 	t_stack		*b_stack;
 	t_list		**operations;
-	// t_list		**pending_b_operations;
 	int			*ordered_numbers;
-	int			*numbers_isolation;
-	float		average_isolation;
-	float		max_isolation;
-	t_to_switch	*quicksort_less;
-	t_to_switch	*quicksort_more;
 }				t_so;
 
 typedef struct	s_options
@@ -106,7 +83,6 @@ typedef struct	s_simple_sort
 	t_to_sort	*elems;
 }				t_simple_sort;
 
-
 int				return_error(void);
 t_bool			is_int(char *s);
 void			free_list(t_list **list);
@@ -117,6 +93,13 @@ int				nb_at_index_mod(t_stack *stack, int index);
 int				get_element_index(t_stack *stack, int to_find);
 t_bool			check_order(t_so *so);
 void			delete_next_n_elem(t_list *start, int n);
+void			set_unsorted(t_to_sort *elements, int size, t_bool in_order);
+int				remove_first_most_unsorted(t_to_sort *elements, int size);
+int				count_unsorted(int *elements, int size, t_bool in_order);
+
+void			display_infos(t_stack a_stack, t_stack b_stack, \
+					t_list *operations, t_options options);
+void			display_operations(t_list *operations);
 
 t_stack			new_stack(int size);
 void			add_top(t_stack *s, int n);
@@ -130,9 +113,6 @@ void			inverse_order(t_so *so);
 void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem);
 int				stack_minimum(t_stack *s);
 int				set_median(t_stack *s, int size);
-
-
-
 int				number_at_index(t_stack s, int index);
 t_bool			stack_is_ordered(t_stack stack);
 t_bool			stack_has_duplicates(t_stack a_stack);
@@ -141,27 +121,18 @@ void			add_operation(t_list **operations, t_operation o);
 t_list			*parse_operations(void);
 t_stack			parse_stack(int ac, char **av);
 
-void			display_infos(t_stack a_stack, t_stack b_stack, \
-					t_list *operations, t_options options);
-void			display_operations(t_list *operations);
 void			operation(t_so *so, t_operation o);
 void			execute_all_operations(t_stack *a_stack, \
 					t_stack *b_stack, t_list *operations);
 void			undo_all_operations(t_so *so);
 
-t_sequence		new_sequence(t_operation s[], int size);
+t_sequence		new_sequence(int size, t_operation o1, \
+					t_operation o2, t_operation o3);
 void			free_sequences(t_sequence *so, t_sequence *sr);
 void			optimize_operations_sequences(t_list **operations);
-
-
 void			optimize_last_rotations(t_list **operations, int stack_size);
 void			optimize_operations(t_list **operations);
 void			optimize_rotations(t_list **operations);
-
-// void			get_unsorted(t_to_sort *elements, int size, t_bool in_order);
-void			set_unsorted(t_to_sort *elements, int size, t_bool in_order);
-int				remove_first_most_unsorted(t_to_sort *elements, int size);
-int				count_unsorted(int *elements, int size, t_bool in_order);
 
 t_bool			section_sorted(t_so *so, t_section section, t_bool is_a);
 void			sort_small(t_so *so);
@@ -172,19 +143,12 @@ void			insert_back(t_so *so, t_bool a, int unsorted_count, \
 					int *rotations_count);
 void			simple_sort(t_so *so, t_section *section, t_bool a);
 void			midsort(t_so *so);
-
-// =================================
 t_bool			b_in_a(t_so *so, t_section *section);
+t_bool			check_simple_sort(t_so *so, t_section *section, t_bool a);
+int				sort_by_median(t_so *so, t_bool a_to_b, int size, int median);
 void			indexed_on_top(t_so *so, int index, t_bool a);
-void			midpoint_sort(t_so *so);
-void			recursive_sort_section(t_so *so, t_section section, \
-					int median);
-
-// =================================
+void			recursive_sort_section(t_so *so, t_section section);
 
 t_list			*generate_operations(t_stack *a_stack);
 
-/* MISSING :
-				midsort
-*/
 #endif

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/25 11:24:55 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 11:36:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,18 @@
 
 static void			init_original_sequences(t_sequence *s)
 {
-	t_operation		original_a[] = {RA, PB, RRA};
-	t_operation		original_b[] = {RB, PA, RRB};
-	t_operation		original_c[] = {RA, PA, RRA};
-	t_operation		original_d[] = {RB, PB, RRB};
-
-	s[0] = new_sequence(original_a, 3);
-	s[1] = new_sequence(original_b, 3);
-	s[2] = new_sequence(original_c, 3);
-	s[3] = new_sequence(original_d, 3);
+	s[0] = new_sequence(3, PA, PB, RRA);
+	s[1] = new_sequence(3, RB, PA, RRB);
+	s[2] = new_sequence(3, RA, PA, RRA);
+	s[3] = new_sequence(3, RB, PB, RRB);
 }
 
 static void			init_new_sequences(t_sequence *s)
 {
-	t_operation		new_a[] = {SA, PB};
-	t_operation		new_b[] = {SB, PA};
-	t_operation		new_c[] = {PA, SA};
-	t_operation		new_d[] = {PB, SB};
-
-	s[0] = new_sequence(new_a, 2);
-	s[1] = new_sequence(new_b, 2);
-	s[2] = new_sequence(new_c, 2);
-	s[3] = new_sequence(new_d, 2);
+	s[0] = new_sequence(2, SA, PB, 0);
+	s[1] = new_sequence(2, SB, PA, 0);
+	s[2] = new_sequence(2, PA, SA, 0);
+	s[3] = new_sequence(2, PB, SB, 0);
 }
 
 static int			identify_sequence(t_list *start, t_sequence *so)

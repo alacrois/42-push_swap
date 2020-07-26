@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/25 10:38:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 11:37:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,19 @@ void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)
 		operation(so, rotate_op);
 }
 
-t_sequence		new_sequence(t_operation s[], int size)
+t_sequence		new_sequence(int size, t_operation o1, \
+					t_operation o2, t_operation o3)
 {
 	t_sequence	seq;
-	int			i;
 
 	seq.o = (t_operation *)ft_malloc(sizeof(t_operation) * size);
 	seq.size = size;
-	i = -1;
-	while (++i < size)
-		seq.o[i] = s[i];
+	if (size >= 1)
+		seq.o[0] = o1;
+	if (size >= 2)
+		seq.o[1] = o2;
+	if (size >= 3)
+		seq.o[2] = o3;
 	return (seq);
 }
 
@@ -52,28 +55,6 @@ void			free_sequences(t_sequence *so, t_sequence *sr)
 	{
 		free(so[i].o);
 		free(sr[i].o);
-	}
-}
-
-void			delete_next_n_elem(t_list *start, int n)
-{
-	t_list		*elem;
-	t_list		*nextnext;
-	int			i;
-
-	elem = start->next;
-	i = 0;
-	while (elem != NULL && i < n)
-	{
-		nextnext = elem->next;
-		if (elem->content != NULL)
-		{
-			free(elem->content);
-		}
-		free(elem);
-		elem = nextnext;
-		start->next = elem;
-		i++;
 	}
 }
 
