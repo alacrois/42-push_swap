@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/25 11:27:26 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 13:45:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,6 @@ t_list			*generate_operations(t_stack *a_stack)
 	rotate_elem_on_top(&so, true, stack_minimum(so.a_stack));
 	optimize_operations(so.operations);
 	optimize_rotations(so.operations);
+	free_stack(b_stack);
 	return (*so.operations);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 11:38:51 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:28:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct	s_simple_sort
 }				t_simple_sort;
 
 int				return_error(void);
+void			exit_error(void);
 t_bool			is_int(char *s);
 void			free_list(t_list **list);
 void			get_ordered_numbers_in_array(t_stack *a_stack, \
@@ -102,6 +103,7 @@ void			display_infos(t_stack a_stack, t_stack b_stack, \
 void			display_operations(t_list *operations);
 
 t_stack			new_stack(int size);
+void			free_stack(t_stack s);
 void			add_top(t_stack *s, int n);
 void			remove_top(t_stack *s);
 void			stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o);

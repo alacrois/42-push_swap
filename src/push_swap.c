@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 11:38:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 13:46:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ int				main(int ac, char **av)
 	operations = generate_operations(&a_stack);
 	display_operations(operations);
 	free_list(&operations);
+	free_stack(a_stack);
 	return (0);
 }

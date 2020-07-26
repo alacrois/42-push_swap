@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 16:54:10 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:33:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int					main(int ac, char **av)
 	t_options		options;
 
 	if (ac < 2)
-		return (return_error());
+		return (0);
 	a_stack = parse_stack(ac, av);
 	if (a_stack.size == 0 || stack_has_duplicates(a_stack) == true)
 		return (return_error());
@@ -69,5 +69,7 @@ int					main(int ac, char **av)
 	execute_all_operations(&a_stack, &b_stack, operations);
 	checker_result(a_stack, b_stack, operations, options);
 	free_list(&operations);
+	free_stack(a_stack);
+	free_stack(b_stack);
 	return (0);
 }

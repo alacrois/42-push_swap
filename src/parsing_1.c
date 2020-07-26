@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 16:34:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:51:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ t_list		*parse_operations(void)
 		if (parse_operation(line, &operations) == 0)
 		{
 			free(line);
-			return (operations);
+			exit_error();
+			return (NULL);
 		}
 		free(line);
 	}

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 09:03:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 13:44:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ t_stack		new_stack(int size)
 	s.size = size;
 	s.max_size = size;
 	return (s);
+}
+
+void		free_stack(t_stack s)
+{
+	if (s.data != NULL)
+		free(s.data);
+	s.data = NULL;
+	s.size = 0;
 }
 
 void		add_top(t_stack *s, int n)

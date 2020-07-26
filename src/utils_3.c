@@ -6,11 +6,37 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 11:37:07 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:26:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+t_bool			is_int(char *s)
+{
+	long long	value;
+	int			sign;
+	int			i;
+
+	i = 0;
+	sign = 1;
+	value = 0;
+	if (s[0] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (false);
+		value = value * 10 + (int)(s[i] - '0');
+		if (value * sign < -2147483648 || value * sign > 2147483647)
+			return (false);
+		i++;
+	}
+	return (true);
+}
 
 void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)
 {

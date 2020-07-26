@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 16:52:10 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:31:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void		display_stacks(t_stack a, t_stack b, t_options options)
 
 	if (options.details == 0 || a.max_size > DISPLAY_STACK_MAX_SIZE)
 		return ;
-	ft_putendl("A		B\n");
+	ft_putendl("\nA		B\n");
 	i = 0;
 	while (++i <= a.max_size)
 	{

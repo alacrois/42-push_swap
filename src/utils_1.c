@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/24 13:06:13 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:28:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,13 @@
 int				return_error(void)
 {
 	ft_putstr_fd("Error\n", 2);
-	return (0);
+	return (1);
 }
 
-t_bool			is_int(char *s)
+void			exit_error(void)
 {
-	long long	value;
-	int			sign;
-	int			i;
-
-	i = 0;
-	sign = 1;
-	value = 0;
-	if (s[0] == '-')
-	{
-		sign = -1;
-		i++;
-	}
-	while (s[i])
-	{
-		if (s[i] < '0' || s[i] > '9')
-			return (false);
-		value = value * 10 + (int)(s[i] - '0');
-		if (value * sign < -2147483648 || value * sign > 2147483647)
-			return (false);
-		i++;
-	}
-	return (true);
+	ft_putstr_fd("Error\n", 2);
+	exit(1);
 }
 
 void			free_list(t_list **list)
