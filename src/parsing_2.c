@@ -1,30 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   parsing_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 15:32:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 16:29:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int				main(int ac, char **av)
+int				parse_options(int ac, char **av, t_so *so)
 {
-	t_stack		a_stack;
-	t_list		*operations;
+	int			i;
+	int			options;
 
-	if (ac < 2)
-		return (0);
-	a_stack = parse_stack(ac, av, 0);
-	if (a_stack.size == 0 || stack_has_duplicates(a_stack) == true)
-		return (return_error());
-	operations = generate_operations(&a_stack);
-	display_operations(operations);
-	free_list(&operations);
-	free_stack(a_stack);
-	return (0);
+	options = 0;
+	i = 1;
+	so->options.color = false;
+	so->options.details = 0;
+	so->options.display_stacks = 0;
+	while (i < ac && av[i][0] == '-')
+	{
+		if (ft_strlen(av[i]) == 2 && av[i][1] == 'v')
+			so->options.display_stacks = 1;
+		else if (ft_strlen(av[i]) == 2 && av[i][1] == 'c')
+			so->options.color = true;
+		else if (ft_strlen(av[i]) == 2 && av[i][1] == 'd')
+			so->options.details = 1;
+		else
+			return (options);
+		i++;
+		options++;
+	}
+	return (options);
 }

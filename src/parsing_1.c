@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 14:51:50 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 16:04:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,22 +89,23 @@ static int	parse_number(char *s, int *n)
 	return (1);
 }
 
-t_stack		parse_stack(int ac, char **av)
+t_stack		parse_stack(int ac, char **av, int options)
 {
 	t_stack	stack;
 	int		i;
 	int		tmp;
 
-	stack = new_stack(ac - 1);
-	i = 0;
+	stack = new_stack(ac - 1 - options);
+	i = options;
 	while (++i < ac)
 	{
 		if (parse_number(av[i], &tmp) == 0)
 		{
 			stack.size = 0;
+			free_stack(stack);
 			return (stack);
 		}
-		stack.data[stack.size - i] = tmp;
+		stack.data[stack.size - i + options] = tmp;
 	}
 	return (stack);
 }

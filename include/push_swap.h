@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 18:28:55 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 16:51:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 # include "libft.h"
 # define DISPLAY_STACKS true
 # define DISPLAY_COLOR true
-# define DISPLAY_STACK_MAX_SIZE 30
+# define DISPLAY_STACK_MAX_SIZE 25
 # define SMALL_SORT_THRESHOLD 20
-# define DISPLAY_SLEEP_INTERVAL 2
+# define DISPLAY_SLEEP_INTERVAL 0.66
 
 typedef	enum	e_operation
 {
@@ -40,7 +40,6 @@ typedef struct	s_stack
 	int			size;
 	int			max_size;
 }				t_stack;
-
 
 typedef struct	s_options
 {
@@ -104,14 +103,12 @@ void			set_unsorted(t_to_sort *elements, int size, t_bool in_order);
 int				remove_first_most_unsorted(t_to_sort *elements, int size);
 int				count_unsorted(int *elements, int size, t_bool in_order);
 
-void			display_test(void);
-/*
-void			display_infos(t_stack a_stack, t_stack b_stack, \
-					t_list *operations, t_options options);
-*/
 void			move_cursor_back_n_lines(int n);
 void			display_infos(t_so *so, int number_of_operations, \
 					t_operation last_o);
+void			display_details(t_so *so, int number_of_operations, \
+					t_operation last_o);
+void			display_operation(t_operation o);
 void			display_operations(t_list *operations);
 
 t_stack			new_stack(int size);
@@ -133,7 +130,8 @@ t_bool			stack_has_duplicates(t_stack a_stack);
 
 void			add_operation(t_list **operations, t_operation o);
 t_list			*parse_operations(void);
-t_stack			parse_stack(int ac, char **av);
+t_stack			parse_stack(int ac, char **av, int options);
+int				parse_options(int ac, char **av, t_so *so);
 
 void			operation(t_so *so, t_operation o);
 // void			execute_all_operations(t_stack *a_stack, 

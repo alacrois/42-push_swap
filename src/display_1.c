@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 18:28:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 16:51:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void		display_operation(t_operation o)
+void			display_operation(t_operation o)
 {
 	if (o == SA)
 		ft_putstr("sa");
@@ -60,13 +60,9 @@ static void		display_stacks(t_so *so)
 {
 	int			n;
 	int			i;
-	// int			max_size;
 
 	ft_putendl("A		B\n");
 	i = 0;
-	// max_size = so->a_stack->size > so->b_stack->size ? 
-	// 			so->a_stack->size : so->b_stack->size;
-	// while (++i <= max_size)
 	while (++i <= so->a_stack->max_size)
 	{
 		if (i <= so->a_stack->size)
@@ -92,41 +88,23 @@ static void		display_stacks(t_so *so)
 void			display_infos(t_so *so, int number_of_operations, \
 					t_operation last_o)
 {
-	unsigned int	sleep_time;
-	// if (so->options.details == 0)
-	// 	return ;
 	if (so->printed_lines > 0)
 	{
 		move_cursor_back_n_lines(so->printed_lines);
 		so->printed_lines = 0;
 	}
-	else
+	else if (so->options.display_stacks == 1)
 		ft_putchar('\n');
-	if (so->options.display_stacks == 1 && so->a_stack->max_size <= DISPLAY_STACK_MAX_SIZE)
+	if (so->options.display_stacks == 1 && \
+		so->a_stack->max_size <= DISPLAY_STACK_MAX_SIZE)
 	{
 		display_stacks(so);
 		so->printed_lines += 2 + so->a_stack->max_size;
-		// so->printed_lines += so->a_stack->size > so->b_stack->size ? 
-		// 		so->a_stack->size : so->b_stack->size;
+		usleep((unsigned int)((float)1000000 * DISPLAY_SLEEP_INTERVAL));
 	}
 	if (so->options.details == 1)
-	{
-		ft_putstr("\nOperation : ");
-		if ((int)last_o != -1)
-			display_operation(last_o);
-		ft_putstr("                  ");
-		ft_putstr("\nTotal number of operations : ");
-		// ft_putnbr(ft_lstlen(*so->operations));
-		ft_putnbr(number_of_operations);
-		ft_putchar('\n');
-		so->printed_lines += 3;
-	}
-	// sleep_time = (unsigned int)((float)5000000 / (float)ft_lstlen(*so->operations));
-	sleep_time = (unsigned int)((float)1000000 * DISPLAY_SLEEP_INTERVAL);
-	if (usleep(sleep_time) == -1)
-		ft_exit("usleep error");
+		display_details(so, number_of_operations, last_o);
 }
-
 
 void			display_operations(t_list *operations)
 {

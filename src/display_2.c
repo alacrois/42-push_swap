@@ -6,37 +6,28 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 16:30:18 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 16:51:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void		move_cursor_back_n_lines(int n)
+void			move_cursor_back_n_lines(int n)
 {
-	// ft_putstr("\033[7A BASH\n");
 	ft_putstr("\033[");
 	ft_putnbr(n);
 	ft_putstr("A");
 }
 
-void	display_test(void)
+void			display_details(t_so *so, int number_of_operations, \
+					t_operation last_o)
 {
-	int		i;
-	int		max;
-
-	i = -1;
-	max = 400;
-	while (++i < max)
-	{
-		ft_putendl("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
-		ft_putendl("Nulla libero metus, vulputate ac tempor vitae, ullamcorper eu eros.");
-		ft_putstr("i = ");
-		ft_putnbr(i);
-		ft_putchar('\n');
-		ft_putendl("Sed porttitor tristique efficitur.");
-		ft_putendl("Suspendisse cursus eros id lectus finibus, ut posuere lectus interdum.");
-		if (i < max - 1)
-			move_cursor_back_n_lines(5);
-	}
+	ft_putstr("\nLast operation : ");
+	display_operation(last_o);
+	ft_putstr("   \nTotal number of operations : ");
+	ft_putnbr(number_of_operations);
+	ft_putstr("\nTotal number of elements : ");
+	ft_putnbr(so->a_stack->max_size);
+	ft_putchar('\n');
+	so->printed_lines += 4;
 }

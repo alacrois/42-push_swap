@@ -7,6 +7,6 @@ then
 	# time ./push_swap $arg | ./checker $arg | grep -A 3 "Total number"
 	# push_swap_result=`./push_swap $arg`
 	# echo "$push_swap_result" | ./checker $arg
-	time ./push_swap $arg | ./checker $arg
+	time ./push_swap $arg | ./checker -v -d -c $arg
 	# echo -e "\n"
 fi
