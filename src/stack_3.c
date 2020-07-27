@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/26 18:00:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 20:41:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ int			stack_minimum(t_stack *s)
 
 void		operation(t_so *so, t_operation o)
 {
+	if (((o == RB || o == RRB) && so->b_stack->size <= 1) || \
+		((o == RA || o == RRA) && so->a_stack->size <= 1))
+		return ;
 	if (o < PA)
 		stack_swap(so->a_stack, so->b_stack, o);
 	else if (o < RA)

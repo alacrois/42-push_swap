@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 16:53:32 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 19:32:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int					main(int ac, char **av)
 	options = parse_options(ac, av, &so);
 	if (options == -1)
 		return (return_error());
+	if (ac == options + 1)
+		return (0);
 	a_stack = parse_stack(ac, av, options);
 	if (a_stack.size == 0 || stack_has_duplicates(a_stack) == true)
 		return (return_error());

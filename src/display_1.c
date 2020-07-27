@@ -6,11 +6,18 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 16:51:51 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 19:46:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+void			move_cursor_back_n_lines(int n)
+{
+	ft_putstr("\033[");
+	ft_putnbr(n);
+	ft_putstr("A");
+}
 
 void			display_operation(t_operation o)
 {
@@ -38,72 +45,50 @@ void			display_operation(t_operation o)
 		ft_putstr("rrr");
 }
 
-static int		nb_len(int n)
+static void		display_details(t_so *so, int number_of_operations, \
+					t_operation o)
 {
-	int	len;
-
-	len = 1;
-	if (n < 0)
-	{
-		n = -n;
-		len++;
-	}
-	while (n > 10)
-	{
-		len++;
-		n = n / 10;
-	}
-	return (len);
-}
-
-static void		display_stacks(t_so *so)
-{
-	int			n;
-	int			i;
-
-	ft_putendl("A		B\n");
-	i = 0;
-	while (++i <= so->a_stack->max_size)
-	{
-		if (i <= so->a_stack->size)
-		{
-			n = number_at_index(*so->a_stack, i);
-			ft_putnbr(n);
-			ft_putnchar(' ', 16 - nb_len(n));
-		}
-		else
-			ft_putnchar(' ', 16);
-		if (i <= so->b_stack->size)
-		{
-			n = number_at_index(*so->b_stack, i);
-			ft_putnbr(n);
-			ft_putnchar(' ', 16 - nb_len(n));
-		}
-		else
-			ft_putnchar(' ', 16);
-		ft_putchar('\n');
-	}
+	ft_putstr("\nOperation : ");
+	if (so->options.color == true)
+		ft_putstr("\e[1;33m");
+	display_operation(o);
+	if (so->options.color == true)
+		ft_putstr("\e[0m");
+	ft_putstr("   \nTotal number of operations : ");
+	if (so->options.color == true)
+		ft_putstr("\e[1;33m");
+	ft_putnbr(number_of_operations);
+	if (so->options.color == true)
+		ft_putstr("\e[0m");
+	ft_putstr("\nTotal number of elements : ");
+	ft_putnbr(so->a_stack->max_size);
+	ft_putchar('\n');
+	so->printed_lines += 4;
 }
 
 void			display_infos(t_so *so, int number_of_operations, \
-					t_operation last_o)
+					t_operation o, t_bool before)
 {
 	if (so->printed_lines > 0)
 	{
 		move_cursor_back_n_lines(so->printed_lines);
 		so->printed_lines = 0;
 	}
-	else if (so->options.display_stacks == 1)
+	else if (so->options.display_stacks == true)
 		ft_putchar('\n');
-	if (so->options.display_stacks == 1 && \
+	if (so->options.display_stacks == true && \
 		so->a_stack->max_size <= DISPLAY_STACK_MAX_SIZE)
 	{
-		display_stacks(so);
+		display_stacks(so, o, before);
 		so->printed_lines += 2 + so->a_stack->max_size;
-		usleep((unsigned int)((float)1000000 * DISPLAY_SLEEP_INTERVAL));
 	}
-	if (so->options.details == 1)
-		display_details(so, number_of_operations, last_o);
+	if (so->options.details == true)
+		display_details(so, number_of_operations, o);
+	if (so->options.display_stacks == true && \
+		so->a_stack->max_size <= DISPLAY_STACK_MAX_SIZE)
+		usleep((unsigned int)((float)1000000 * \
+			(so->options.fast == false ? DISPLAY_SLEEP_INTERVAL_NORMAL : \
+			DISPLAY_SLEEP_INTERVAL_FAST)));
 }
 
 void			display_operations(t_list *operations)

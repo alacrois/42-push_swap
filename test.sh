@@ -1,7 +1,9 @@
 #!/bin/bash
 if [ $# -eq 1 ]
 then
-	# ./push_swapV7 $1 | ./checker $1
-	# ./push_swap $1
-	./push_swap $1 | ./checker $1
+	result=`./push_swap $1`
+	echo "===== PUSH_SWAP RESULT ====="
+	echo "$result"
+	echo "====== CHECKER RESULT ======"
+	echo -ne "$result" | ./checker -v -f -c -d $1
 fi

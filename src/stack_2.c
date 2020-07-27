@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 16:36:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 19:44:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,17 +113,21 @@ void			execute_all_operations(t_so *so)
 	elem = *so->operations;
 	i = 0;
 	if (elem == NULL)
-		display_infos(so, i, -1);
+		display_infos(so, i, -1, false);
 	while (elem != NULL)
 	{
 		i++;
 		o = *(t_operation *)elem->content;
+		if (so->options.display_stacks == true)
+			display_infos(so, i, o, true);
 		stack_swap(so->a_stack, so->b_stack, o);
 		stack_push(so->a_stack, so->b_stack, o);
 		stack_rotate(so->a_stack, so->b_stack, o);
 		stack_reverse_rotate(so->a_stack, so->b_stack, o);
 		elem = elem->next;
-		if (so->options.display_stacks == 1 || elem == NULL)
-			display_infos(so, i, o);
+		if (so->options.display_stacks == true)
+			display_infos(so, i, o, false);
+		else if (elem == NULL)
+			display_infos(so, i, -1, false);
 	}
 }

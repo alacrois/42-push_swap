@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 16:51:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 19:50:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 # define DISPLAY_COLOR true
 # define DISPLAY_STACK_MAX_SIZE 25
 # define SMALL_SORT_THRESHOLD 20
-# define DISPLAY_SLEEP_INTERVAL 0.66
+# define DISPLAY_SLEEP_INTERVAL_NORMAL 0.66
+# define DISPLAY_SLEEP_INTERVAL_FAST 0.25
 
 typedef	enum	e_operation
 {
@@ -44,8 +45,9 @@ typedef struct	s_stack
 typedef struct	s_options
 {
 	t_bool		color;
-	int			details;
-	int			display_stacks;
+	t_bool		details;
+	t_bool		display_stacks;
+	t_bool		fast;
 }				t_options;
 
 typedef struct	s_so
@@ -105,9 +107,10 @@ int				count_unsorted(int *elements, int size, t_bool in_order);
 
 void			move_cursor_back_n_lines(int n);
 void			display_infos(t_so *so, int number_of_operations, \
-					t_operation last_o);
-void			display_details(t_so *so, int number_of_operations, \
-					t_operation last_o);
+					t_operation o, t_bool before);
+void			display_stacks(t_so *so, t_operation o, \
+					t_bool before);
+
 void			display_operation(t_operation o);
 void			display_operations(t_list *operations);
 
@@ -134,8 +137,6 @@ t_stack			parse_stack(int ac, char **av, int options);
 int				parse_options(int ac, char **av, t_so *so);
 
 void			operation(t_so *so, t_operation o);
-// void			execute_all_operations(t_stack *a_stack, 
-					// t_stack *b_stack, t_list *operations);
 void			execute_all_operations(t_so *so);
 void			undo_all_operations(t_so *so);
 

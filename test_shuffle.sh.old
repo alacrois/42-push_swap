@@ -2,6 +2,7 @@
 if [ $# -eq 1 ]
 then
 	arg=`ruby -e "puts (-$1...$1).to_a.shuffle.join(' ')"`
+	# arg2=`ruby -e "puts (-5000...5000).to_a.reverse.insert(rand(8000) + 1000, 10001).join(' ')"`
 	echo "arg = $arg"
 	./push_swap $arg | ./checker -v -f -d -c $arg
 fi

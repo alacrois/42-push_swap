@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 16:04:17 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 20:01:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	parse_number(char *s, int *n)
 		if ((s[i] < '0' || s[i] > '9') && s[i] != '-')
 			return (0);
 	}
-	if (is_int(s) == false)
+	if (is_int(s) == false || (ft_strlen(s) == 1 && s[0] == '-'))
 		return (0);
 	*n = ft_atoi((const char *)s);
 	return (1);
@@ -99,7 +99,7 @@ t_stack		parse_stack(int ac, char **av, int options)
 	i = options;
 	while (++i < ac)
 	{
-		if (parse_number(av[i], &tmp) == 0)
+		if (ft_strlen(av[i]) == 0 || parse_number(av[i], &tmp) == 0)
 		{
 			stack.size = 0;
 			free_stack(stack);
