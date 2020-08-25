@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/25 22:45:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/25 23:50:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void			checker_result(t_so *so)
 		else
 			ft_putendl("OK");
 	}
+	if (so->options.input != 0)
+		close(so->options.input);
 }
 
 static void			init_so(t_so *so, t_stack *a, t_stack *b, \
@@ -61,8 +63,6 @@ int					main(int ac, char **av)
 	if (a_stack.size == 0 || stack_has_duplicates(a_stack) == true)
 		return (return_error());
 	operations = parse_operations(so.options.input);
-	if (so.options.input != 0)
-		close(so.options.input);
 	init_so(&so, &a_stack, &b_stack, &operations);
 	execute_all_operations(&so);
 	checker_result(&so);

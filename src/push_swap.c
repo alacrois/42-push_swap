@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/25 22:35:38 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/25 23:37:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int				get_output_file(int ac, char **av, int *file)
+static int		get_output_file(int ac, char **av, int *file)
 {
 	*file = 1;
 	if (ft_strcmp((const char *)av[1], "-w") == 0)

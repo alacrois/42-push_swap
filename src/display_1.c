@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/25 22:17:48 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/25 23:47:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,13 @@ void			display_infos(t_so *so, int number_of_operations, \
 		move_cursor_back_n_lines(so->printed_lines);
 		so->printed_lines = 0;
 	}
-	else if (so->options.display_stacks == true)
-		ft_putchar('\n');
+	else
+	{
+		if (so->options.display_stacks == true)
+			ft_putchar('\n');
+		if (so->options.display_stacks == true && so->options.input != 0)
+			ft_putchar('\n');
+	}
 	if (so->options.display_stacks == true && \
 		so->a_stack->max_size <= DISPLAY_STACK_MAX_SIZE)
 	{
