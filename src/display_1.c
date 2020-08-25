@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 19:46:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/25 22:17:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,30 @@ void			move_cursor_back_n_lines(int n)
 	ft_putstr("A");
 }
 
-void			display_operation(t_operation o)
+void			display_operation(t_operation o, int fd)
 {
 	if (o == SA)
-		ft_putstr("sa");
+		ft_putstr_fd("sa", fd);
 	else if (o == SB)
-		ft_putstr("sb");
+		ft_putstr_fd("sb", fd);
 	else if (o == SS)
-		ft_putstr("ss");
+		ft_putstr_fd("ss", fd);
 	else if (o == PA)
-		ft_putstr("pa");
+		ft_putstr_fd("pa", fd);
 	else if (o == PB)
-		ft_putstr("pb");
+		ft_putstr_fd("pb", fd);
 	else if (o == RA)
-		ft_putstr("ra");
+		ft_putstr_fd("ra", fd);
 	else if (o == RB)
-		ft_putstr("rb");
+		ft_putstr_fd("rb", fd);
 	else if (o == RR)
-		ft_putstr("rr");
+		ft_putstr_fd("rr", fd);
 	else if (o == RRA)
-		ft_putstr("rra");
+		ft_putstr_fd("rra", fd);
 	else if (o == RRB)
-		ft_putstr("rrb");
+		ft_putstr_fd("rrb", fd);
 	else if (o == RRR)
-		ft_putstr("rrr");
+		ft_putstr_fd("rrr", fd);
 }
 
 static void		display_details(t_so *so, int number_of_operations, \
@@ -51,7 +51,7 @@ static void		display_details(t_so *so, int number_of_operations, \
 	ft_putstr("\nOperation : ");
 	if (so->options.color == true)
 		ft_putstr("\e[1;33m");
-	display_operation(o);
+	display_operation(o, 1);
 	if (so->options.color == true)
 		ft_putstr("\e[0m");
 	ft_putstr("   \nTotal number of operations : ");
@@ -91,7 +91,7 @@ void			display_infos(t_so *so, int number_of_operations, \
 			DISPLAY_SLEEP_INTERVAL_FAST)));
 }
 
-void			display_operations(t_list *operations)
+void			display_operations(t_list *operations, int fd)
 {
 	t_list		*elem;
 	t_operation	o;
@@ -100,8 +100,8 @@ void			display_operations(t_list *operations)
 	while (elem != NULL)
 	{
 		o = *(t_operation *)elem->content;
-		display_operation(o);
-		ft_putchar('\n');
+		display_operation(o, fd);
+		ft_putchar_fd('\n', fd);
 		elem = elem->next;
 	}
 }

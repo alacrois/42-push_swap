@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 20:01:01 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/25 22:40:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ static int	parse_operation(char *line, t_list **operations)
 	return (1);
 }
 
-t_list		*parse_operations(void)
+t_list		*parse_operations(int fd)
 {
 	char	*line;
 	t_list	*operations;
 
 	operations = NULL;
-	while (ft_gnl(0, &line))
+	while (ft_gnl(fd, &line))
 	{
 		if (parse_operation(line, &operations) == 0)
 		{
