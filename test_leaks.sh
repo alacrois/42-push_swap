@@ -9,4 +9,5 @@ then
 
 	# The following line checks 'checker' :
 	./push_swap $arg | valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind_output.txt ./checker -d -c -v -f $arg
+	
 fi

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/25 22:40:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 18:51:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,27 @@ t_stack		parse_stack(int ac, char **av, int options)
 {
 	t_stack	stack;
 	int		i;
+	int		i2;
 	int		tmp;
+	char	**arg_p;
 
 	stack = new_stack(ac - 1 - options);
 	i = options;
 	while (++i < ac)
 	{
-		if (ft_strlen(av[i]) == 0 || parse_number(av[i], &tmp) == 0)
+		arg_p = ft_strsplit(av[i], ' ');
+		i2 = -1;
+		while (arg_p[++i2])
 		{
-			stack.size = 0;
-			free_stack(stack);
-			return (stack);
+			if (ft_strlen(arg_p[i2]) == 0 || parse_number(arg_p[i2], &tmp) == 0)
+			{
+				free_stack(stack);
+				free_arg_parts(arg_p);
+				return (stack);
+			}
+			stack.data[stack.size - i + options] = tmp;
 		}
-		stack.data[stack.size - i + options] = tmp;
+		free_arg_parts(arg_p);
 	}
 	return (stack);
 }

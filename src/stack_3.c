@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/27 20:41:39 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 18:42:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ t_bool		stack_has_duplicates(t_stack a_stack)
 		while (++i2 < a_stack.size)
 		{
 			if (a_stack.data[i1] == a_stack.data[i2] && i1 != i2)
+			{
+				free_stack(a_stack);
 				return (true);
+			}
 		}
 	}
 	return (false);

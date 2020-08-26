@@ -6,11 +6,21 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/25 23:44:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 18:30:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+void			free_arg_parts(char **arg_parts)
+{
+	int			i;
+
+	i = -1;
+	while (arg_parts[++i])
+		free(arg_parts[i]);
+	free(arg_parts);
+}
 
 static void		init(t_so *so, int *options, int *i)
 {

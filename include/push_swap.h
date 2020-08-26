@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/25 22:44:06 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 18:31:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void			add_operation(t_list **operations, t_operation o);
 t_list			*parse_operations(int fd);
 t_stack			parse_stack(int ac, char **av, int options);
 int				parse_options(int ac, char **av, t_so *so);
+void			free_arg_parts(char **arg_parts);
 
 void			operation(t_so *so, t_operation o);
 void			execute_all_operations(t_so *so);
