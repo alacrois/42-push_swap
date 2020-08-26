@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/26 21:40:34 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 22:28:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int		get_output_file(int ac, char **av, int *file)
 	{
 		if (ac < 4)
 			return (-1);
-		*file = open(av[2], O_CREAT | O_WRONLY | O_TRUNC);
+		*file = open(av[2], O_CREAT | O_RDWR | O_TRUNC, 0666);
 		if (*file == -1)
 			exit_error();
 	}
