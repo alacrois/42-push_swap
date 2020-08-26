@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/26 21:44:28 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 22:05:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_list		*parse_operations(int fd)
 	t_list	*operations;
 
 	operations = NULL;
-	while (ft_gnl(fd, &line))
+	while (ft_gnl(fd, &line) == 1)
 	{
 		if (parse_operation(line, &operations) == 0)
 		{
@@ -105,6 +105,11 @@ t_stack		parse_stack(int ac, char **av, int options)
 	int		added;
 
 	stack = new_stack(get_stack_size(ac, av, options));
+	if (stack.size == 0)
+	{
+		free_stack(stack);
+		return (stack);
+	}
 	i = options;
 	added = 0;
 	while (++i < ac)
