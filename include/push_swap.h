@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/26 18:31:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 21:22:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ t_bool			stack_has_duplicates(t_stack a_stack);
 
 void			add_operation(t_list **operations, t_operation o);
 t_list			*parse_operations(int fd);
+int				parse_number(char *s, int *n);
+int				get_stack_size(int ac, char **av, int options);
 t_stack			parse_stack(int ac, char **av, int options);
 int				parse_options(int ac, char **av, t_so *so);
 void			free_arg_parts(char **arg_parts);

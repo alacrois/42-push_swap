@@ -6,24 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/26 18:51:55 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 21:44:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void		add_operation(t_list **operations, t_operation o)
-{
-	if (*operations == NULL)
-	{
-		*operations = ft_lstnew((const void *)&o, sizeof(t_operation));
-	}
-	else
-	{
-		ft_lstaddend(operations, \
-			ft_lstnew((const void *)&o, sizeof(t_operation)));
-	}
-}
 
 static int	parse_operation(char *line, t_list **operations)
 {
@@ -73,7 +60,7 @@ t_list		*parse_operations(int fd)
 	return (operations);
 }
 
-static int	parse_number(char *s, int *n)
+int			parse_number(char *s, int *n)
 {
 	int		i;
 
@@ -89,31 +76,42 @@ static int	parse_number(char *s, int *n)
 	return (1);
 }
 
+static int	parse_stack_core(char **arg_p, t_stack *s, int *added)
+{
+	int		i;
+	int		tmp;
+
+	i = -1;
+	while (arg_p[++i])
+	{
+		if (ft_strlen(arg_p[i]) == 0 || parse_number(arg_p[i], &tmp) == 0)
+		{
+			free_stack(*s);
+			free_arg_parts(arg_p);
+			return (-1);
+		}
+		s->data[s->size - *added - 1] = tmp;
+		*added += 1;
+	}
+	free_arg_parts(arg_p);
+	return (0);
+}
+
 t_stack		parse_stack(int ac, char **av, int options)
 {
 	t_stack	stack;
 	int		i;
-	int		i2;
-	int		tmp;
 	char	**arg_p;
+	int		added;
 
-	stack = new_stack(ac - 1 - options);
+	stack = new_stack(get_stack_size(ac, av, options));
 	i = options;
+	added = 0;
 	while (++i < ac)
 	{
 		arg_p = ft_strsplit(av[i], ' ');
-		i2 = -1;
-		while (arg_p[++i2])
-		{
-			if (ft_strlen(arg_p[i2]) == 0 || parse_number(arg_p[i2], &tmp) == 0)
-			{
-				free_stack(stack);
-				free_arg_parts(arg_p);
-				return (stack);
-			}
-			stack.data[stack.size - i + options] = tmp;
-		}
-		free_arg_parts(arg_p);
+		if (parse_stack_core(arg_p, &stack, &added) == -1)
+			return (stack);
 	}
 	return (stack);
 }

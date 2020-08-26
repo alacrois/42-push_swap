@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/08/26 18:30:52 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 21:08:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@ void			free_arg_parts(char **arg_parts)
 	while (arg_parts[++i])
 		free(arg_parts[i]);
 	free(arg_parts);
+}
+
+void			add_operation(t_list **operations, t_operation o)
+{
+	if (*operations == NULL)
+	{
+		*operations = ft_lstnew((const void *)&o, sizeof(t_operation));
+	}
+	else
+	{
+		ft_lstaddend(operations, \
+			ft_lstnew((const void *)&o, sizeof(t_operation)));
+	}
 }
 
 static void		init(t_so *so, int *options, int *i)

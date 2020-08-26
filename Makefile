@@ -4,6 +4,7 @@ NAME = push_swap
 
 SRCS = 	src/parsing_1.c \
 		src/parsing_2.c \
+		src/parsing_3.c \
 		src/utils_1.c \
 		src/utils_2.c \
 		src/utils_3.c \
