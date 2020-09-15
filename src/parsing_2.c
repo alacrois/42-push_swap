@@ -6,50 +6,83 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/16 22:28:11 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 21:08:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_bool		stack_is_ordered(t_stack stack)
+void			free_arg_parts(char **arg_parts)
 {
-	int		a;
-	int		b;
-	int		index;
+	int			i;
 
-	if (stack.size == 0)
-		return (true);
-	index = -1;
-	while (++index < stack.size - 1)
-	{
-		a = stack.data[index];
-		b = stack.data[index + 1];
-		if (a < b)
-		{
-			if (DEBUG_CHECKER == true)
-				printf("stack_is_ordered ==> false, %i < %i at index %i\n", \
-						a, b, index);
-			return (false);
-		}
-	}
-	return (true);
+	i = -1;
+	while (arg_parts[++i])
+		free(arg_parts[i]);
+	free(arg_parts);
 }
 
-t_bool		stack_has_duplicates(t_stack a_stack)
+void			add_operation(t_list **operations, t_operation o)
 {
-	int		i1;
-	int		i2;
-
-	i1 = -1;
-	while (++i1 < a_stack.size)
+	if (*operations == NULL)
 	{
-		i2 = -1;
-		while (++i2 < a_stack.size)
-		{
-			if (a_stack.data[i1] == a_stack.data[i2] && i1 != i2)
-				return (true);
-		}
+		*operations = ft_lstnew((const void *)&o, sizeof(t_operation));
 	}
-	return (false);
+	else
+	{
+		ft_lstaddend(operations, \
+			ft_lstnew((const void *)&o, sizeof(t_operation)));
+	}
+}
+
+static void		init(t_so *so, int *options, int *i)
+{
+	*options = 0;
+	*i = 1;
+	so->options.color = false;
+	so->options.details = false;
+	so->options.display_stacks = false;
+	so->options.fast = false;
+	so->options.input = 0;
+}
+
+static int		parse_options_1(char **av, int i, t_so *so)
+{
+	if (ft_strlen(av[i]) == 2 && av[i][1] == 'v')
+		so->options.display_stacks = true;
+	else if (ft_strlen(av[i]) == 2 && av[i][1] == 'f')
+		so->options.fast = true;
+	else if (ft_strlen(av[i]) == 2 && av[i][1] == 'c')
+		so->options.color = true;
+	else if (ft_strlen(av[i]) == 2 && av[i][1] == 'd')
+		so->options.details = true;
+	else
+		return (0);
+	return (1);
+}
+
+int				parse_options(int ac, char **av, t_so *so)
+{
+	int			i;
+	int			options;
+
+	init(so, &options, &i);
+	while (i < ac && av[i][0] == '-')
+	{
+		if (ft_strlen(av[i]) == 2 && av[i][1] == 'r')
+		{
+			i++;
+			options++;
+			if (i >= ac)
+				return (-1);
+			so->options.input = open(av[i], O_RDONLY);
+			if (so->options.input == -1)
+				return (-1);
+		}
+		else if (parse_options_1(av, i, so) == 0)
+			return (options);
+		i++;
+		options++;
+	}
+	return (options);
 }

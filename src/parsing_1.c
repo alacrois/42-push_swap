@@ -6,24 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:24:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 22:05:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void		add_operation(t_list **operations, t_operation o)
-{
-	if (*operations == NULL)
-	{
-		*operations = ft_lstnew((const void *)&o, sizeof(t_operation));
-	}
-	else
-	{
-		ft_lstaddend(operations, \
-			ft_lstnew((const void *)&o, sizeof(t_operation)));
-	}
-}
 
 static int	parse_operation(char *line, t_list **operations)
 {
@@ -54,25 +41,26 @@ static int	parse_operation(char *line, t_list **operations)
 	return (1);
 }
 
-t_list		*parse_operations(void)
+t_list		*parse_operations(int fd)
 {
 	char	*line;
 	t_list	*operations;
 
 	operations = NULL;
-	while (ft_gnl(0, &line))
+	while (ft_gnl(fd, &line) == 1)
 	{
 		if (parse_operation(line, &operations) == 0)
 		{
 			free(line);
-			return (operations);
+			exit_error();
+			return (NULL);
 		}
 		free(line);
 	}
 	return (operations);
 }
 
-static int	parse_number(char *s, int *n)
+int			parse_number(char *s, int *n)
 {
 	int		i;
 
@@ -82,28 +70,53 @@ static int	parse_number(char *s, int *n)
 		if ((s[i] < '0' || s[i] > '9') && s[i] != '-')
 			return (0);
 	}
-	if (is_int(s) == false)
+	if (is_int(s) == false || (ft_strlen(s) == 1 && s[0] == '-'))
 		return (0);
 	*n = ft_atoi((const char *)s);
 	return (1);
 }
 
-t_stack		parse_stack(int ac, char **av)
+static int	parse_stack_core(char **arg_p, t_stack *s, int *added)
 {
-	t_stack	stack;
 	int		i;
 	int		tmp;
 
-	stack = new_stack(ac - 1);
-	i = 0;
+	i = -1;
+	while (arg_p[++i])
+	{
+		if (ft_strlen(arg_p[i]) == 0 || parse_number(arg_p[i], &tmp) == 0)
+		{
+			free_stack(*s);
+			free_arg_parts(arg_p);
+			return (-1);
+		}
+		s->data[s->size - *added - 1] = tmp;
+		*added += 1;
+	}
+	free_arg_parts(arg_p);
+	return (0);
+}
+
+t_stack		parse_stack(int ac, char **av, int options)
+{
+	t_stack	stack;
+	int		i;
+	char	**arg_p;
+	int		added;
+
+	stack = new_stack(get_stack_size(ac, av, options));
+	if (stack.size == 0)
+	{
+		free_stack(stack);
+		return (stack);
+	}
+	i = options;
+	added = 0;
 	while (++i < ac)
 	{
-		if (parse_number(av[i], &tmp) == 0)
-		{
-			stack.size = 0;
+		arg_p = ft_strsplit(av[i], ' ');
+		if (parse_stack_core(arg_p, &stack, &added) == -1)
 			return (stack);
-		}
-		stack.data[stack.size - i] = tmp;
 	}
 	return (stack);
 }

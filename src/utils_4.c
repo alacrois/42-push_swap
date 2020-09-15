@@ -6,68 +6,94 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 22:57:08 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 11:25:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static t_operation	get_opposite_operation(t_operation o)
+static void		sort_array(int *array, int size)
 {
-	if (o == RA)
-		return (RRA);
-	else if (o == RRA)
-		return (RA);
-	else if (o == RB)
-		return (RRB);
-	else if (o == RRB)
-		return (RB);
-	else if (o == PA)
-		return (PB);
-	else if (o == PB)
-		return (PA);
-	else if (o == RR)
-		return (RRR);
-	else if (o == RRR)
-		return (RR);				
-	return (-1);
+	int			i;
+	int			tmp;
+	t_bool		switched;
+
+	switched = true;
+	while (switched == true)
+	{
+		switched = false;
+		i = -1;
+		while (++i < size - 1)
+		{
+			if (array[i] > array[i + 1])
+			{
+				tmp = array[i];
+				array[i] = array[i + 1];
+				array[i + 1] = tmp;
+				switched = true;
+			}
+		}
+	}
 }
 
-int				next_operations_to_delete(t_list *start, t_operation rotation)
+int				set_median(t_stack *s, int size)
 {
-	int			same_rotation_count;
-	int			mirror_rotation_count;
-	t_list		*elem;
-	t_operation	mirror_rotation;
-	t_operation	o;
-	int			to_delete;
+	int			i;
+	int			array[size];
 
-	elem = start;
-	same_rotation_count = 0;
-	mirror_rotation = get_opposite_operation(rotation);
-	o = *((t_operation *)elem->content);
-	while (elem != NULL && o == rotation)
+	i = -1;
+	while (++i < size)
+		array[i] = nb_at_index_mod(s, 1 + i);
+	sort_array(array, size);
+	return (array[size / 2]);
+}
+
+int				count_unsorted(int *elements, int size, t_bool in_order)
+{
+	int			i;
+	t_to_sort	elems[size];
+	int			count;
+
+	i = -1;
+	while (++i < size)
 	{
-		same_rotation_count++;
-		elem = elem->next;
-		if (elem != NULL)
-			o = *((t_operation *)elem->content);
+		elems[i].value = elements[i];
+		elems[i].ooo = 0;
+		elems[i].used = true;
 	}
-	mirror_rotation_count = 0;
-	while (elem != NULL && o == mirror_rotation)
+	set_unsorted(elems, size, in_order);
+	while (remove_first_most_unsorted(elems, size) == 1)
+		set_unsorted(elems, size, in_order);
+	count = 0;
+	i = -1;
+	while (++i < size)
 	{
-		mirror_rotation_count++;
-		elem = elem->next;
-		if (elem != NULL)
-			o = *((t_operation *)elem->content);
+		count += elems[i].used == true ? 0 : 1;
 	}
-	if (same_rotation_count == 0 || mirror_rotation_count == 0)
-		to_delete = 0;
-	else if (same_rotation_count > mirror_rotation_count)
-		to_delete = 0;
+	return (count);
+}
+
+void			indexed_on_top(t_so *so, int index, t_bool a)
+{
+	t_stack		*s;
+	int			step;
+	t_operation	rotation;
+
+	s = a == true ? so->a_stack : so->b_stack;
+	index = index > s->size ? index - s->size : index;
+	index = index < 1 ? index + s->size : index;
+	if (s->size == 0)
+		return ;
+	step = index - 1 <= s->size / 2 ? -1 : 1;
+	if (a == true)
+		rotation = index - 1 <= s->size / 2 ? RA : RRA;
 	else
-		to_delete = same_rotation_count;
-	return (to_delete);
+		rotation = index - 1 <= s->size / 2 ? RB : RRB;
+	while (index > 1 && index <= s->size)
+	{
+		operation(so, rotation);
+		index += step;
+	}
 }
 
 void			delete_next_n_elem(t_list *start, int n)
@@ -83,7 +109,6 @@ void			delete_next_n_elem(t_list *start, int n)
 		nextnext = elem->next;
 		if (elem->content != NULL)
 		{
-			// printf("Trimmed operation : %i(1)\n", *((t_operation *)elem->content));
 			free(elem->content);
 		}
 		free(elem);
@@ -91,73 +116,4 @@ void			delete_next_n_elem(t_list *start, int n)
 		start->next = elem;
 		i++;
 	}
-}
-
-// void			delete_next_operations(t_list *start, t_operation o, int n)
-// {
-// 	t_list		*elem;
-// 	t_list		*previous;
-// 	int			i;
-// 	t_operation	new_rotation;
-
-// 	new_rotation = (o == RA || o == RB) ? RR : RRR;
-// 	elem = start;
-// 	i = -1;
-// 	while (++i < n)
-// 	{
-// 		*((t_operation *)elem->content) = new_rotation;
-// 		previous = elem;
-// 		elem = elem->next;
-// 	}
-// 	delete_next_n_elem(previous, n);
-// }
-
-
-void	optimize_operations(t_list **operations)
-{
-	t_list		*elem;
-	t_list		*previous;
-	// t_list		*pp;
-	int			to_delete;
-	t_operation	o;
-	int			index;
-
-	if (operations == NULL || *operations == NULL)
-		return ;
-	// if (DEBUG_OPTIMIZE == true)
-	// 	printf("optimize_operations START\n");
-	previous = NULL;
-	// pp = NULL;
-	index = 1;
-	elem = *operations;
-	while (elem != NULL && elem->next != NULL)
-	{
-		// if (DEBUG_OPTIMIZE == true)
-		// 	printf("D1\n");
-		o = *((t_operation *)elem->content);
-		to_delete = next_operations_to_delete(elem, o);
-		// if (DEBUG_OPTIMIZE == true)
-		// 	printf("D2\n");
-		if (previous != NULL && to_delete > 0)
-		{
-			// if (DEBUG_OPTIMIZE == true)
-			// 	printf("D3\n");			
-			delete_next_n_elem(previous, to_delete * 2);
-			elem = previous->next;
-			// previous = ft_lstelem(*operations, index - 1);
-		}
-		else
-		{
-			// if (DEBUG_OPTIMIZE == true)
-			// 	printf("D4\n");				
-			previous = elem;
-			elem = elem->next;
-			index++;
-		}
-		// if (DEBUG_OPTIMIZE == true)
-		// 	printf("D5\n");			
-	}
-	// if (DEBUG_OPTIMIZE == true)
-	// 	printf("optimize_operations END\n");
-	optimize_operations_sequences(operations);
 }

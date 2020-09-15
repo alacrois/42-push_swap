@@ -4,6 +4,7 @@ NAME = push_swap
 
 SRCS = 	src/parsing_1.c \
 		src/parsing_2.c \
+		src/parsing_3.c \
 		src/utils_1.c \
 		src/utils_2.c \
 		src/utils_3.c \
@@ -11,22 +12,22 @@ SRCS = 	src/parsing_1.c \
 		src/operations_1.c \
 		src/operations_2.c \
 		src/operations_3.c \
-		src/operations_4.c \
-		src/optimize_operations.c \
+		src/optimization_1.c \
+		src/optimization_2.c \
+		src/optimization_3.c \
+		src/optimization_4.c \
 		src/stack_1.c \
 		src/stack_2.c \
-		src/pre_sort_1.c \
-		src/pre_sort_2.c \
-		src/pre_sort_3.c \
-		src/quicksort_1.c \
-		src/quicksort_2.c \
-		src/quicksort_3.c \
+		src/stack_3.c \
+		src/simple_sort_1.c \
+		src/simple_sort_2.c \
+		src/simple_sort_3.c \
+		src/simple_sort_4.c \
+		src/display_1.c \
+		src/display_2.c \
 		src/midsort_1.c \
 		src/midsort_2.c \
-		src/midsort_3.c \
-		src/midsort_4.c \
-		src/midsort_5.c \
-		src/simple_sort.c
+		src/midsort_3.c
 
 SRCS1 =	src/push_swap.c $(SRCS)
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/08 03:10:51 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/27 19:44:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void			stack_swap(t_stack *a_stack, t_stack *b_stack, t_operation o)
 {
-	t_stack	*stack;
-	int		tmp;
+	t_stack		*stack;
+	int			tmp;
 
 	stack = o == SA ? a_stack : NULL;
 	stack = o == SB ? b_stack : stack;
@@ -78,7 +78,7 @@ void			stack_rotate(t_stack *a_stack, t_stack *b_stack, t_operation o)
 }
 
 void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
-				t_operation o)
+					t_operation o)
 {
 	t_stack		*stack;
 	int			index;
@@ -104,18 +104,30 @@ void			stack_reverse_rotate(t_stack *a_stack, t_stack *b_stack, \
 	}
 }
 
-void			execute_stack_operations(t_stack *a_stack, t_stack *b_stack, \
-									t_list *operations)
+void			execute_all_operations(t_so *so)
 {
 	t_operation	o;
+	t_list		*elem;
+	int			i;
 
-	while (operations != NULL)
+	elem = *so->operations;
+	i = 0;
+	if (elem == NULL)
+		display_infos(so, i, -1, false);
+	while (elem != NULL)
 	{
-		o = *(t_operation *)operations->content;
-		stack_swap(a_stack, b_stack, o);
-		stack_push(a_stack, b_stack, o);
-		stack_rotate(a_stack, b_stack, o);
-		stack_reverse_rotate(a_stack, b_stack, o);
-		operations = operations->next;
+		i++;
+		o = *(t_operation *)elem->content;
+		if (so->options.display_stacks == true)
+			display_infos(so, i, o, true);
+		stack_swap(so->a_stack, so->b_stack, o);
+		stack_push(so->a_stack, so->b_stack, o);
+		stack_rotate(so->a_stack, so->b_stack, o);
+		stack_reverse_rotate(so->a_stack, so->b_stack, o);
+		elem = elem->next;
+		if (so->options.display_stacks == true)
+			display_infos(so, i, o, false);
+		else if (elem == NULL)
+			display_infos(so, i, -1, false);
 	}
 }

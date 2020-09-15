@@ -6,160 +6,102 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 08:25:33 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 10:25:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	sort_section_core(t_so *so, int size, t_bool from_a, int median)
+static int			get_next_to_sort_index(t_stack *s, int median)
 {
-	t_stack		*s;
-	t_operation	push;
-	t_operation	rotate;
-	t_operation	rrotate;
-	int			i;
-	int			rotation_count;
-	int			push_count;
+	int				best_index_diff;
+	int				index_diff;
+	int				tmp_index;
+	t_bool			found;
+	int				i;
 
-
+	found = false;
 	i = -1;
-	rotation_count = 0;
-	s = from_a == true ? so->a_stack : so->b_stack;
-	push = from_a == true ? PB : PA;
-	rotate = from_a == true ? RA : RB;
-	rrotate = from_a == true ? RRA : RRB;
-	push_count = 0;
-	while (++i < size)
+	while (++i < s->size)
 	{
-		if ((from_a == true && nb_at_index_mod(s, 1) <= median) || \
-			(from_a == false && nb_at_index_mod(s, 1) > median))
+		if (nb_at_index_mod(s, 1 + i) < median)
 		{
-			do_operation(so, push);
-			push_count++;
-		}
-		else
-		{
-			do_operation(so, rotate);
-			rotation_count++;
+			index_diff = s->size - i;
+			index_diff = i < index_diff ? i : index_diff;
+			if (found == false || index_diff < best_index_diff)
+			{
+				best_index_diff = index_diff;
+				tmp_index = 1 + i;
+				found = true;
+			}
 		}
 	}
-	while (rotation_count > 0)
-	{
-		do_operation(so, rrotate);
-		rotation_count--;
-	}
-	return (push_count);
+	if (found == false)
+		return (-1);
+	return (tmp_index);
 }
 
-void	midsort_section(t_so *so, int size, t_bool from_a, int depth)
+static t_section	sort_a_in_b_by_median(t_so *so, t_section section)
 {
-	t_stack		*s;
-	t_operation	push;
-	t_operation	rotate;
-	t_operation	rrotate;
-	int			i;
-	int			median;
-	int			push_count;
+	int				next_to_sort_index;
+	t_section		new_section;
+	int				median;
 
-	s = from_a == true ? so->a_stack : so->b_stack;
-	median = set_median(s, size);
-	rotate = from_a == true ? RA : RB;
-	rrotate = from_a == true ? RRA : RRB;
-	if (DEBUG_MIDSORT == true)
+	median = set_median(so->a_stack, section.size);
+	new_section.size = 0;
+	next_to_sort_index = get_next_to_sort_index(so->a_stack, median);
+	if (next_to_sort_index != -1)
+		new_section.last_elem = nb_at_index_mod(so->a_stack, \
+									next_to_sort_index);
+	while (next_to_sort_index != -1)
 	{
-		printf("\e[1;32mStart of sort_section\e[0m : stack is %c, size is %i, median is %i\n", \
-							from_a == true ? 'A' : 'B', size, median);
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+		indexed_on_top(so, next_to_sort_index, true);
+		new_section.size++;
+		new_section.first_elem = nb_at_index_mod(so->a_stack, 1);
+		operation(so, PB);
+		next_to_sort_index = get_next_to_sort_index(so->a_stack, median);
 	}
-	if (section_is_sorted(so, size, from_a) == true)
-	{
-		if (DEBUG_MIDSORT == true)
-			printf("\e[1;33mEnd of sort_section\e[0m (already sorted)\n");
-		return ;
-	}
-	else if (size == 2)
-	{
-		if (from_a == true)
-			do_operation(so, SA);
-		else
-			do_operation(so, SB);
-				if (DEBUG_MIDSORT == true)
-		printf("\e[1;33mEnd of sort_section\e[0m (section sorted after a single swap)\n");
-		return ;
-	}
-	push = from_a == true ? PB : PA;
-	// rotate = from_a == true ? RA : RB;
-	// median = set_median(s, size);
-	// if (DEBUG_MIDSORT == true)
-	// 	printf("Before main loop, median is %i\n", median);
-	push_count = sort_section_core(so, size, from_a, median);
-	if (DEBUG_MIDSORT == true)
-	{
-		printf("\e[1;33mAfter main loop\e[0m, %i elements pushed & %i elements rotated\n", \
-				push_count, size - push_count);
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
+	return (new_section);
+}
 
-	}
-	midsort_section(so, push_count, from_a == true ? false : true, depth + 1);
+static void			sort_section_b_in_a(t_so *so, t_section section)
+{
+	int				i;
 
-	if (DEBUG_MIDSORT == true)
+	if (section_sorted(so, section, false) == true)
 	{
-		// printf("\e[1;33mBetween 2 recursive calls\e[0m, rotate will be called %i times.\n",
-		// size - push_count);
-		printf("\e[1;33mBetween 2 recursive calls\e[0m, stack is %c, size is %i, median is %i\n", \
-			from_a == true ? 'A' : 'B', size, median);
-		if (depth == 0)
-		{
-			printf("\e[1;33mDepth = 0\e[0m, will do %i rrotate\n", size - push_count);
-			display_infos(*so->a_stack, *so->b_stack, *so->operations);
-
-		}
-	}
-	if (rrotate == SS || rotate == SS)
-		printf("The sky is falling !\n");
-
-	if (depth == 0)
-	{
+		indexed_on_top(so, get_element_index(so->b_stack, section.first_elem), \
+												false);
 		i = -1;
-		while (++i < size - push_count)
-			do_operation(so, rrotate);
+		while (++i < section.size)
+			operation(so, PA);
 	}
-	midsort_section(so, size - push_count, from_a, depth + 1);
-	i = -1;
-	while (depth > -1 && ++i < size)
+	else
 	{
-		do_operation(so, push);
-	}
-	// i = -1;
-	// while (++i < push_count)
-	// 	do_operation(so, rotate);
-
-	if (DEBUG_MIDSORT == true)
-	{
-		printf("\e[1;33mEnd of sort_section\e[0m (after recursive calls)\n");
-		if (depth == 0)
-		{
-			printf("\e[1;33mDepth = 0\e[0m, final state :\n");
-			display_infos(*so->a_stack, *so->b_stack, *so->operations);
-
-		}
+		recursive_sort_section(so, section);
 	}
 }
 
-void	midsort(t_so *so)
+void				midsort(t_so *so)
 {
-	// midsort_section(so, so->a_stack->max_size, true, 0);
-	midpoint_sort(so);
-	// all_b_to_a(so->a_stack, so->b_stack, so->operations);
-	// rotate_minimum_on_top(so);
-	if (DEBUG_MIDSORT == true)
+	t_section		sections[so->a_stack->max_size];
+	t_section		all_a;
+	int				sections_count;
+
+	sections_count = 0;
+	all_a.first_elem = nb_at_index_mod(so->a_stack, 1);
+	all_a.last_elem = nb_at_index_mod(so->a_stack, 0);
+	all_a.size = so->a_stack->size;
+	while (section_sorted(so, all_a, true) == false)
 	{
-		printf("MIDSORT DONE :\n");
-		display_infos(*so->a_stack, *so->b_stack, *so->operations);
-		if (stack_is_ordered(*so->a_stack) == true)
-			ft_putendl("\e[1;32mStack is ordered.\e[0m");
-		else
-			ft_putendl("\e[1;31mStack is not ordered.\e[0m");
+		sections[sections_count] = sort_a_in_b_by_median(so, all_a);
+		all_a.first_elem = nb_at_index_mod(so->a_stack, 1);
+		all_a.last_elem = nb_at_index_mod(so->a_stack, 0);
+		all_a.size = so->a_stack->size;
+		sections_count++;
+	}
+	while (--sections_count >= 0)
+	{
+		sort_section_b_in_a(so, sections[sections_count]);
 	}
 }

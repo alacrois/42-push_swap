@@ -6,97 +6,99 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/22 10:05:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	free_list(t_list **list)
+int			nb_at_index_mod(t_stack *stack, int index)
 {
-	t_list	*elem;
-	t_list	*next_elem;
+	int		n;
 
-	elem = list != NULL ? *list : NULL;
-	while (elem != NULL)
-	{
-		next_elem = elem->next;
-		if (elem->content != NULL)
-			free(elem->content);
-		free(elem);
-		elem = next_elem;
-	}
-	if (list != NULL)
-		*list = NULL;
-}
-
-int		get_index_distance(int a, int b, int size)
-{
-	int	d1;
-	int	d2;
-
-	if (a <= b)
-	{
-		d1 = b - a;
-		d2 = a + (size - b);
-	}
+	if (index < 1)
+		n = number_at_index(*stack, index + stack->size);
+	else if (index > stack->size)
+		n = number_at_index(*stack, index - stack->size);
 	else
+		n = number_at_index(*stack, index);
+	return (n);
+}
+
+int			out_of_order(t_so *so)
+{
+	int		count;
+	int		i;
+	int		a;
+	int		b;
+	int		c;
+
+	count = 0;
+	i = 0;
+	while (++i < so->a_stack->max_size)
 	{
-		d1 = a - b;
-		d2 = b + (size - a);
+		a = nb_at_index_mod(so->a_stack, i - 1);
+		b = nb_at_index_mod(so->a_stack, i);
+		c = nb_at_index_mod(so->a_stack, i + 1);
+		if ((c != so->ordered_numbers[0] && b > c) \
+			|| (a != so->ordered_numbers[so->a_stack->max_size - 1] && a > b))
+			count++;
 	}
-	return (d1 < d2 ? d1 : d2);
+	return (count);
 }
 
-void	free_stack(t_stack s)
+int			get_element_index(t_stack *stack, int to_find)
 {
-	if (s.data != NULL)
-		free(s.data);
-}
+	int		index;
+	int		to_compare;
+	int		i;
 
-void	optimize_rotations(t_list **operations)
-{
-	t_list		*elem;
-	// t_list		*previous;
-	int			to_delete;
-	t_operation	o;
-
-	if (operations == NULL || *operations == NULL)
-		return ;
-	if (DEBUG_OPTIMIZE == true)
-		printf("optimize_rotations START\n");
-	// previous = NULL;
-	elem = *operations;
-	while (elem->next != NULL)
+	index = 1;
+	i = stack->size;
+	while (--i >= 0)
 	{
-		o = *((t_operation *)elem->content);
-		if (o == RA || o == RB || o == RRA || o == RRB)
-		{
-			to_delete = next_rotation_to_delete(elem, o);
-			if (to_delete > 0)
-				replace_next_rotations(elem, o, to_delete);
-		}
-		elem = elem->next;
+		to_compare = stack->data[i];
+		if (to_find == to_compare)
+			return (index);
+		index++;
 	}
-	if (DEBUG_OPTIMIZE == true)
-		printf("optimize_rotations END\n");
+	return (-1);
 }
 
-void		check_swap(t_so *so)
+void		inverse_order(t_so *so)
 {
-	t_bool	sa;
-	t_bool	sb;
+	int		len;
+	int		i;
 
-	sa = false;
-	sb = false;
-	if (so->a_stack->size > 1 && nb_at_index_mod(so->a_stack, 1) > nb_at_index_mod(so->a_stack, 2))
-		sa = true;
-	if (so->b_stack->size > 1 && nb_at_index_mod(so->b_stack, 1) < nb_at_index_mod(so->b_stack, 2))
-		sb = true;
-	if (sa == true && sb == true)
-		do_operation(so, SS);
-	else if (sa == true)
-		do_operation(so, SA);
-	else if (sb == true)
-		do_operation(so, SB);
+	len = so->a_stack->max_size;
+	i = len;
+	while (--i >= 2)
+	{
+		operation(so, PB);
+		if (so->b_stack->size > 1)
+			operation(so, RB);
+	}
+	operation(so, SA);
+	while (so->b_stack->size > 0)
+		operation(so, PA);
+}
+
+t_bool		check_order(t_so *so)
+{
+	int		len;
+	int		i;
+	int		a;
+	int		b;
+
+	len = so->a_stack->max_size;
+	i = 0;
+	while (++i <= len)
+	{
+		a = number_at_index(*so->a_stack, i);
+		b = number_at_index(*so->a_stack, i < len ? i + 1 : 1);
+		if ((b != so->ordered_numbers[0] || a != so->ordered_numbers[len - 1]) \
+			&& a > b)
+			return (false);
+	}
+	return (true);
 }

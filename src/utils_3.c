@@ -6,100 +6,101 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/18 00:11:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/26 14:26:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static t_operation	get_mirror_rotation(t_operation o)
+t_bool			is_int(char *s)
 {
-	if (o == RA)
-		return (RB);
-	else if (o == RRA)
-		return (RRB);
-	else if (o == RB)
-		return (RA);
-	else if (o == RRB)
-		return (RRA);				
-	return (-1);
-}
-
-int				next_rotation_to_delete(t_list *start, t_operation rotation)
-{
-	int			same_rotation_count;
-	int			mirror_rotation_count;
-	t_list		*elem;
-	t_operation	mirror_rotation;
-	t_operation	o;
-	int			to_delete;
-
-	elem = start;
-	same_rotation_count = 0;
-	mirror_rotation = get_mirror_rotation(rotation);
-	o = *((t_operation *)elem->content);
-	while (elem != NULL && o == rotation)
-	{
-		same_rotation_count++;
-		elem = elem->next;
-		if (elem != NULL)
-			o = *((t_operation *)elem->content);
-	}
-	mirror_rotation_count = 0;
-	while (elem != NULL && o == mirror_rotation)
-	{
-		mirror_rotation_count++;
-		elem = elem->next;
-		if (elem != NULL)
-			o = *((t_operation *)elem->content);
-	}
-	if (same_rotation_count == 0 || mirror_rotation_count == 0)
-		to_delete = 0;
-	else if (same_rotation_count > mirror_rotation_count)
-		to_delete = 0;
-	else
-		to_delete = same_rotation_count;
-	return (to_delete);
-}
-
-static void		delete_next_n_elem(t_list *start, int n)
-{
-	t_list		*elem;
-	t_list		*nextnext;
+	long long	value;
+	int			sign;
 	int			i;
 
-	elem = start->next;
 	i = 0;
-	while (elem != NULL && i < n)
+	sign = 1;
+	value = 0;
+	if (s[0] == '-')
 	{
-		nextnext = elem->next;
-		if (elem->content != NULL)
-		{
-			// printf("Trimmed operation : %i(1)\n", *((t_operation *)elem->content));
-			free(elem->content);
-		}
-		free(elem);
-		elem = nextnext;
-		start->next = elem;
+		sign = -1;
 		i++;
 	}
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (false);
+		value = value * 10 + (int)(s[i] - '0');
+		if (value * sign < -2147483648 || value * sign > 2147483647)
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
-void			replace_next_rotations(t_list *start, t_operation o, int n)
+void			rotate_elem_on_top(t_so *so, t_bool a_stack, int elem)
 {
-	t_list		*elem;
-	t_list		*previous;
-	int			i;
-	t_operation	new_rotation;
+	t_stack		*s;
+	int			len;
+	int			index;
+	t_operation	rotate_op;
 
-	new_rotation = (o == RA || o == RB) ? RR : RRR;
-	elem = start;
+	s = a_stack == true ? so->a_stack : so->b_stack;
+	len = s->size;
+	index = get_element_index(s, elem);
+	if (a_stack == true)
+		rotate_op = index - 1 <= len / 2 ? RA : RRA;
+	else
+		rotate_op = index - 1 <= len / 2 ? RB : RRB;
+	while (number_at_index(*s, 1) != elem)
+		operation(so, rotate_op);
+}
+
+t_sequence		new_sequence(int size, t_operation o1, \
+					t_operation o2, t_operation o3)
+{
+	t_sequence	seq;
+
+	seq.o = (t_operation *)ft_malloc(sizeof(t_operation) * size);
+	seq.size = size;
+	if (size >= 1)
+		seq.o[0] = o1;
+	if (size >= 2)
+		seq.o[1] = o2;
+	if (size >= 3)
+		seq.o[2] = o3;
+	return (seq);
+}
+
+void			free_sequences(t_sequence *so, t_sequence *sr)
+{
+	int			i;
+
 	i = -1;
-	while (++i < n)
+	while (++i < 4)
 	{
-		*((t_operation *)elem->content) = new_rotation;
-		previous = elem;
-		elem = elem->next;
+		free(so[i].o);
+		free(sr[i].o);
 	}
-	delete_next_n_elem(previous, n);
+}
+
+t_bool			section_sorted(t_so *so, t_section section, t_bool is_a)
+{
+	int			i;
+	int			a;
+	int			b;
+	int			start_index;
+	t_stack		*s;
+
+	s = is_a == true ? so->a_stack : so->b_stack;
+	start_index = get_element_index(s, section.first_elem);
+	i = -1;
+	while (++i < section.size - 1)
+	{
+		a = nb_at_index_mod(s, i + start_index + 0);
+		b = nb_at_index_mod(s, i + start_index + 1);
+		if ((is_a == true && a > b) || (is_a == false && a < b))
+			return (false);
+	}
+	return (true);
 }

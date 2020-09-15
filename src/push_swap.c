@@ -6,32 +6,42 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 19:31:06 by alacrois          #+#    #+#             */
-/*   Updated: 2020/07/21 06:14:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/08/26 22:28:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	return_error(void)
+static int		get_output_file(int ac, char **av, int *file)
 {
-	ft_putstr_fd("Error\n", 2);
+	*file = 1;
+	if (ft_strcmp((const char *)av[1], "-w") == 0)
+	{
+		if (ac < 4)
+			return (-1);
+		*file = open(av[2], O_CREAT | O_RDWR | O_TRUNC, 0666);
+		if (*file == -1)
+			exit_error();
+	}
 	return (0);
 }
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	t_stack		a_stack;
 	t_list		*operations;
+	int			output;
 
-	if (ac < 2)
+	if (ac < 2 || get_output_file(ac, av, &output) == -1)
 		return (0);
-	a_stack = parse_stack(ac, av);
+	a_stack = parse_stack(ac, av, output != 1 ? 2 : 0);
 	if (a_stack.size == 0 || stack_has_duplicates(a_stack) == true)
 		return (return_error());
 	operations = generate_operations(&a_stack);
-	// printf("before 'display_operations'\n");
-	if (DEBUG_SIMPLE_SORT == false)
-		display_operations(operations);
+	display_operations(operations, output);
+	if (output != 1)
+		close(output);
 	free_list(&operations);
+	free_stack(a_stack);
 	return (0);
 }
